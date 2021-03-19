@@ -1,35 +1,115 @@
 package com.example.testnavbottom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.example.testnavbottom.R.id.date;
+import static com.example.testnavbottom.R.id.fade;
+import static com.example.testnavbottom.R.id.swEnableEvent;
+
+
+
+
+
 
 public class classListAdaper extends ArrayAdapter<Classview> {
     private  Context mContext;
     int mRes;
+
+
+
+//THIS FUNCTION IS HUGEEEEEEEEEEEEEE ERROR!!!
+    public  String dayName(String year,String month,String day){
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
+
+        // this formatter will have the current locale
+        SimpleDateFormat formatx = new SimpleDateFormat("EEEE");
+
+       String date= formatx.format(cal.getTime());
+        String realdayname= "err";
+
+        switch (date){
+            case "Monday":
+                realdayname="T2";
+                break;
+            case "Tuesday":
+                realdayname="T3";
+                break;
+            case "Wednesday":
+                realdayname="T4";
+                break;
+            case "Thursday":
+                realdayname="T5";
+                break;
+            case "Friday":
+                realdayname="T6";
+                break;
+            case "Saturday":
+                realdayname="T7";
+                break;
+            case "Sunday":
+                realdayname="CN";
+                break;
+
+        }
+
+
+
+        return realdayname;
+    }
     public classListAdaper(@NonNull Context context, int resource, @NonNull ArrayList<Classview> objects) {
         super(context, resource, objects);
         mContext=context;
         mRes=resource;
     }
+    public String getdate(String rawdate,int opt){
+
+       // rawdate = "2020-08-24 09:30:00";
+        Pattern pattern = Pattern.compile("(?<=^)[\\s\\S]*?(?= )");
+        ArrayList<String> tasks = new ArrayList<String>();
+        Matcher matcher = pattern.matcher(rawdate);
+        String month="0";
+        while (matcher.find()) {
+            month= matcher.group(0);
+        }
+        String[] arrOfStr = month.split("-", 3);
+        return arrOfStr[opt];
+    }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String time =getItem(position).getTime();
-        String info=getItem(position).getInfo();
-        String weekday=getItem(position).getWeekday();
-        String date =getItem(position).getDate();
-        Classview mClass= new Classview(time,info,weekday,date);
+        String time =getItem(position).getStartat();
+        String title=getItem(position).getTitle();
+
+        String weekday= dayName(getdate(getItem(position).getStartat(),0),getdate(getItem(position).getStartat(),1),getdate(getItem(position).getStartat(),2));
+
+      String date =getdate(getItem(position).getStartat(),2);
+        //String date =getItem(position).getStartat();
+      //  Classview mClass= new Classview(time,info,weekday,date);
         LayoutInflater inflater =LayoutInflater.from(mContext);
         convertView = inflater.inflate(mRes,parent,false);
         TextView Dtime = convertView.findViewById(R.id.tv1);
@@ -37,10 +117,28 @@ public class classListAdaper extends ArrayAdapter<Classview> {
         TextView Ddate = convertView.findViewById(R.id.date);
         TextView Ddateweek = convertView.findViewById(R.id.dateweek);
 
+        Switch sw = convertView.findViewById(swEnableEvent);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Dinfo.setBackgroundColor(Color.parseColor("#FF018786"));
+                }else {
+                    Dinfo.setBackgroundColor(Color.parseColor("#7e827f"));
+                }
+
+            }
+        });
+
+
+        //Dinfo.setText( sw.toString());
+
+
         Ddate.setText(date);
         Ddateweek.setText(weekday);
         Dtime.setText(time);
-        Dinfo.setText(info);
+        Dinfo.setText(title);
         return  convertView;
     }
 }

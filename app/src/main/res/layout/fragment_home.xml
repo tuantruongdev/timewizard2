@@ -15,5 +15,20 @@ tools:context=".ui.home.HomeFragment">
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp"
         android:id="@+id/lv1"/>
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="refesh DB"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="200dp"
+        android:id="@+id/btn1"
+        ></Button>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete DB"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="70dp"
+        android:id="@+id/btn2"
+        ></Button>
 </RelativeLayout>

@@ -1,48 +1,100 @@
 package com.example.testnavbottom;
 
 public class Classview {
-    private String time;
-    private  String info;
-    private  String weekday;
-    private  String date;
-
-    public String getDate() {
-        return date;
+    private String title = "";
+    private int enable = 1;
+    private String descr = "";
+    private String startat = "";
+    private String endat = "";
+    private int type = 0;
+    private String alarmat = "";
+    private String note = "";
+    private String weekday="T2";
+    private  int id=0;
+    private int Id=0;
+    public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
+        this.title = title;
+        this.enable = enable;
+        this.descr = descr;
+        this.startat = startat;
+        this.endat = endat;
+        this.type = type;
+        this.alarmat = alarmat;
+        this.note = note;
+        this.weekday=weekday;
+        this.id = Id;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+
 
     public String getWeekday() {
         return weekday;
     }
 
-    public void setWeekday(String weekday) {
+    public void setWeekday(String title) {
         this.weekday = weekday;
     }
-
-    public String getTime() {
-        return time;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getInfo() {
-        return info;
+    public int getEnable() {
+        return enable;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setEnable(int enable) {
+        this.enable = enable;
     }
 
-    public Classview(String time, String info,String weekday,String date) {
-        this.time = time;
-        this.info = info;
-        this.weekday=weekday;
-        this.date= date;
+    public String getDescr() {
+        return descr;
+    }
 
+    public void setDescr(String descr) {
+        this.descr = descr;
+    }
+
+    public String getStartat() {
+        return startat;
+    }
+
+    public void setStartat(String startat) {
+        this.startat = startat;
+    }
+
+    public String getEndat() {
+        return endat;
+    }
+
+    public void setEndat(String endat) {
+        this.endat = endat;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getAlarmat() {
+        return alarmat;
+    }
+
+    public void setAlarmat(String alarmat) {
+        this.alarmat = alarmat;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

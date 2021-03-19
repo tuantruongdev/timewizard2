@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.testnavbottom"
+        applicationId "com.example.timewizard"
         minSdkVersion 25
         targetSdkVersion 30
         versionCode 1
@@ -27,7 +27,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+}
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'

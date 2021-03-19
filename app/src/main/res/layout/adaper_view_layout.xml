@@ -16,7 +16,7 @@
     android:id="@+id/swEnableEvent"
     android:layout_below="@id/dateweek"
     android:layout_marginLeft="15dp"
-    android:checked="true"
+
     android:background="@drawable/rounded_cornersw"
 
     ></Switch>

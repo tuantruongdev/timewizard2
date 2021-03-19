@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.Window;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
-
 import com.example.testnavbottom.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,7 +22,7 @@ import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
     private static Context context;
-
+    DatabaseHelper mDatabasehelper;
 
 
     public static Context getAppContext() {
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-
-
+       // Switch swEnable =(Switch)findViewById(R.id.swEnableEvent);
+       // swEnable.toggle();
 
     }
 

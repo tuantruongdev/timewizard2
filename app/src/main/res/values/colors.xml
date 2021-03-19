@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightdark">#1a1b1c</color>
     <color name="yellowIos">#FFCC00</color>
+    <color name="fadedgray">#7e827f</color>
 </resources>
