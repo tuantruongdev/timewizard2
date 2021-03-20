@@ -4,12 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.io.Console;
 import java.sql.SQLData;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -145,6 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Lấy toàn bộ SP
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public ArrayList<Classview> getAllProducts() {
 
         ArrayList<Classview> event = new ArrayList<Classview>();
@@ -155,7 +160,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Đến dòng đầu của tập dữ liệu
         cursor.moveToFirst();
         int i=0;
+
+        //dddddddddddajwhdlkahjdlawd
+        Classview nClass=   new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!",1,"", "1970-01-01 00:00:00"," ",2,"","","1",-1);
+        Cursor oldCusor =cursor;
+        int ftime=1;
+        String olddate="";
         while (!cursor.isAfterLast()) {
+
+
+
 
             int eventID = cursor.getInt(0);
             String eventtitle = cursor.getString(1);
@@ -169,15 +183,133 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+        if(ftime==1){
+            nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,eventalarmat,"1",eventID);
 
-             Classview nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,eventalarmat,"1",eventID);
-
-       //   nClass.getTitle();
+            //   nClass.getTitle();
 
             event.add(nClass);
-           // nClass.getTitle();
+            olddate = cursor.getString(3);
+            // nClass.getTitle();
             cursor.moveToNext();
             i++;
+            ftime=0;
+            continue;
+        }else {
+
+
+
+
+            String tempDay = olddate;
+
+            String mTempday4 = getdate(tempDay, 2);
+            String mTempmonth4 = getdate(tempDay, 1);
+            String mTempyear4 = getdate(tempDay, 0);
+
+            String mTempday5 = getdate(eventstartat, 2);
+            String mTempmonth5 = getdate(eventstartat, 1);
+            String mTempyear5 = getdate(eventstartat, 0);
+
+            String mTempyear9 = getdate(eventstartat, 0);
+        //check neu 2 task gan nhau thi bo qua
+//dawhjkkkkkkkkkkkkkkk
+            Calendar cal = GregorianCalendar.getInstance();
+            Calendar oldcal = GregorianCalendar.getInstance();
+            int flag=0;
+
+
+                    LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+                    LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
+
+         //   dt1.isAfter(dt2)
+            if (Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1){
+
+                String time1 = mTempyear4+"-"+mTempmonth4+"-"+String.valueOf(Integer.parseInt(mTempday4)) ;  // Start date
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c1 = Calendar.getInstance();
+                try {
+                    c1.setTime(sdf.parse(time1));
+                }catch (Exception e){
+
+                }
+
+
+                c1.add(Calendar.DATE,1);
+
+                String timeC1 =sdf.format(c1.getTime())+" 01:01:01";
+
+
+
+                String time2 = mTempyear5+"-"+mTempmonth5+"-"+String.valueOf(Integer.parseInt(mTempday5)) ;  // Start date
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c2 = Calendar.getInstance();
+                try {
+                    c2.setTime(sdf2.parse(time1));
+                }catch (Exception e){
+
+                }
+
+                //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+
+
+
+                String timeC2 =sdf.format(c2.getTime())+" 01:01:01";
+
+
+
+
+                if (timeC1!=timeC2 ){
+
+
+
+                        nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", timeC1, " ", 2, "", "", "1", -1);
+                        event.add(nClass);
+                        i++;
+
+                        //set next day here
+               // Calendar cal = GregorianCalendar.getInstance();
+                //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+                String dt3 = mTempyear4+"-"+mTempmonth4+"-"+String.valueOf(Integer.parseInt(mTempday4)) ;
+                SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c3 = Calendar.getInstance();
+               try {
+                   c3.setTime(sdf3.parse(dt3));
+               }catch (Exception e){}
+
+                //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+
+                c3.add(Calendar.DATE,1);
+
+                olddate =sdf.format(c3.getTime())+" 01:01:01";
+                     ///   olddate = mTempyear5+"-"+mTempmonth5+"-"+String.valueOf(Integer.parseInt(mTempday4)+1)+" 00:00:00";
+                        continue;
+
+                     }
+
+
+            }
+
+
+            nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, eventalarmat, "1", eventID);
+
+            //   nClass.getTitle();
+
+            event.add(nClass);
+
+            olddate = cursor.getString(3);
+            // nClass.getTitle();
+            cursor.moveToNext();
+            i++;
+            continue;
+        }
+
+
+          //  Calendar cal = GregorianCalendar.getInstance();
+         //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+
+
+
+
         }
 
         cursor.close();
