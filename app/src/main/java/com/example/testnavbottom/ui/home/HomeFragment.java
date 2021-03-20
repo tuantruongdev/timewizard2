@@ -2,6 +2,7 @@ package com.example.testnavbottom.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -83,6 +85,7 @@ public class HomeFragment extends Fragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -246,7 +249,7 @@ public class HomeFragment extends Fragment {
 
         classListAdaper adaper = new classListAdaper(this.getContext(),R.layout.adaper_view_layout,a);
 
-        today =mydb.getDayIndex();
+        today =mydb.getDayIndex(a);
         listView.setAdapter(adaper);
         listView.setSelection(today);
 

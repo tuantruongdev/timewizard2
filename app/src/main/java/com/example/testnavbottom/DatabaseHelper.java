@@ -87,9 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (Integer.parseInt(getdate(mydate,0))==cal1.get(Calendar.YEAR)&&Integer.parseInt(getdate(mydate,1))==cal1.get(Calendar.MONTH)+1&&Integer.parseInt(getdate(mydate,2))==cal1.get(Calendar.DAY_OF_MONTH)){
             return  true;
         }
-      int year= cal1.get(Calendar.MONTH);
-        Log.d("xxxxxxxxxx----------------------", String.valueOf(year));
-        //   if (cal.after)
+
 
 
         return false;
@@ -107,41 +105,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int getDayIndex() {
+    public int getDayIndex(ArrayList<Classview> events) {
 
-        ArrayList<Classview> event = new ArrayList<Classview>();
+      //  ArrayList<Classview> event = new ArrayList<Classview>();
 
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat  from events", null);
 
         //Đến dòng đầu của tập dữ liệu
-        cursor.moveToFirst();
+
+
+
+
         int i=0;
-        while (!cursor.isAfterLast()) {
-
-            int eventID = cursor.getInt(0);
-            String eventtitle = cursor.getString(1);
-            String eventdescr = cursor.getString(2);
-            String eventstartat = cursor.getString(3);
-            String eventendat = cursor.getString(4);
-            int eventenable = cursor.getInt(5);
-            String eventalarmat = cursor.getString(7);
-            int eventtype= cursor.getInt(6);
 
 
+        while (i < events.size()) {
+            if (checkscroll(events.get(i).getStartat())) {
+                currentDateIndex = i;
 
-            if ( checkscroll(eventstartat)) {
-                currentDateIndex =i;
             }
-            //   nClass.getTitle();
-
-
-            // nClass.getTitle();
-            cursor.moveToNext();
             i++;
         }
 
-        cursor.close();
+
+
+
+
 
 
         return currentDateIndex;
@@ -181,6 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int eventtype= cursor.getInt(6);
 
 
+// request add vao database, truong hop su kien trong, insert cot vao db
+
 
 
         if(ftime==1){
@@ -217,12 +207,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Calendar oldcal = GregorianCalendar.getInstance();
             int flag=0;
 
-
+        cal.set(Integer.parseInt(mTempyear4) ,Integer.parseInt(mTempmonth4 ),Integer.parseInt( mTempday4));
                     LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+                  //  cal.add(Calendar.DATE,-1);
                     LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
+                 dt2=   dt2.minusDays(1);
+//Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
 
+            Log.d("cac",cal.getTime().toString());
          //   dt1.isAfter(dt2)
-            if (Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1){
+            if (dt2.isAfter(dt1)){
 
                 String time1 = mTempyear4+"-"+mTempmonth4+"-"+String.valueOf(Integer.parseInt(mTempday4)) ;  // Start date
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
