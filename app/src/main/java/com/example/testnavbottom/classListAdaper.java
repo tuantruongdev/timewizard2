@@ -42,14 +42,27 @@ public class classListAdaper extends ArrayAdapter<Classview> {
 
 //THIS FUNCTION IS HUGEEEEEEEEEEEEEE ERROR!!!
     public  String dayName(String year,String month,String day){
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
+        String time2 = year+"-"+month+"-"+String.valueOf(Integer.parseInt(day)) ;  // Start date
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c2 = Calendar.getInstance();
+        try {
+            c2.setTime(sdf2.parse(time2));
+        }catch (Exception e){
 
-        // this formatter will have the current locale
-        SimpleDateFormat formatx = new SimpleDateFormat("EEEE");
+        }
 
-       String date= formatx.format(cal.getTime());
-        String realdayname= "err";
+        SimpleDateFormat sdf3 = new SimpleDateFormat("EEEE");
+        String date= sdf3.format(c2.getTime());
+
+
+
+
+
+
+
+
+
+                String realdayname= "err";
 
         switch (date){
             case "Monday":

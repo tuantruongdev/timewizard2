@@ -40,6 +40,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currentDateIndex;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean compare2Classlist(Classview a, Classview b ){
+            a.getStartat();
+
+        String tempDay = a.getStartat();
+        String tempDayb = b.getStartat();
+
+
+        String mTempday4 = getdate(tempDay, 2);
+        String mTempmonth4 = getdate(tempDay, 1);
+        String mTempyear4 = getdate(tempDay, 0);
+
+        String mTempday5 = getdate(tempDayb, 2);
+        String mTempmonth5 = getdate(tempDayb, 1);
+        String mTempyear5 = getdate(tempDayb, 0);
+
+
+
+        LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
+          dt2=dt2.minusDays(1);
+        if (dt1.isAfter(dt2)) {
+            return true;
+        }
+
+
+
+
+        return  false;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public  ArrayList<Classview> ArraylistCompare(ArrayList<Classview> myClass){
+        Classview[] arrayClassview = new Classview[myClass.size()];
+
+        int i=0;
+        while (i < myClass.size()) {
+            arrayClassview[i]=myClass.get(i);
+            i++;
+        }
+
+
+   //     arrayClassview[k] > key
+
+        int n = myClass.size();
+        for (int j = 1; j < n; ++j) {
+            Classview key = arrayClassview[j];
+            int k = j - 1;
+
+            // Di chuyển các phần tử của arr [0 ... i - 1], lớn hơn key
+            // đến một vị trí trước vị trí hiện tại của chúng
+            while (k >= 0 && (compare2Classlist( arrayClassview[k],key) )) {
+                arrayClassview[k + 1] = arrayClassview[k];
+                k = k - 1;
+            }
+            arrayClassview[k + 1] = key;
+        }
+
+
+/*
+        int n = myClass.size();
+        for (int ii = 0; ii < n - 1; ii++) {
+            for (int j = 0; j < n - ii - 1; j++)
+                if ((compare2Classlist(arrayClassview[j], arrayClassview[j + 1]))) {
+                    // swap arr[j+1] và arr[i]
+                    Classview temp = arrayClassview[j];
+                    arrayClassview[j] = arrayClassview[j + 1];
+                    arrayClassview[j + 1] = temp;
+                }
+        }*/
+
+        Log.d("asd",arrayClassview[myClass.size()-1].getStartat());
+       ArrayList<Classview> clss= new ArrayList<Classview>();
+        i=0;
+        while (i < myClass.size()) {
+            clss.add(arrayClassview[i]);
+            i++;
+        }
+
+
+
+
+        return clss;
+    }
+    
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -214,7 +303,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                  dt2=   dt2.minusDays(1);
 //Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
 
-            Log.d("cac",cal.getTime().toString());
+           // Log.d("cac",cal.getTime().toString());
          //   dt1.isAfter(dt2)
             if (dt2.isAfter(dt1)){
 

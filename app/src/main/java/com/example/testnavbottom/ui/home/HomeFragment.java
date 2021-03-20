@@ -42,6 +42,8 @@ import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -64,7 +66,8 @@ public class HomeFragment extends Fragment {
         return sb.toString();
     }
 
-    void listviewLoad(LayoutInflater inflater,ViewGroup container){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    void listviewLoad(LayoutInflater inflater, ViewGroup container){
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final ListView listView = root.findViewById(R.id.lv1);
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
@@ -111,7 +114,7 @@ public class HomeFragment extends Fragment {
 
 
                 ArrayList<Classview> a  =  mydb.getAllProducts();
-
+                a=mydb.ArraylistCompare(a);
                 classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
 
               //  listView.setSelection(1);
@@ -124,7 +127,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Gson gson = new Gson();
+
                 String rawJson="deo co gi";
                 try {
                     rawJson=readText(getContext() ,R.raw.eventsjs);
@@ -135,6 +138,8 @@ public class HomeFragment extends Fragment {
 
                 int count=0;
                 Pattern pattern = Pattern.compile("(?<=title)[\\s\\S]*?(?=\\})",Pattern.MULTILINE);
+
+
                 ArrayList<String> tasks = new ArrayList<String>();
                 Matcher matcher = pattern.matcher(rawJson);
 
@@ -158,7 +163,10 @@ public class HomeFragment extends Fragment {
                 classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
 
 
+
+                today =mydb.getDayIndex(a);
                 listView.setAdapter(adaper);
+                listView.setSelection(today);
 
 
 
@@ -170,89 +178,13 @@ public class HomeFragment extends Fragment {
 
 
 
-
-      /*
-        for (int i=0;i<30;i++) {
-
-            int day = calendar.get(Calendar.DAY_OF_WEEK);
-            Date date = calendar.getTime();
-            int cday = calendar.get(Calendar.DATE);
-
-            String currentdayweek = "T2";
-
-            switch (day) {
-                case Calendar.SUNDAY:
-                    currentdayweek = "CN";
-                    break;
-                case Calendar.MONDAY:
-                    currentdayweek = "T2";
-                    break;
-                case Calendar.TUESDAY:
-                    currentdayweek = "T3";
-                    break;
-                case Calendar.WEDNESDAY:
-                    currentdayweek = "T4";
-                    break;
-                case Calendar.THURSDAY:
-                    currentdayweek = "T5";
-                    break;
-                case Calendar.FRIDAY:
-                    currentdayweek = "T6";
-                    break;
-                case Calendar.SATURDAY:
-                    currentdayweek = "T7";
-                    break;
-                default:
-                    currentdayweek = "T2";
-                    break;
-            }
-
-
-            Classview class1 = new Classview("--:--", "Bạn chưa có lịch hôm nay, vui lòng thêm sự kiện nhé!~", currentdayweek, String.valueOf(cday));
-
-
-
-
-            mydb.insertProduct(class1);
-            classlist.add(class1);
-
-
-
-
-
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-        }
-        */
-
-       /* classlist.add(class2);
-        classlist.add(class3);
-        classlist.add(class4);
-        classlist.add(class5);
-        classlist.add(class1);*/
-    /*
-      classlist.add(mydb.getProductByID(1));
-        classlist.add(mydb.getProductByID(2));
-        classlist.add(mydb.getProductByID(3));
-        classlist.add(mydb.getProductByID(4));
-
-     */
-
-    //  mydb.deleteallevent();
-
-
-
-
-
-
-
         ArrayList<Classview> a  =  mydb.getAllProducts();
-
+        a=mydb.ArraylistCompare(a);
         classListAdaper adaper = new classListAdaper(this.getContext(),R.layout.adaper_view_layout,a);
 
         today =mydb.getDayIndex(a);
         listView.setAdapter(adaper);
         listView.setSelection(today);
-
 
 
 
