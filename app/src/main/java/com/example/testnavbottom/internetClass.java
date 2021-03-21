@@ -43,6 +43,9 @@ public class internetClass {
         if(mode==3){
             return  mtask.refresh_token;
         }
+        if (mode==5 && !mtask._id.equals("1")){
+            return "1";
+        }
 
 
         return "error";
