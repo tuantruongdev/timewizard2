@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "ProductDbHelper";
-    private static final String DATABASE_NAME = "myproduct.db";
+    private static final String DATABASE_NAME = "truongdeptrai.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_PRODUCT = "events";
     private String title = "";
@@ -62,10 +64,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
         LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
           dt2=dt2.minusDays(1);
-        if (dt1.isAfter(dt2)) {
-            return true;
-        }
-
+//maybe error here
+          if ( dt1.compareTo(dt2)!=1) {
+              if (dt1.isAfter(dt2)) {
+                  return true;
+              }
+          }
 
 
 
@@ -113,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
         }*/
 
-        Log.d("asd",arrayClassview[myClass.size()-1].getStartat());
+
        ArrayList<Classview> clss= new ArrayList<Classview>();
         i=0;
         while (i < myClass.size()) {
@@ -136,6 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Phương thức này tự động gọi nếu storage chưa có DATABASE_NAME
     @Override
     public void onCreate(SQLiteDatabase db) {
+
 
         Log.i(TAG, "Create table");
         String queryCreateTable = "CREATE TABLE " + TABLE_PRODUCT + " ( " +
@@ -231,7 +236,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ArrayList<Classview> event = new ArrayList<Classview>();
 
-        SQLiteDatabase db = getReadableDatabase();
+      //  SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+
+       // SQLiteDatabase  db=SQLiteDatabase.openOrCreateDatabase("truongdeptrai.db",null, null);
+
+        SQLiteDatabase  db = getWritableDatabase();
+
         Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat  from events", null);
 
         //Đến dòng đầu của tập dữ liệu
@@ -441,8 +451,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Chèn mới
   public   void insertProduct(Classview classEvent) {
-        SQLiteDatabase db = getWritableDatabase();
+
+      SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+      //  SQLiteDatabase db = getWritableDatabase();
     // String[] a= new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),classEvent.getType(),classEvent.getNote(),classEvent.getNote()};
+
+
         db.execSQL("INSERT INTO events (title,descr,startat,endat,type,note,alarmat,enable) VALUES (?,?,?,?,?,?,?,?)",
                 new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getNote(),enable+ ""});
     }

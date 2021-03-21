@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.testnavbottom.R;
+import com.example.testnavbottom.internetClass;
 
 public class NotificationsFragment extends Fragment {
 
@@ -23,13 +24,19 @@ public class NotificationsFragment extends Fragment {
         notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        TextView textView=root.findViewById(R.id.tvrefreshtaskFromSvo);
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onClick(View v) {
+
+                internetClass a= new internetClass();
+                a.checkSmartName("DTC1854801030076","Leminh77",inflater,container);
+
+
             }
         });
+
+
         return root;
     }
 }

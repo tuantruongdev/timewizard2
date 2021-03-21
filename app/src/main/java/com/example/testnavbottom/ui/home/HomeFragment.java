@@ -33,6 +33,7 @@ import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.taskCL;
+import com.example.testnavbottom.internetClass;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -48,10 +49,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Inflater;
 
 public class HomeFragment extends Fragment {
     public  int today=1;
-
+    Context contextnew=this.getContext();
     private static Context context;
     private HomeViewModel homeViewModel;
     private  String readText(Context context, int resId) throws IOException {
@@ -65,6 +67,69 @@ public class HomeFragment extends Fragment {
         }
         return sb.toString();
     }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+   public void getEventsFromsvo(String rawJson, LayoutInflater inflater,ViewGroup container){
+
+
+      View root = inflater.inflate(R.layout.fragment_home, container, false);
+     final ListView listView = root.findViewById(R.id.lv1);
+        DatabaseHelper mydb = new DatabaseHelper(this.getContext());
+        Gson gson1=new Gson();
+
+        int count=0;
+        Pattern pattern = Pattern.compile("(?<=title)[\\s\\S]*?(?=\\})",Pattern.MULTILINE);
+
+
+        ArrayList<String> tasks = new ArrayList<String>();
+        Matcher matcher = pattern.matcher(rawJson);
+
+        while (matcher.find()){
+            tasks.add("{\"title"+matcher.group(0)+"}");
+            count++;
+        }
+
+        for (int i=0;i<count;i++) {
+            taskCL mtask= gson1.fromJson(tasks.get(i),taskCL.class);
+            Classview myDbtask= new Classview(mtask.title,1,mtask.desc,mtask.startAt,mtask.finishAt,1,"1","this is note","T2",1);
+
+
+            mydb.insertProduct(myDbtask);
+            //editText.setText(editText.getText()+mtask.title+"\n");
+        }
+
+
+    //    ArrayList<Classview> a  =  mydb.getAllProducts();
+     //   a=mydb.ArraylistCompare(a);
+
+
+
+/*
+            classListAdaper adaper = new classListAdaper(contextnew, R.layout.adaper_view_layout, a);
+            today =mydb.getDayIndex(a);
+            listView.setAdapter(adaper);
+            listView.setSelection(today);
+
+*/
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     void listviewLoad(LayoutInflater inflater, ViewGroup container){
@@ -89,8 +154,7 @@ public class HomeFragment extends Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -114,7 +178,7 @@ public class HomeFragment extends Fragment {
 
 
                 ArrayList<Classview> a  =  mydb.getAllProducts();
-                a=mydb.ArraylistCompare(a);
+
                 classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
 
               //  listView.setSelection(1);
@@ -127,46 +191,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-                String rawJson="deo co gi";
-                try {
-                    rawJson=readText(getContext() ,R.raw.eventsjs);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Gson gson1=new Gson();
-
-                int count=0;
-                Pattern pattern = Pattern.compile("(?<=title)[\\s\\S]*?(?=\\})",Pattern.MULTILINE);
-
-
-                ArrayList<String> tasks = new ArrayList<String>();
-                Matcher matcher = pattern.matcher(rawJson);
-
-                while (matcher.find()){
-                    tasks.add("{\"title"+matcher.group(0)+"}");
-                    count++;
-                }
-
-                for (int i=0;i<count;i++) {
-                    taskCL mtask= gson1.fromJson(tasks.get(i),taskCL.class);
-                    Classview myDbtask= new Classview(mtask.title,1,mtask.desc,mtask.startAt,mtask.finishAt,1,"1","this is note","T2",1);
-
-
-                mydb.insertProduct(myDbtask);
-                //editText.setText(editText.getText()+mtask.title+"\n");
-                }
-
-
-                ArrayList<Classview> a  =  mydb.getAllProducts();
-
-                classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
-
-
-
-                today =mydb.getDayIndex(a);
-                listView.setAdapter(adaper);
-                listView.setSelection(today);
 
 
 
