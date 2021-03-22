@@ -10,14 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,6 +39,7 @@ import com.example.testnavbottom.R;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.taskCL;
 import com.example.testnavbottom.internetClass;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -151,6 +157,113 @@ public class HomeFragment extends Fragment {
 
 
 
+    public void displayAlertDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.addeventpicker, null);
+        TimePicker timePicker =alertLayout.findViewById(R.id.datePicker1);
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        TextView textViewtime=alertLayout.findViewById(R.id.timetext);
+        DatePicker realdatepicker= alertLayout.findViewById(R.id.realdatepicker);
+        realdatepicker.setVisibility(View.GONE);
+        timePicker.setIs24HourView(true);
+        textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
+        Space space=alertLayout.findViewById(R.id.blankspace);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
+            }
+        });
+        Button btnNext= alertLayout.findViewById(R.id.btnNext);
+        Button btnBack= alertLayout.findViewById(R.id.btnBack);
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int pixels = (int) (50 * scale + 0.5f);
+
+
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                //set buttons under calendar
+                timePicker.setVisibility(View.GONE);
+                realdatepicker.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams lp =
+                        new RelativeLayout.LayoutParams
+                                (
+                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                );
+                lp.setMargins(pixels, 0, 0, 0);
+                lp.addRule(RelativeLayout.BELOW,realdatepicker.getId());
+                lp.addRule(RelativeLayout.RIGHT_OF,space.getId());
+
+
+
+                btnNext.setLayoutParams(lp);
+
+                RelativeLayout.LayoutParams lpBack =
+                        new RelativeLayout.LayoutParams
+                                (
+                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                );
+                lpBack.addRule(RelativeLayout.BELOW,realdatepicker.getId());
+                lpBack.addRule(RelativeLayout.LEFT_OF,space.getId());
+                lpBack.setMargins(0, 0, pixels, 0);
+                btnBack.setLayoutParams(lpBack);
+            }
+        });
+
+
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                timePicker.setVisibility(View.VISIBLE);
+                realdatepicker.setVisibility(View.GONE);
+                RelativeLayout.LayoutParams lp =
+                        new RelativeLayout.LayoutParams
+                                (
+                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                );
+                lp.setMargins(pixels, 0, 0, 0);
+                lp.addRule(RelativeLayout.BELOW,textViewtime.getId());
+                lp.addRule(RelativeLayout.RIGHT_OF,space.getId());
+
+
+
+
+
+
+                btnNext.setLayoutParams(lp);
+
+                RelativeLayout.LayoutParams lpBack =
+                        new RelativeLayout.LayoutParams
+                                (
+                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                );
+                lpBack.addRule(RelativeLayout.BELOW,textViewtime.getId());
+                lpBack.addRule(RelativeLayout.LEFT_OF,space.getId());
+                lpBack.setMargins(0, 0, pixels, 0);
+                btnBack.setLayoutParams(lpBack);
+
+            }
+        });
+
+
+        alert.setTitle("Chọn thời gian cho Sự Kiện");
+        alert.setView(alertLayout);
+        alert.setCancelable(true);
+
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -166,7 +279,15 @@ public class HomeFragment extends Fragment {
       //  listviewLoad(inflater,container);
      //   Classview event= new Classview("--","mon loz","T5","18");
 
+        FloatingActionButton addbtn = root.findViewById(R.id.floatingBtn);
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlertDialog();
 
+
+            }
+        });
         ArrayList<Classview> classlist = new ArrayList<>();
 
         Button btn1=root.findViewById(R.id.btn1);
