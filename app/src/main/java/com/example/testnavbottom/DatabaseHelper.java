@@ -170,7 +170,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             month= matcher.group(0);
         }
         String[] arrOfStr = month.split("-", 3);
-        return arrOfStr[opt];
+        if (arrOfStr[opt].length()<2){
+            return  "0"+arrOfStr[opt];
+        }
+        return  arrOfStr[opt];
     }
 
 
@@ -292,7 +295,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String tempDay = olddate;
 
             String mTempday4 = getdate(tempDay, 2);
+
+
             String mTempmonth4 = getdate(tempDay, 1);
+
+
             String mTempyear4 = getdate(tempDay, 0);
 
             String mTempday5 = getdate(eventstartat, 2);

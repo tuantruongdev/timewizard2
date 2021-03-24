@@ -63,7 +63,7 @@ public class classListAdaper extends ArrayAdapter<Classview> {
 
 
                 String realdayname= "err";
-
+/*
 
         switch (date){
             case "Thứ Hai":
@@ -89,10 +89,10 @@ public class classListAdaper extends ArrayAdapter<Classview> {
                 break;
 
         }
+*/
 
 
 
-        /*
         switch (date){
             case "Monday":
                 realdayname="T2";
@@ -117,7 +117,7 @@ public class classListAdaper extends ArrayAdapter<Classview> {
                 break;
 
         }
-*/
+
 
 
         return realdayname;

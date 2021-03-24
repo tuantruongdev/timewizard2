@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -59,8 +62,14 @@ import java.util.zip.Inflater;
 
 public class HomeFragment extends Fragment {
     public  int today=1;
+    public int currentAddView=0;
     Context contextnew=this.getContext();
     private static Context context;
+    String eventStartAt="Không có tiêu đề";
+
+    String eventTitle="Không có tiêu đề";
+    String eventDesc="Không có tiêu đề";
+
     private HomeViewModel homeViewModel;
     private  String readText(Context context, int resId) throws IOException {
         InputStream is = context.getResources().openRawResource(resId);
@@ -168,26 +177,111 @@ public class HomeFragment extends Fragment {
         timePicker.setIs24HourView(true);
         textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
         Space space=alertLayout.findViewById(R.id.blankspace);
+
+
+
+        EditText edtTitle= alertLayout.findViewById(R.id.edteventTitle);
+        EditText edtDesc= alertLayout.findViewById(R.id.edteventDesc);
+        edtTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            eventTitle = edtTitle.getText().toString();
+            }
+        });
+
+
+
+
+        alert.setTitle("Chọn thời gian cho Sự Kiện");
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+
+        AlertDialog dialog = alert.create();
+        dialog.show();
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
             }
         });
+        RelativeLayout rev1= alertLayout.findViewById(R.id.relativeTimepicker);
+        RelativeLayout rev2= alertLayout.findViewById(R.id.relaAddtext);
         Button btnNext= alertLayout.findViewById(R.id.btnNext);
         Button btnBack= alertLayout.findViewById(R.id.btnBack);
         final float scale = getContext().getResources().getDisplayMetrics().density;
         int pixels = (int) (50 * scale + 0.5f);
+        Button btnFinish= alertLayout.findViewById(R.id.btnFinish);
+        Button btnBack2= alertLayout.findViewById(R.id.btnBacktoTimepicker);
+        TextView timeDisplayOnaddtitle=alertLayout.findViewById(R.id.datetimeTV);
+        btnBack2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentAddView==2){
+                    rev1.setVisibility(View.VISIBLE);
+                    rev2.setVisibility(View.GONE);
+                    currentAddView=1;
+
+                }
 
 
 
+            }
+        });
+
+
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper mydb = new DatabaseHelper(contextnew);
+                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,"0",0,eventStartAt,"no note","T2",0 ));
+                dialog.cancel();
+                currentAddView=0;
+
+                /*
+
+
+                 public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
+
+                 private String title = "";
+    private int enable = 1;
+    private String descr = "";
+    private String startat = "";
+    private String endat = "";
+    private int type = 0;
+    private String alarmat = "";
+    private String note = "";
+    private String weekday="T2";
+
+
+                 */
+            }
+        });
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
+                if (currentAddView==1){
+                rev1.setVisibility(View.GONE);
+                rev2.setVisibility(View.VISIBLE);
+                currentAddView=2;
+                timeDisplayOnaddtitle.setText(timePicker.getHour()+":"+timePicker.getMinute()+"  "+realdatepicker.getDayOfMonth()+"/"+realdatepicker.getMonth()+1+"/"+realdatepicker.getYear());
 
+             //need to add "0" char
+                 eventStartAt=realdatepicker.getYear()+"-"+realdatepicker.getMonth()+1+"-"+realdatepicker.getDayOfMonth()+" "+timePicker.getHour()+":"+timePicker.getMinute()+":00";
 
+                }
+                if (currentAddView==0){
                 //set buttons under calendar
                 timePicker.setVisibility(View.GONE);
                 realdatepicker.setVisibility(View.VISIBLE);
@@ -213,6 +307,8 @@ public class HomeFragment extends Fragment {
                 lpBack.addRule(RelativeLayout.LEFT_OF,space.getId());
                 lpBack.setMargins(0, 0, pixels, 0);
                 btnBack.setLayoutParams(lpBack);
+                currentAddView=1;
+                }
             }
         });
 
@@ -222,45 +318,40 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if (currentAddView==0){
+                    dialog.cancel();
+                }
+                if (currentAddView==1) {
+                    timePicker.setVisibility(View.VISIBLE);
+                    realdatepicker.setVisibility(View.GONE);
+                    RelativeLayout.LayoutParams lp =
+                            new RelativeLayout.LayoutParams
+                                    (
+                                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                    );
+                    lp.setMargins(pixels, 0, 0, 0);
+                    lp.addRule(RelativeLayout.BELOW, textViewtime.getId());
+                    lp.addRule(RelativeLayout.RIGHT_OF, space.getId());
 
-                timePicker.setVisibility(View.VISIBLE);
-                realdatepicker.setVisibility(View.GONE);
-                RelativeLayout.LayoutParams lp =
-                        new RelativeLayout.LayoutParams
-                                (
-                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
-                                );
-                lp.setMargins(pixels, 0, 0, 0);
-                lp.addRule(RelativeLayout.BELOW,textViewtime.getId());
-                lp.addRule(RelativeLayout.RIGHT_OF,space.getId());
 
+                    btnNext.setLayoutParams(lp);
 
-
-
-
-
-                btnNext.setLayoutParams(lp);
-
-                RelativeLayout.LayoutParams lpBack =
-                        new RelativeLayout.LayoutParams
-                                (
-                                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
-                                );
-                lpBack.addRule(RelativeLayout.BELOW,textViewtime.getId());
-                lpBack.addRule(RelativeLayout.LEFT_OF,space.getId());
-                lpBack.setMargins(0, 0, pixels, 0);
-                btnBack.setLayoutParams(lpBack);
-
+                    RelativeLayout.LayoutParams lpBack =
+                            new RelativeLayout.LayoutParams
+                                    (
+                                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
+                                    );
+                    lpBack.addRule(RelativeLayout.BELOW, textViewtime.getId());
+                    lpBack.addRule(RelativeLayout.LEFT_OF, space.getId());
+                    lpBack.setMargins(0, 0, pixels, 0);
+                    btnBack.setLayoutParams(lpBack);
+                currentAddView=0;
+                }
             }
         });
 
 
-        alert.setTitle("Chọn thời gian cho Sự Kiện");
-        alert.setView(alertLayout);
-        alert.setCancelable(true);
 
-        AlertDialog dialog = alert.create();
-        dialog.show();
     }
 
 
@@ -304,6 +395,7 @@ public class HomeFragment extends Fragment {
 
               //  listView.setSelection(1);
                 listView.setAdapter(adaper);
+
 
             }
         });
