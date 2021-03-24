@@ -39,12 +39,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.example.testnavbottom.R.id.date;
+import static com.example.testnavbottom.R.id.end;
 import static com.example.testnavbottom.R.id.fade;
 import static com.example.testnavbottom.R.id.swEnableEvent;
-
-
-
-
+import static com.example.testnavbottom.R.id.tvInfo;
 
 
 public class classListAdaper extends ArrayAdapter<Classview> {
@@ -191,7 +189,7 @@ int currentAddView=0;
 
         TextView tvTitle= convertview.findViewById(R.id.tv2);
         TextView tvDesc= convertview.findViewById(R.id.tvInfo);
-        TextView tvTime= convertview.findViewById(R.id.tv1);
+        TextView tvTime= convertview.findViewById(R.id.tvsstartAt);
         TextView tvID= convertview.findViewById(R.id.tvidOfevent);
 
 
@@ -427,6 +425,10 @@ int currentAddView=0;
         TextView Did = convertView.findViewById(R.id.tvidOfevent);
         TextView Ddesc= convertView.findViewById(R.id.tvInfo);
         View finalConvertView = convertView;
+        TextView tvtimeend= convertView.findViewById(R.id.tvendat);
+        TextView tvTime= convertView.findViewById(R.id.tvsstartAt);
+
+
         Dinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,13 +451,19 @@ int currentAddView=0;
         });
 
 
+        if (getItem(position).getType()==0){
+            Dinfo.setBackgroundColor(Color.parseColor("#5a1363"));
+            Ddesc.setBackgroundColor(Color.parseColor("#5a1363"));
+        }
+
         //Dinfo.setText( sw.toString());
-
-
+        String timeend =getItem(position).getEndat();
+        tvtimeend.setText(timeend);
         Ddate.setText(date);
         Ddateweek.setText(weekday);
-        Dtime.setText(time);
+        Dtime.setText(  getTime(time,0)+":"+getTime(time,1)+"-"+getTime(timeend,0)+":"+getTime(timeend,1));
         Dinfo.setText(title);
+        tvTime.setText(time);
         Did.setText(String.valueOf(id));
         Ddesc.setText(desc);
         return  convertView;

@@ -91,7 +91,7 @@ android:layout_marginLeft="80dp"
 
         android:background="@drawable/round_cornerbottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="52dp"
         android:id="@+id/tvInfo"
         android:paddingLeft="14dp"
         android:layout_marginTop="-5dp"
@@ -116,13 +116,31 @@ android:layout_marginLeft="80dp"
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0dddddddddddddaaaaaaaaaaaa"
+        android:text="id"
         android:textColor="@color/black"
         android:id="@+id/tvidOfevent"
-        android:visibility="visible">
+        android:visibility="gone">
+
     </TextView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tvsstartat"
+        android:textColor="@color/black"
+        android:id="@+id/tvsstartAt"
+        android:visibility="gone">
 
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tvssendat"
+        android:textColor="@color/black"
+        android:id="@+id/tvendat"
+        android:visibility="gone">
+
+    </TextView>
 
 
 

@@ -243,7 +243,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DatabaseHelper mydb = new DatabaseHelper(contextnew);
-                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,"0",0,eventStartAt,"no note","T2",0 ));
+                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,"no note","T2",0 ));
                 dialog.cancel();
                 currentAddView=0;
 
