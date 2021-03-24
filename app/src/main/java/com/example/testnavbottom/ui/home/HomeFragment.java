@@ -247,23 +247,7 @@ public class HomeFragment extends Fragment {
                 dialog.cancel();
                 currentAddView=0;
 
-                /*
 
-
-                 public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
-
-                 private String title = "";
-    private int enable = 1;
-    private String descr = "";
-    private String startat = "";
-    private String endat = "";
-    private int type = 0;
-    private String alarmat = "";
-    private String note = "";
-    private String weekday="T2";
-
-
-                 */
             }
         });
         btnNext.setOnClickListener(new View.OnClickListener() {
@@ -275,10 +259,24 @@ public class HomeFragment extends Fragment {
                 rev1.setVisibility(View.GONE);
                 rev2.setVisibility(View.VISIBLE);
                 currentAddView=2;
-                timeDisplayOnaddtitle.setText(timePicker.getHour()+":"+timePicker.getMinute()+"  "+realdatepicker.getDayOfMonth()+"/"+realdatepicker.getMonth()+1+"/"+realdatepicker.getYear());
+
+                String date= String.valueOf(realdatepicker.getDayOfMonth());
+                String month=String.valueOf(realdatepicker.getMonth()+1);;
+                if (realdatepicker.getDayOfMonth()<10){
+                    date= "0"+String.valueOf(realdatepicker.getDayOfMonth());
+                }
+
+                    if (realdatepicker.getMonth()+1<10){
+                        month= "0"+String.valueOf(realdatepicker.getMonth()+1);
+                    }
+
+
+                timeDisplayOnaddtitle.setText(timePicker.getHour()+":"+timePicker.getMinute()+"  "+date+"/"+ month +"/"+realdatepicker.getYear());
 
              //need to add "0" char
-                 eventStartAt=realdatepicker.getYear()+"-"+realdatepicker.getMonth()+1+"-"+realdatepicker.getDayOfMonth()+" "+timePicker.getHour()+":"+timePicker.getMinute()+":00";
+
+
+                 eventStartAt=realdatepicker.getYear()+"-"+  month +"-"+date+" "+timePicker.getHour()+":"+timePicker.getMinute()+":00";
 
                 }
                 if (currentAddView==0){
@@ -379,6 +377,8 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+
         ArrayList<Classview> classlist = new ArrayList<>();
 
         Button btn1=root.findViewById(R.id.btn1);

@@ -10,7 +10,7 @@ public class Classview {
     private String alarmat = "";
     private String note = "";
     private String weekday="T2";
-    private  int id=0;
+
     private int Id=0;
     public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
         this.title = title;
@@ -22,10 +22,17 @@ public class Classview {
         this.alarmat = alarmat;
         this.note = note;
         this.weekday=weekday;
-        this.id = Id;
+        this.Id = Id;
     }
 
 
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
 
     public String getWeekday() {
         return weekday;

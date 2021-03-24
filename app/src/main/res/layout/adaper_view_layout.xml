@@ -7,7 +7,7 @@
     android:weightSum="100"
     android:background="@color/white"
     android:layout_height="match_parent"
-
+    android:id="@+id/idrelalayout"
     >
 
 <Switch
@@ -57,6 +57,9 @@
     android:background="@drawable/rounded_corner"
 android:layout_marginLeft="80dp"
         android:textStyle="bold"
+
+
+
     ></TextView>
     <View
         android:layout_width="match_parent"
@@ -67,17 +70,65 @@ android:layout_marginLeft="80dp"
 
    <TextView
 
-       android:background="@drawable/round_cornerbottom"
+       android:background="@color/teal_700"
        android:layout_width="match_parent"
-       android:layout_height="80dp"
+       android:layout_height="50dp"
         android:id="@+id/tv2"
        android:paddingLeft="14dp"
        android:paddingTop="3dp"
        android:layout_marginLeft="80dp"
        android:layout_below="@+id/tv1"
-       android:text="thông tin môn học"
+       android:text="thông tin môn học\nline 2"
         android:textColor="@color/white"
 
-       android:textSize="17dp"></TextView>
+       android:textSize="17dp"
+
+
+       >
+       </TextView>
+
+    <TextView
+
+        android:background="@drawable/round_cornerbottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tvInfo"
+        android:paddingLeft="14dp"
+        android:layout_marginTop="-5dp"
+
+        android:layout_marginLeft="80dp"
+        android:layout_below="@+id/tv2"
+        android:text="mô tả môn học"
+        android:textColor="@color/white"
+
+        android:textSize="14dp"
+
+
+        >
+
+
+
+
+
+   </TextView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0dddddddddddddaaaaaaaaaaaa"
+        android:textColor="@color/black"
+        android:id="@+id/tvidOfevent"
+        android:visibility="visible">
+    </TextView>
+
+
+
+
+
+
+
+
+
 
     </RelativeLayout>

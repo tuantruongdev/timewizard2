@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
           dt2=dt2.minusDays(1);
 //maybe error here
-          if ( dt1.compareTo(dt2)!=1) {
+          if ( dt1.compareTo(dt2)!=0) {
               if (dt1.isAfter(dt2)) {
                   return true;
               }
@@ -104,18 +104,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             arrayClassview[k + 1] = key;
         }
 
-
-/*
-        int n = myClass.size();
-        for (int ii = 0; ii < n - 1; ii++) {
-            for (int j = 0; j < n - ii - 1; j++)
-                if ((compare2Classlist(arrayClassview[j], arrayClassview[j + 1]))) {
-                    // swap arr[j+1] và arr[i]
-                    Classview temp = arrayClassview[j];
-                    arrayClassview[j] = arrayClassview[j + 1];
-                    arrayClassview[j + 1] = temp;
-                }
-        }*/
 
 
        ArrayList<Classview> clss= new ArrayList<Classview>();
@@ -360,11 +348,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 if (timeC1!=timeC2 ){
 
+                //disabled
+
+                     //   nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", timeC1, " ", 2, "", "", "1", -1);
+                       // event.add(nClass);
+                        //i++;
 
 
-                        nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", timeC1, " ", 2, "", "", "1", -1);
-                        event.add(nClass);
-                        i++;
+
+
 
                         //set next day here
                // Calendar cal = GregorianCalendar.getInstance();
@@ -443,7 +435,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-            classEvent = new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,"","1",0);
+            classEvent = new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,"","1",eventID);
         }
         cursor.close();
         return classEvent;
@@ -451,9 +443,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Cập nhật
     void updateProduct(Classview classEvent) {
-        SQLiteDatabase db = getWritableDatabase();
-      //  db.execSQL("UPDATE events SET title=?, startat = ? where id = ?",
-         //      new String[]{classEvent.getInfo(), classEvent.getTime() +  "1"});
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+        String sqlcommand="UPDATE events SET title= '"+classEvent.getTitle()+"',descr= '"+classEvent.getDescr()+"' ,startat = '"+classEvent.getStartat()+"',endat= '"+classEvent.getEndat()+"',type= "+ String.valueOf(classEvent.getType())+",note= '"+classEvent.getNote()+"',alarmat= '"+classEvent.getAlarmat()+"',enable= "+classEvent.getEnable()+" where id = "+classEvent.getId();
+        db.execSQL(sqlcommand);
+
+
+ //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
+        //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
+
+
+
     }
 
     //Chèn mới
