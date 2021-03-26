@@ -2,6 +2,7 @@ package com.example.testnavbottom.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -26,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -195,7 +198,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-            eventTitle = edtTitle.getText().toString();
+
             }
         });
 
@@ -242,6 +245,9 @@ public class HomeFragment extends Fragment {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                eventTitle = edtTitle.getText().toString();
+                eventDesc=edtDesc.getText().toString();
                 DatabaseHelper mydb = new DatabaseHelper(contextnew);
                 mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,"no note","T2",0 ));
                 dialog.cancel();
@@ -357,12 +363,17 @@ public class HomeFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final ListView listView = root.findViewById(R.id.lv1);
 
-        Calendar calendar = Calendar.getInstance();
+
+
+
+                Calendar calendar = Calendar.getInstance();
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
         Context context=this.getContext();
       //  listviewLoad(inflater,container);
@@ -372,8 +383,15 @@ public class HomeFragment extends Fragment {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayAlertDialog();
+               displayAlertDialog();
+//
+           //     ArrayList<Classview> a  =  mydb.getAllProducts();
 
+             //   classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
+
+             //  adaper.remove();
+
+              // adaper.notifyDataSetChanged();
 
             }
         });
@@ -417,10 +435,44 @@ public class HomeFragment extends Fragment {
 
         ArrayList<Classview> a  =  mydb.getAllProducts();
         a=mydb.ArraylistCompare(a);
+
         classListAdaper adaper = new classListAdaper(this.getContext(),R.layout.adaper_view_layout,a);
 
         today =mydb.getDayIndex(a);
         listView.setAdapter(adaper);
+        ArrayList<Classview> finalA = a;
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int
+                    position, long id) {
+
+                // it will get the position of selected item from the ListView
+
+                final int selected_item = position;
+
+                new AlertDialog.Builder(getContext()).
+                        setIcon(android.R.drawable.ic_delete)
+                        .setTitle("Xóa sự kiện này?")
+                        .setMessage("Bạn có thực sự muốn xóa vĩnh viễn sự kiện này..?")
+                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                                mydb.deleteProductByID(finalA.get(selected_item).getId());
+
+                                finalA.remove(selected_item);
+                                adaper.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("Không" , null).show();
+
+                return true;
+            }
+        });
+
+
+
         listView.setSelection(today);
 
 

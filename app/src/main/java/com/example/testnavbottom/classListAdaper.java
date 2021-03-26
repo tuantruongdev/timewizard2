@@ -1,7 +1,9 @@
 package com.example.testnavbottom;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.Switch;
@@ -135,6 +138,7 @@ int currentAddView=0;
 
         return realdayname;
     }
+
     public classListAdaper(@NonNull Context context, int resource, @NonNull ArrayList<Classview> objects) {
         super(context, resource, objects);
         mContext=context;
@@ -180,6 +184,49 @@ int currentAddView=0;
 
 
     }
+
+
+    public void displaydeleteopts(View convertview){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        // Set Title and Message:
+        builder.setTitle("Xác nhận").setMessage("Bạn có thực sự muốn xóa sự kiện này?");
+
+        //
+        builder.setCancelable(true);
+
+
+        // Create "Yes" button with OnClickListener.
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(mContext,"Đã xóa sự kiện vừa chọn!",
+                        Toast.LENGTH_SHORT).show();
+               // final ListView listView = convertview.findViewById(R.id.lv1);
+
+
+            }
+        });
+
+
+        // Create "No" button with OnClickListener.
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(mContext,"Đã hủy.",
+                        Toast.LENGTH_SHORT).show();
+                //  Cancel
+                dialog.cancel();
+            }
+        });
+
+
+        // Create AlertDialog:
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+
 
 
 
@@ -433,6 +480,14 @@ int currentAddView=0;
             @Override
             public void onClick(View v) {
              displayAlertDialog(finalConvertView);
+            }
+        });
+
+        Dinfo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+            //    displaydeleteopts(finalConvertView);
+                return false;
             }
         });
 
