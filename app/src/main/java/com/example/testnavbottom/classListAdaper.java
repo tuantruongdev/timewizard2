@@ -79,8 +79,8 @@ int currentAddView=0;
 
 
                 String realdayname= "err";
-/*
 
+/*
         switch (date){
             case "Thứ Hai":
                 realdayname="T2";
@@ -94,10 +94,10 @@ int currentAddView=0;
             case "Thứ Năm":
                 realdayname="T5";
                 break;
-            case "Thứ 6":
+            case "Thứ Sáu":
                 realdayname="T6";
                 break;
-            case "Thứ 7":
+            case "Thứ Bảy":
                 realdayname="T7";
                 break;
             case "Chủ Nhật":

@@ -4,13 +4,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Space;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,11 +38,245 @@ import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.classlistAlarm_adapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DashboardFragment extends Fragment  {
+   int currentAddView =0;
 
+
+    String eventStartAt="Không có tiêu đề";
+
+    String eventTitle="Không có tiêu đề";
+    String eventDesc="Không có tiêu đề";
     private DashboardViewModel dashboardViewModel;
+    String getTime(String src,int opt){
+        // rawdate = "2020-08-24 09:30:00";
+        Pattern pattern = Pattern.compile("(?<= )[\\s\\S]*?(?=$)");
+        ArrayList<String> tasks = new ArrayList<String>();
+        Matcher matcher = pattern.matcher(src);
+        String month="0";
+        while (matcher.find()) {
+            month= matcher.group(0);
+        }
+        String[] arrOfStr = month.split(":", 3);
+        if (arrOfStr[opt].length()<2){
+            return  "0"+arrOfStr[opt];
+        }
+        return  arrOfStr[opt];
+
+
+
+
+    }
+
+    public void displayAlertDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.addeventalarmpicker, null);
+        TimePicker timePicker =alertLayout.findViewById(R.id.datePicker1);
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        TextView textViewtime=alertLayout.findViewById(R.id.timetext);
+        DatePicker realdatepicker= alertLayout.findViewById(R.id.realdatepicker);
+
+        timePicker.setIs24HourView(true);
+        textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
+        Space space=alertLayout.findViewById(R.id.blankspace);
+
+
+
+        EditText edtTitle= alertLayout.findViewById(R.id.edteventTitle);
+        EditText edtDesc= alertLayout.findViewById(R.id.edteventDesc);
+        edtTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
+
+        alert.setTitle("Chọn thời gian cho Báo Thức");
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+
+        AlertDialog dialog = alert.create();
+        dialog.show();
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                textViewtime.setText(timePicker.getHour()+":"+timePicker.getMinute());
+            }
+        });
+        RelativeLayout rev1= alertLayout.findViewById(R.id.relativeTimepicker);
+        RelativeLayout rev2= alertLayout.findViewById(R.id.relaAddtext);
+        Button btnNext= alertLayout.findViewById(R.id.btnNext);
+        Button btnBack= alertLayout.findViewById(R.id.btnBack);
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int pixels = (int) (50 * scale + 0.5f);
+        Button btnFinish= alertLayout.findViewById(R.id.btnFinish);
+        Button btnBack2= alertLayout.findViewById(R.id.btnBacktoTimepicker);
+        TextView timeDisplayOnaddtitle=alertLayout.findViewById(R.id.datetimeTV);
+        btnBack2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentAddView==2){
+                    rev1.setVisibility(View.VISIBLE);
+                    rev2.setVisibility(View.GONE);
+                    currentAddView=0;
+
+
+
+
+
+
+
+                }
+
+
+
+            }
+        });
+
+
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                eventTitle = edtTitle.getText().toString();
+                eventDesc=edtDesc.getText().toString();
+                DatabaseHelper mydb = new DatabaseHelper(getContext());
+                Spinner spinner = (Spinner)alertLayout.findViewById(R.id.spinner);
+
+                String note =String.valueOf(spinner.getSelectedItemPosition());
+
+
+                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,note,"T2",0 ));
+                dialog.cancel();
+                currentAddView=0;
+
+
+            }
+        });
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (currentAddView==0){
+                    rev1.setVisibility(View.GONE);
+                    rev2.setVisibility(View.VISIBLE);
+                    currentAddView=2;
+
+
+
+
+                    timeDisplayOnaddtitle.setText(timePicker.getHour()+":"+timePicker.getMinute());
+
+                    //need to add "0" char
+
+
+                    eventStartAt="2000-12-03 "+timePicker.getHour()+":"+timePicker.getMinute()+":00";
+
+                    Spinner spinner = (Spinner)alertLayout.findViewById(R.id.spinner);
+
+                    String hour = getTime("2000-12-03 "+ timePicker.getHour()+":00:00",0)+":"+  getTime("2000-12-03 01:"+timePicker.getMinute()+":00",1)+":00";
+
+
+                    DateFormat dateFormat=new SimpleDateFormat("hh:mm:ss");
+                    Date date2 = null;
+                    try {
+                        date2 = dateFormat.parse(hour+":00");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Date date3 = null;
+                    try {
+                        date3 = dateFormat.parse("00:00:01");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    List<String> categories = new ArrayList<String>();
+                    for (int i=2;i<7;i++) {
+
+                        long diff = date2.getTime() - (5400000 * i + 840000);
+
+                        long sodu = 86400000 + diff;
+
+                        if (sodu < 0) {
+
+
+                            sodu = 86400000 + sodu;
+                            date3.setTime(sodu);
+                        }else {
+
+                            date3.setTime(sodu);
+
+                        }
+                        categories.add(i+ " chu kì  "+date3.getHours()+":"+date3.getMinutes());
+                    }
+
+
+
+
+
+
+
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categories);
+
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    spinner.setAdapter(dataAdapter);
+                    spinner.setSelection(3);
+
+
+
+
+
+                }
+
+            }
+        });
+
+
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (currentAddView==0){
+                    dialog.cancel();
+                }
+
+            }
+        });
+
+
+
+    }
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,7 +292,13 @@ public class DashboardFragment extends Fragment  {
 
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final ListView listView = root.findViewById(R.id.listviewAlarm);
-
+        FloatingActionButton buttonadd=root.findViewById(R.id.floatingBtnaddalarm);
+        buttonadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        displayAlertDialog();
+            }
+        });
 
 
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());

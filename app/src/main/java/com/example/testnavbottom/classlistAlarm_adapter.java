@@ -83,6 +83,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         String hour = getTime(time,0)+":"+getTime(time,1);
         String title=getItem(position).getTitle();
         String desc=getItem(position).getDescr();
+        String chuky=getItem(position).getNote();
         int id=getItem(position).getId();
 
 
@@ -96,8 +97,8 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         TextView wakeuptime= convertView.findViewById(R.id.Timeview);
         TextView sleeptime= convertView.findViewById(R.id.startSleepTime);
         TextView descview= convertView.findViewById(R.id.descview);
-        TextView swalamr= convertView.findViewById(R.id.swalarm);
-
+        Switch swalamr= convertView.findViewById(R.id.swalarm);
+        TextView chukyTv=convertView.findViewById(R.id.chuky);
 
 
         wakeuptime.setOnLongClickListener(new View.OnLongClickListener() {
@@ -134,7 +135,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         }
 
 
-        long diff =date2.getTime()-( 5400000*6+840000);
+        long diff =date2.getTime()-( 5400000* (Integer.parseInt(chuky)+2) +840000);
 
         long sodu=     86400000+diff;
 
@@ -149,6 +150,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
 
         date3.setTime(sodu);
 
+        chukyTv.setText("("+ String.valueOf(Integer.parseInt(chuky)+2) +" chu kỳ)");
         sleeptime.setText(String.valueOf(date3.getHours()+":"+date3.getMinutes()));
 
 

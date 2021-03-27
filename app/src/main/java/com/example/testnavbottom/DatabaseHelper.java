@@ -233,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase  db = getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat  from events", null);
+        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events", null);
 
         //Đến dòng đầu của tập dữ liệu
         cursor.moveToFirst();
@@ -256,6 +256,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String eventendat = cursor.getString(4);
             int eventenable = cursor.getInt(5);
             String eventalarmat = cursor.getString(7);
+            String note=cursor.getString(8);
             int eventtype= cursor.getInt(6);
 
 
@@ -264,7 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         if(ftime==1){
-            nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,eventalarmat,"1",eventID);
+            nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,note,"1",eventID);
 
             //   nClass.getTitle();
 
@@ -382,7 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
 
 
-            nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, eventalarmat, "1", eventID);
+            nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, note, "1", eventID);
 
             //   nClass.getTitle();
 
@@ -464,7 +465,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         db.execSQL("INSERT INTO events (title,descr,startat,endat,type,note,alarmat,enable) VALUES (?,?,?,?,?,?,?,?)",
-                new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getNote(),enable+ ""});
+                new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),enable+ ""});
     }
 
     //Xoá sản phẩm khỏi DB

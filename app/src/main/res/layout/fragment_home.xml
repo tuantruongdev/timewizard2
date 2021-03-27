@@ -20,23 +20,8 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp" />
 
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="700dp"
-        android:text="refesh DB"></Button>
 
 
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="500dp"
-
-        android:text="delete DB"></Button>
 
 
     <RelativeLayout
@@ -79,6 +64,27 @@
             app:rippleColor="#3E3C3C"
             app:srcCompat="@drawable/ic_baseline_add_24"
             app:tint="@color/white" />
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingBtnrefresh"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="0dp"
+            android:outlineProvider="none"
+            app:backgroundTint="@color/lightdark"
+            app:borderWidth="0dp"
+            app:rippleColor="#3E3C3C"
+            app:srcCompat="@drawable/ic_baseline_refresh_24"
+            app:tint="@color/white" />
+
 
     </RelativeLayout>
 

@@ -399,8 +399,8 @@ public class HomeFragment extends Fragment {
 
         ArrayList<Classview> classlist = new ArrayList<>();
 
-        Button btn1=root.findViewById(R.id.btn1);
-        Button btn2=root.findViewById(R.id.btn2);
+
+        FloatingActionButton btn2=root.findViewById(R.id.floatingBtnrefresh);
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -418,17 +418,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-
-
-
-
-            }
-        });
 
 
 
