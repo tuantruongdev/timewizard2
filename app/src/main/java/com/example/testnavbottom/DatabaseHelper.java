@@ -233,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase  db = getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events", null);
+        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 0 or type like 1", null);
 
         //Đến dòng đầu của tập dữ liệu
         cursor.moveToFirst();
@@ -412,6 +412,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Classview> getAllProducts2() {
+
+        ArrayList<Classview> event = new ArrayList<Classview>();
+
+
+        SQLiteDatabase  db = getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 3", null);
+
+        //Đến dòng đầu của tập dữ liệu
+        cursor.moveToFirst();
+        int i=0;
+
+        Classview nClass=   new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!",1,"", "1970-01-01 00:00:00"," ",2,"","","1",-1);
+        Cursor oldCusor =cursor;
+
+        while (!cursor.isAfterLast()) {
+
+
+            int eventID = cursor.getInt(0);
+            String eventtitle = cursor.getString(1);
+            String eventdescr = cursor.getString(2);
+            String eventstartat = cursor.getString(3);
+            String eventendat = cursor.getString(4);
+            int eventenable = cursor.getInt(5);
+            String eventalarmat = cursor.getString(7);
+            String note = cursor.getString(8);
+            int eventtype = cursor.getInt(6);
+
+            nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, note, "1", eventID);
+
+            //   nClass.getTitle();
+
+            event.add(nClass);
+
+
+            // nClass.getTitle();
+            cursor.moveToNext();
+            i++;
+            continue;
+
+        }
+            return event;
+    }
+
+
+
+
     //Lấy một SP biết ID
     public Classview getProductByID(int ID) {
         Classview classEvent = null;
@@ -474,6 +522,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM events where id = ?", new String[]{String.valueOf(eventID)});
     }
     public   void deleteallevent() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM events where id NOT NULL and type like 0 or type like 1");
+    }
+
+    public   void deleteallevent2() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id NOT NULL");
     }

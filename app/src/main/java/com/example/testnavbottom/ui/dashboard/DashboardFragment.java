@@ -169,7 +169,7 @@ public class DashboardFragment extends Fragment  {
                 String note =String.valueOf(spinner.getSelectedItemPosition());
 
 
-                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,note,"T2",0 ));
+                mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,3,eventStartAt,note,"T2",0 ));
                 dialog.cancel();
                 currentAddView=0;
 
@@ -311,7 +311,7 @@ public class DashboardFragment extends Fragment  {
 
 
 
-      a= mydb.getAllProducts();
+      a= mydb.getAllProducts2();
      // a=mydb.ArraylistCompare(a);
         classlistAlarm_adapter adapter = new classlistAlarm_adapter(this.getContext(),R.layout.alarm_layout,a);
 

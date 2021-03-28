@@ -1,9 +1,13 @@
 package com.example.testnavbottom;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,15 +27,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.testnavbottom.R.id.swEnableEvent;
+
+
+import static android.content.Context.ALARM_SERVICE;
+
 
 public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
     private  Context mContext;
     int mRes;
+
+    Calendar calendar;
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
 
     public classlistAlarm_adapter(@NonNull Context context, int resource, @NonNull ArrayList<Classview> objects) {
         super(context, resource, objects);
@@ -101,6 +114,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         TextView chukyTv=convertView.findViewById(R.id.chuky);
 
 
+
         wakeuptime.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -153,7 +167,31 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         chukyTv.setText("("+ String.valueOf(Integer.parseInt(chuky)+2) +" chu kỳ)");
         sleeptime.setText(String.valueOf(date3.getHours()+":"+date3.getMinutes()));
 
+        swalamr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+            if (swalamr.isChecked()) {
+
+
+                Intent intent = new Intent(getContext(), alarmReceiver.class);
+
+                calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
+                calendar.set(Calendar.SECOND, 0);
+                alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+
+                pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
+
+            }
+
+
+
+            }
+        });
 
 
         return  convertView;
