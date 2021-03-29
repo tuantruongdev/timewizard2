@@ -40,7 +40,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
     private  Context mContext;
     int mRes;
-
+    Intent intent = new Intent(getContext(), alarmReceiver.class);
     Calendar calendar;
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
@@ -174,7 +174,9 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
             if (swalamr.isChecked()) {
 
 
-                Intent intent = new Intent(getContext(), alarmReceiver.class);
+                intent.putExtra("extra","on");
+
+
 
                 calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
@@ -187,9 +189,12 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
                 Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
 
             }
+                if (!swalamr.isChecked()) {
+                    intent.putExtra("extra","off");
+                    alarmManager.cancel(pendingIntent);
+                    getContext().sendBroadcast(intent);
 
-
-
+                }
             }
         });
 

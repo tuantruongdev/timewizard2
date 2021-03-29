@@ -34,6 +34,14 @@
             android:exported="true"
             >
         </receiver>
+
+
+        <receiver
+            android:name=".notiActivity"
+            android:enabled="true"
+            android:exported="true"
+            >
+        </receiver>
         <service android:name=".Music"
             android:enabled="true"></service>
     </application>

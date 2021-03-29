@@ -28,9 +28,10 @@ public class alarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context , Intent intent){
         Log.d("im in","in receiver");
 
+        String extra=intent.getExtras().getString("extra");
 
-/*
             Intent myIntent= new Intent(context,Music.class);
+            myIntent.putExtra("extra",extra);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(myIntent);
         } else {
@@ -38,8 +39,8 @@ public class alarmReceiver extends BroadcastReceiver {
         }
 
 
- */
 
+/*
 
         String channelId = "Your_channel_id";
         NotificationManager notificationManager= (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -90,7 +91,7 @@ public class alarmReceiver extends BroadcastReceiver {
 
 
         SystemClock.sleep(17000);
-
+*/
 
     }
 

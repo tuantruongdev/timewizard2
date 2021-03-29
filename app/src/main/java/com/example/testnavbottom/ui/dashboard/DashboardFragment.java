@@ -328,8 +328,8 @@ public class DashboardFragment extends Fragment  {
 
                 new AlertDialog.Builder(getContext()).
                         setIcon(android.R.drawable.ic_delete)
-                        .setTitle("Xóa sự kiện này?")
-                        .setMessage("Bạn có thực sự muốn xóa vĩnh viễn sự kiện này..?")
+                        .setTitle("Xóa báo thức này?")
+                        .setMessage("Bạn có thực sự muốn xóa vĩnh viễn báo thức này..?")
                         .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)

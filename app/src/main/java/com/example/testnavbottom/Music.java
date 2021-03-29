@@ -11,6 +11,7 @@ import android.media.MediaParser;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -22,26 +23,123 @@ import java.security.Provider;
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 public class Music extends Service {
+    MediaPlayer mediaPlayer;
     private static final int ID_SERVICE = 101;
 @Nullable
     @Override
     public IBinder onBind(Intent intent){
     return null;
 }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
+
+
     public int onStartCommand(Intent intent,int flags,int startId){
         Log.d("on music", "im on music ");
+        int id=0;
+        String keymedia=intent.getExtras().getString("extra");
 
-        MediaPlayer mediaPlayer;
-        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.iphone_alarm_morning);
-        mediaPlayer.start();
+        if (keymedia.equals("on")){
+            id=1;
+        }
+        if (keymedia.equals("off")){
+            id=0;
+
+        }
+
+        if (id==1){
+
+
+
+        Intent clickIntent = new Intent(getApplicationContext(),notiActivity.class);
+        PendingIntent clickpendingIntent =PendingIntent.getBroadcast(getApplicationContext(),0,clickIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        String channelId = "Your_channel_id";
+        NotificationManager notificationManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+
+
+        Intent repeating_intent = new Intent(getApplicationContext(), MainActivity.class);
+
+
+
+
+        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent =PendingIntent.getActivity(getApplicationContext(),100,repeating_intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder= new NotificationCompat.Builder(
+                getApplicationContext()
+        ).setSmallIcon(R.drawable.ic_baseline_calendar_today_24)
+                .setContentTitle("this is a content title")
+                .setAutoCancel(true)
+                .setContentText("this is a text of content")
+                .addAction(R.drawable.ic_baseline_edit_24,"small title",clickpendingIntent)
+                .addAction(R.mipmap.ic_launcher,"click me me",clickpendingIntent)
+                .setShowWhen(true)
+
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                ;
+
+
+
+
+        NotificationChannel channel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
+
+     builder.setChannelId(channelId);
+
+   //   notificationManager.notify(1,builder.build());
+
+
+
+            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.reality);
+            mediaPlayer.start();
+
+
+
+
+      //  builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+        SystemClock.sleep(2000);
+        Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
+        this.stopForeground(false);
+
+       startForeground(1, builder.build());
+        //
+        return START_NOT_STICKY;}
+
+
+        if (id==0){
+
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+
+
+        }
 
 
         return START_NOT_STICKY;
-
-
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("getting destroyed", "goodbye");
+
+    }
 
     public void onCreate() {
         super.onCreate();
