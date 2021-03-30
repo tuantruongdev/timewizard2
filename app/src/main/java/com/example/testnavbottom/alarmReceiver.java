@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -28,10 +29,15 @@ public class alarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context , Intent intent){
         Log.d("im in","in receiver");
 
-        String extra=intent.getExtras().getString("extra");
 
+
+        Bundle extras = intent.getExtras();
             Intent myIntent= new Intent(context,Music.class);
-            myIntent.putExtra("extra",extra);
+
+
+
+          myIntent.putExtras(extras);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(myIntent);
         } else {

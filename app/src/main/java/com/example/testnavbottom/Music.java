@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.MediaParser;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
@@ -24,6 +25,8 @@ import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 public class Music extends Service {
     MediaPlayer mediaPlayer;
+    String newid="";
+
     private static final int ID_SERVICE = 101;
 @Nullable
     @Override
@@ -37,7 +40,22 @@ public class Music extends Service {
     public int onStartCommand(Intent intent,int flags,int startId){
         Log.d("on music", "im on music ");
         int id=0;
-        String keymedia=intent.getExtras().getString("extra");
+        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.iphone_alarm_morning);
+
+        Bundle extras = intent.getExtras();
+
+        String keymedia=extras.getString("extra");
+        String getnewID=extras.getString("newid");
+        String neededid=extras.getString("neededid");
+
+
+        if (getnewID!=null){
+
+            if(!getnewID.equals(" "))
+            newid=getnewID;
+
+        }
+
 
         if (keymedia.equals("on")){
             id=1;
@@ -104,7 +122,7 @@ public class Music extends Service {
 
 
 
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.reality);
+
             mediaPlayer.start();
 
 
@@ -119,16 +137,33 @@ public class Music extends Service {
 
        startForeground(1, builder.build());
         //
-        return START_NOT_STICKY;}
-
-
-        if (id==0){
-
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-
-
+        return START_NOT_STICKY;
         }
+        if (id==0) {
+
+
+            Log.d("trying to stop service","1");
+            Log.d("newid",newid);
+            Log.d("needid",neededid);
+
+
+
+
+
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.reset();
+
+
+
+
+
+
+
+            }
+        }
+
+
 
 
         return START_NOT_STICKY;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
+import com.example.testnavbottom.ui.dashboard.DashboardFragment;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -98,7 +101,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         String desc=getItem(position).getDescr();
         String chuky=getItem(position).getNote();
         int id=getItem(position).getId();
-
+        int enabled=getItem(position).getEnable();
 
 
 
@@ -113,6 +116,16 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         Switch swalamr= convertView.findViewById(R.id.swalarm);
         TextView chukyTv=convertView.findViewById(R.id.chuky);
 
+
+        if(enabled==1){
+            swalamr.setChecked(true);
+
+
+
+        }
+        if (enabled==0){
+            swalamr.setChecked(false);
+        }
 
 
         wakeuptime.setOnLongClickListener(new View.OnLongClickListener() {
@@ -167,34 +180,75 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         chukyTv.setText("("+ String.valueOf(Integer.parseInt(chuky)+2) +" chu kỳ)");
         sleeptime.setText(String.valueOf(date3.getHours()+":"+date3.getMinutes()));
 
+
         swalamr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+
+                intent.setAction(time);
+
+                alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+
+
+                DatabaseHelper db= new DatabaseHelper(getContext());
+
+
             if (swalamr.isChecked()) {
 
-
-                intent.putExtra("extra","on");
-
+                Bundle extras = new Bundle();
 
 
+                extras.putString("extra","on");
+                extras.putString("newid",time);
+                extras.putString("neededid"," ");
+                intent.putExtras(extras);
+                pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                db.enableEvent(id,1);
                 calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
                 calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
                 calendar.set(Calendar.SECOND, 0);
-                alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
 
-                pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
 
+
+
             }
                 if (!swalamr.isChecked()) {
-                    intent.putExtra("extra","off");
-                    alarmManager.cancel(pendingIntent);
-                    getContext().sendBroadcast(intent);
+                    Bundle extras = new Bundle();
 
+
+                    extras.putString("extra","off");
+                    extras.putString("neededid",time);
+                    extras.putString("newid"," ");
+                    intent.putExtras(extras);
+                    pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
+                    calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
+                    calendar.set(Calendar.SECOND, 0);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                    Calendar currnethour=Calendar.getInstance();
+                    currnethour.set(Calendar.SECOND,0);
+                    int h1=calendar.get(Calendar.HOUR_OF_DAY);
+                    int m1=calendar.get(Calendar.MINUTE);
+                    int h2=currnethour.get(Calendar.HOUR_OF_DAY);
+                    int m2=currnethour.get(Calendar.MINUTE);
+
+                   // if (h1==h2&&m1==m2) {
+
+
+                        getContext().sendBroadcast(intent);
+                   // }
+
+                    alarmManager.cancel(pendingIntent);
+                    db.enableEvent(id,0);
                 }
+            db.close();
             }
         });
 

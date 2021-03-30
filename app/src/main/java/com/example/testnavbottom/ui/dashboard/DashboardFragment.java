@@ -1,11 +1,15 @@
 package com.example.testnavbottom.ui.dashboard;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.testnavbottom.Classview;
 import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.R;
+import com.example.testnavbottom.alarmReceiver;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.classlistAlarm_adapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,13 +49,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class DashboardFragment extends Fragment  {
    int currentAddView =0;
+   AlarmManager alarmManager;
+   PendingIntent pendingIntent;
+Calendar calendar;
 
 
     String eventStartAt="Không có tiêu đề";
@@ -172,6 +183,31 @@ public class DashboardFragment extends Fragment  {
                 mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,3,eventStartAt,note,"T2",0 ));
                 dialog.cancel();
                 currentAddView=0;
+                Intent intent = new Intent(getContext(), alarmReceiver.class);
+
+                Bundle extras = new Bundle();
+                extras.putString("newid",eventStartAt);
+              extras.putString("extra","on");
+                extras.putString("neededid"," ");
+
+                /*
+                intent.putExtra("extra","on");
+                intent.putExtra("newid",eventStartAt);
+*/
+                intent.putExtras(extras);
+                intent.setAction(eventStartAt);
+
+                calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(eventStartAt, 0)));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(eventStartAt, 1)));
+                calendar.set(Calendar.SECOND, 0);
+
+
+                alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+
+                pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
 
 
             }

@@ -504,6 +504,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+    //Cập nhật
+    void enableEvent(int id,int opt) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+        String sqlcommand="UPDATE events SET enable='"+opt+"'  where id = "+id;
+        db.execSQL(sqlcommand);
+
+
+        //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
+        //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
+
+
+
+    }
+
+
     //Chèn mới
   public   void insertProduct(Classview classEvent) {
 
