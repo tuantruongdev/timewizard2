@@ -27,15 +27,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
     private static Context context;
     DatabaseHelper mDatabasehelper;
 
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
-    public static Context getAppContext() {
-        return MainActivity.context;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,14 +60,29 @@ public class MainActivity extends AppCompatActivity {
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-     //   NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+
+
+        Intent intent = getIntent();
+
+
+        String action = intent.getStringExtra("action");
+if (action!=null) {
+    if (action.equals("alarm")) {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.nav_view);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(1, true);
+
+    }
+}
+
+   NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+   NavigationUI.setupWithNavController(navView, navController);
 
        // Switch swEnable =(Switch)findViewById(R.id.swEnableEvent);
        // swEnable.toggle();

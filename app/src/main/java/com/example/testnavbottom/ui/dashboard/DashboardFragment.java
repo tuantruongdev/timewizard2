@@ -89,7 +89,7 @@ Calendar calendar;
 
     }
 
-    public void displayAlertDialog() {
+    public void displayAlertDialog(ListView listView) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.addeventalarmpicker, null);
         TimePicker timePicker =alertLayout.findViewById(R.id.datePicker1);
@@ -181,7 +181,40 @@ Calendar calendar;
 
 
                 mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,3,eventStartAt,note,"T2",0 ));
+
+                mydb.close();
                 dialog.cancel();
+
+
+                View root = inflater.inflate(R.layout.fragment_dashboard, null);
+
+
+
+
+                mydb = new DatabaseHelper(getContext());
+
+
+
+                ArrayList<Classview> a  = new ArrayList<Classview>();
+
+
+
+
+
+                a= mydb.getAllProducts2();
+                // a=mydb.ArraylistCompare(a);
+                classlistAlarm_adapter adapter = new classlistAlarm_adapter(getContext(),R.layout.alarm_layout,a);
+
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+
+
+            mydb.close();
+
+
+
+
                 currentAddView=0;
                 Intent intent = new Intent(getContext(), alarmReceiver.class);
 
@@ -336,13 +369,13 @@ Calendar calendar;
         buttonadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        displayAlertDialog();
+        displayAlertDialog(listView);
             }
         });
 
 
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
-        Context context=this.getContext();
+
         ArrayList<Classview> classlist = new ArrayList<>();
 
       ArrayList<Classview> a  = new ArrayList<Classview>();

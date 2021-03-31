@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.testnavbottom.ui.dashboard.DashboardFragment;
+
 import java.security.Provider;
 
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
@@ -81,7 +83,7 @@ public class Music extends Service {
 
 
         Intent repeating_intent = new Intent(getApplicationContext(), MainActivity.class);
-
+           repeating_intent.putExtra("action","alarm");
 
 
 
@@ -94,8 +96,7 @@ public class Music extends Service {
                 .setContentTitle(title)
                 .setAutoCancel(true)
                 .setContentText(desc)
-                .addAction(R.drawable.ic_baseline_edit_24,"small title",clickpendingIntent)
-                .addAction(R.mipmap.ic_launcher,"click me me",clickpendingIntent)
+
                 .setShowWhen(true)
 
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
