@@ -190,6 +190,10 @@ Calendar calendar;
               extras.putString("extra","on");
                 extras.putString("neededid"," ");
 
+                //set title vaf desc bao notify
+                extras.putString("title","Báo thức cho "+getTime(eventStartAt, 0)+":"+getTime(eventStartAt, 1));
+                extras.putString("desc","Nhấn vào để tắt báo thức");
+
                 /*
                 intent.putExtra("extra","on");
                 intent.putExtra("newid",eventStartAt);

@@ -29,6 +29,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -102,7 +105,6 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         String chuky=getItem(position).getNote();
         int id=getItem(position).getId();
         int enabled=getItem(position).getEnable();
-
 
 
 
@@ -181,6 +183,8 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
         sleeptime.setText(String.valueOf(date3.getHours()+":"+date3.getMinutes()));
 
 
+        String finalTitle = title;
+        String finalDesc = desc;
         swalamr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -197,11 +201,17 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
             if (swalamr.isChecked()) {
 
                 Bundle extras = new Bundle();
-
+                Calendar calendar3=Calendar.getInstance();
+                calendar3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
+                calendar3.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
+                int h3=calendar3.get(Calendar.HOUR_OF_DAY);
+                int m3=calendar3.get(Calendar.MINUTE);
 
                 extras.putString("extra","on");
                 extras.putString("newid",time);
                 extras.putString("neededid"," ");
+                extras.putString("title", "Báo thức cho " +String.valueOf(h3)+":"+String.valueOf(m3));
+                extras.putString("desc", "Nhấn vào để tắt báo thức");
                 intent.putExtras(extras);
                 pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 db.enableEvent(id,1);
@@ -225,6 +235,8 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
                     extras.putString("extra","off");
                     extras.putString("neededid",time);
                     extras.putString("newid"," ");
+                    extras.putString("title", "canceling");
+                    extras.putString("desc", "canceling desc");
                     intent.putExtras(extras);
                     pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     calendar = Calendar.getInstance();
@@ -239,11 +251,18 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
                     int h2=currnethour.get(Calendar.HOUR_OF_DAY);
                     int m2=currnethour.get(Calendar.MINUTE);
 
-                   // if (h1==h2&&m1==m2) {
+
+
+
+
+                    LocalTime dt1 = LocalTime.parse(checkday(h1)+":"+checkday(m1)+":00");
+                    LocalTime dt2 = LocalTime.parse(checkday(h2)+":"+checkday(m2)+":00");
+                dt2=    dt2.plus(2, ChronoUnit.MINUTES);
+                   if (dt2.isAfter(dt1)) {
 
 
                         getContext().sendBroadcast(intent);
-                   // }
+                    }
 
                     alarmManager.cancel(pendingIntent);
                     db.enableEvent(id,0);
@@ -255,6 +274,15 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
 
         return  convertView;
     }
+    String checkday(int day){
+        if (day<10){
+            return "0"+String.valueOf(day);
+        }
+        return  String.valueOf(day);
+
+
+    }
+
 }
 
 

@@ -40,14 +40,15 @@ public class Music extends Service {
     public int onStartCommand(Intent intent,int flags,int startId){
         Log.d("on music", "im on music ");
         int id=0;
-        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.iphone_alarm_morning);
+
 
         Bundle extras = intent.getExtras();
 
         String keymedia=extras.getString("extra");
         String getnewID=extras.getString("newid");
         String neededid=extras.getString("neededid");
-
+        String title=extras.getString("title");
+        String desc=extras.getString("desc");
 
         if (getnewID!=null){
 
@@ -90,9 +91,9 @@ public class Music extends Service {
         NotificationCompat.Builder builder= new NotificationCompat.Builder(
                 getApplicationContext()
         ).setSmallIcon(R.drawable.ic_baseline_calendar_today_24)
-                .setContentTitle("this is a content title")
+                .setContentTitle(title)
                 .setAutoCancel(true)
-                .setContentText("this is a text of content")
+                .setContentText(desc)
                 .addAction(R.drawable.ic_baseline_edit_24,"small title",clickpendingIntent)
                 .addAction(R.mipmap.ic_launcher,"click me me",clickpendingIntent)
                 .setShowWhen(true)
@@ -122,7 +123,7 @@ public class Music extends Service {
 
 
 
-
+            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.iphone_alarm_morning);
             mediaPlayer.start();
 
 
