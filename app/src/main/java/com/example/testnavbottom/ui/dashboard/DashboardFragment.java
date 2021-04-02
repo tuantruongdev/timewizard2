@@ -186,31 +186,11 @@ Calendar calendar;
                 dialog.cancel();
 
 
-                View root = inflater.inflate(R.layout.fragment_dashboard, null);
+               setUserVisibleHint(true);
 
 
 
-
-                mydb = new DatabaseHelper(getContext());
-
-
-
-                ArrayList<Classview> a  = new ArrayList<Classview>();
-
-
-
-
-
-                a= mydb.getAllProducts2();
-                // a=mydb.ArraylistCompare(a);
-                classlistAlarm_adapter adapter = new classlistAlarm_adapter(getContext(),R.layout.alarm_layout,a);
-
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-
-
-            mydb.close();
+    
 
 
 
@@ -348,6 +328,21 @@ Calendar calendar;
 
     }
 
+    public void openActivity2(){
+        Intent intent = new Intent(this.getContext(),MainActivity.class);
+        startActivity(intent);
+
+
+
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
+
 
 
 
@@ -366,6 +361,20 @@ Calendar calendar;
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final ListView listView = root.findViewById(R.id.listviewAlarm);
         FloatingActionButton buttonadd=root.findViewById(R.id.floatingBtnaddalarm);
+        Button btn =root.findViewById(R.id.testButton);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             setUserVisibleHint(true);
+                //   openActivity2();
+              //  Intent refresh = new Intent(getContext(), DashboardFragment.class);
+              //  startActivity(refresh);
+              //  this.finish();
+            }
+        });
+
+
+
         buttonadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

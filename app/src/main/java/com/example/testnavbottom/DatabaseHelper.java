@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class  DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "ProductDbHelper";
     private static final String DATABASE_NAME = "truongdeptrai.db";
     private static final int DATABASE_VERSION = 1;
@@ -227,11 +227,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ArrayList<Classview> event = new ArrayList<Classview>();
 
-      //  SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+       SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
 
        // SQLiteDatabase  db=SQLiteDatabase.openOrCreateDatabase("truongdeptrai.db",null, null);
 
-        SQLiteDatabase  db = getWritableDatabase();
+//        SQLiteDatabase  db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 0 or type like 1", null);
 

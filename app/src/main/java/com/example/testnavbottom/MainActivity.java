@@ -4,25 +4,33 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.example.testnavbottom.ui.dashboard.DashboardFragment;
 import com.example.testnavbottom.ui.home.HomeFragment;
+import com.example.testnavbottom.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,11 +38,20 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
-    private static Context context;
+    public static Context context=getContext();
     DatabaseHelper mDatabasehelper;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    public static Context getContext() {
+        return context;
+    }
+
+
+
+    public void refresh(){
+        ViewGroup vg = (ViewGroup) findViewById (R.id.nav_host_fragment_container);
+        vg.removeAllViews();
+        vg.refreshDrawableState();
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -42,17 +59,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
+        int nightModeFlags =
+                this.getBaseContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                getSupportActionBar().hide();
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+                this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                break;
+
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+
+                break;
+        }
 
 
 
-   this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
+
         super.onCreate(savedInstanceState);
      //   setContentView(R.layout.activity_main);
 
     //    this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_main);
      // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-   getSupportActionBar().hide();
+  // getSupportActionBar().hide();
 
 
 
@@ -60,9 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
+
+        navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new HomeFragment()).commit();
+
 
 
         Intent intent = getIntent();
@@ -71,22 +109,36 @@ public class MainActivity extends AppCompatActivity {
         String action = intent.getStringExtra("action");
 if (action!=null) {
     if (action.equals("alarm")) {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.nav_view);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(1, true);
+        navView.setSelectedItemId(R.id.navigation_dashboard);
+    }
+    else{
+        navView.setSelectedItemId(R.id.navigation_home);
 
     }
 }
 
-   NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
-   NavigationUI.setupWithNavController(navView, navController);
-
-       // Switch swEnable =(Switch)findViewById(R.id.swEnableEvent);
-       // swEnable.toggle();
 
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment=null;
+            switch (item.getItemId()){
+                case R.id.navigation_home:
+                    selectedFragment=new HomeFragment();
+                    break;
+                case R.id.navigation_dashboard:
+                    selectedFragment=new DashboardFragment();
+                    break;
+                case R.id.navigation_notifications:
+                    selectedFragment=new NotificationsFragment();
+                    break;
+
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,selectedFragment).commit();
+            return true;
+
+        }
+    };
 
 }

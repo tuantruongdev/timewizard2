@@ -4,7 +4,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 
 import androidx.annotation.RequiresApi;
 
@@ -26,7 +26,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class internetClass {
+public class internetClass  {
     String myTasks="not yet";
 
 
@@ -43,10 +43,13 @@ public class internetClass {
         if(mode==3){
             return  mtask.refresh_token;
         }
-        if (mode==5 && !mtask._id.equals("1")){
+        if (mode==5 && mtask._id.compareTo("1")==0){
             return "1";
         }
 
+        if (mode==6 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+            return "1";
+        }
 
         return "error";
     }
@@ -85,6 +88,7 @@ public class internetClass {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
+                Log.d("gettask","failure");
                 myTasks="fail";
             }
 
@@ -94,23 +98,29 @@ public class internetClass {
                 if (response.isSuccessful()) {
                     final String myRes = response.body().string();
 
-                            String stt=checkAndGet(myRes, 1);
+                            String stt=checkAndGet(myRes, 5);
 
-                            if (stt.equals("1")) {
+                            if (stt.compareTo("1")==0) {
 
                                 HomeFragment a=new HomeFragment();
-                                a.getEventsFromsvo(myRes,inflater,container);
+                                a.getEventsFromsvo(myRes);
 
-                                Log.d("abc","congrats");
+                                Log.d("gettask","correct");
 
 
 
 
                             } else {
 
+
+                                Log.d("gettask","failed!");
+
                             }
 
 
+                }
+                else {
+                    Log.d("gettask","notsuccesfully!");
                 }
 
             }
@@ -141,6 +151,8 @@ public class internetClass {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
                 myTasks="fail";
+                Log.d("username","failure!");
+
             }
 
             @Override
@@ -148,7 +160,7 @@ public class internetClass {
                 if (response.isSuccessful()) {
                     final String myRes = response.body().string();
 
-                            String stt=checkAndGet(myRes, 1);
+                            String stt=checkAndGet(myRes, 6);
                             // tv1.setText(myRes);
                             if (stt.equals("1")) {
 
@@ -166,12 +178,15 @@ public class internetClass {
 
 
                             } else {
+                                Log.d("username","not equal!");
 
                             }
 
 
-                }
+                }else {
 
+                    Log.d("username","notsuccessfully!");
+                }
             }
         });
 

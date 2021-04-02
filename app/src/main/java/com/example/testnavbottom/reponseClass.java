@@ -1,12 +1,12 @@
 package com.example.testnavbottom;
 
 public class reponseClass {
-    String stt;
-    String sso_token;
-    String refresh_token;
+    public String stt;
+    public String sso_token;
+    public String refresh_token;
     String school_url;
     String type;
-    String _id="1";
+    public String _id="1";
 
 
 }

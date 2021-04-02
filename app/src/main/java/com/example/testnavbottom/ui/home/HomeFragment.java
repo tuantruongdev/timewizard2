@@ -86,14 +86,22 @@ public class HomeFragment extends Fragment {
         return sb.toString();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-   public void getEventsFromsvo(String rawJson, LayoutInflater inflater,ViewGroup container){
+   public void getEventsFromsvo(String rawJson){
 
 
-      View root = inflater.inflate(R.layout.fragment_home, container, false);
-     final ListView listView = root.findViewById(R.id.lv1);
+
+
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
         Gson gson1=new Gson();
 
@@ -169,7 +177,7 @@ public class HomeFragment extends Fragment {
 
 
 
-    public void displayAlertDialog() {
+    public void displayAlertDialog(ListView listView) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.addeventpicker, null);
         TimePicker timePicker =alertLayout.findViewById(R.id.datePicker1);
@@ -243,15 +251,21 @@ public class HomeFragment extends Fragment {
 
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
 
                 eventTitle = edtTitle.getText().toString();
                 eventDesc=edtDesc.getText().toString();
-                DatabaseHelper mydb = new DatabaseHelper(contextnew);
+                DatabaseHelper mydb = new DatabaseHelper(getContext());
                 mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,"no note","T2",0 ));
                 dialog.cancel();
                 currentAddView=0;
+
+                setUserVisibleHint(true);
+
+
+
 
 
             }
@@ -383,7 +397,7 @@ public class HomeFragment extends Fragment {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               displayAlertDialog();
+               displayAlertDialog(listView);
 //
            //     ArrayList<Classview> a  =  mydb.getAllProducts();
 
@@ -397,7 +411,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        ArrayList<Classview> classlist = new ArrayList<>();
+
 
 
         FloatingActionButton btn2=root.findViewById(R.id.floatingBtnrefresh);

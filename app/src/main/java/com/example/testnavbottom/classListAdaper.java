@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,12 +29,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.testnavbottom.ui.home.HomeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -231,9 +237,9 @@ int currentAddView=0;
 
 
 
-    public void displayAlertDialog(View convertview) {
+    public Bundle displayAlertDialog(View convertview, TextView Dtime, TextView Dinfo, TextView Ddesc) {
 
-
+        Bundle extras= new Bundle();
         TextView tvTitle= convertview.findViewById(R.id.tv2);
         TextView tvDesc= convertview.findViewById(R.id.tvInfo);
         TextView tvTime= convertview.findViewById(R.id.tvsstartAt);
@@ -334,6 +340,7 @@ int currentAddView=0;
 
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
 
@@ -344,6 +351,33 @@ int currentAddView=0;
             //    mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,"0",0,eventStartAt,"no note","T2",0 ));
                 dialog.cancel();
                 currentAddView=0;
+                int today=0;
+
+           Dtime.setText(  getTime(eventStartAt,0)+":"+getTime(eventStartAt,1));
+                Dinfo.setText(eventTitle);
+                Ddesc.setText(eventDesc);
+
+
+                        //  View root = inflater.inflate(R.layout.fragment_dashboard,);
+
+/*
+                final ListView listView = convertview.findViewById(R.id.listviewAlarm);
+                ArrayList<Classview> a  =  mydb.getAllProducts();
+                a=mydb.ArraylistCompare(a);
+
+
+
+                classListAdaper adaper = new classListAdaper(getContext(),R.layout.adaper_view_layout,a);
+
+                today =mydb.getDayIndex(a);
+                a=mydb.ArraylistCompare(a);
+                listView.setAdapter(adaper);
+                adaper.notifyDataSetChanged();
+                today =mydb.getDayIndex(a);
+                listView.setSelection(today);
+*/
+
+
 //  public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
 
             }
@@ -447,7 +481,7 @@ int currentAddView=0;
         });
 
 
-
+        return extras;
     }
 
 
@@ -479,7 +513,8 @@ int currentAddView=0;
         Dinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             displayAlertDialog(finalConvertView);
+            displayAlertDialog(finalConvertView,Dtime,Dinfo,Ddesc);
+            //    SystemClock.sleep(7000);
             }
         });
 
@@ -498,6 +533,7 @@ int currentAddView=0;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     Dinfo.setBackgroundColor(Color.parseColor("#FF018786"));
+
                 }else {
                     Dinfo.setBackgroundColor(Color.parseColor("#7e827f"));
                 }
@@ -507,6 +543,7 @@ int currentAddView=0;
 
 
         if (getItem(position).getType()==0){
+
             Dinfo.setBackgroundColor(Color.parseColor("#5a1363"));
             Ddesc.setBackgroundColor(Color.parseColor("#5a1363"));
         }
