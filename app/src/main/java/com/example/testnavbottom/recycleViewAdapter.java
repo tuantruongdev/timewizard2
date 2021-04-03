@@ -72,7 +72,7 @@ public recycleViewAdapter(ArrayList<Classview> myArraylist){
 
 
 
-       holder.Dtime.setText("cac");
+
         if (currentClassview.getType()==0){
             holder.Dinfo.setBackgroundColor(Color.parseColor("#5a1363"));
 

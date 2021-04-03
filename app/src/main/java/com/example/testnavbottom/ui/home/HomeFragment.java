@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
@@ -32,10 +33,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,9 +51,11 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.daimajia.swipe.util.Attributes;
 import com.example.testnavbottom.Classview;
 import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.R;
+import com.example.testnavbottom.RecyclerViewAdapter;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.recycleViewAdapter;
 import com.example.testnavbottom.taskCL;
@@ -64,6 +69,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -396,7 +402,7 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-       final ListView listView = root.findViewById(R.id.lv1);
+      // final ListView listView = root.findViewById(R.id.lv1);
 
 
 
@@ -414,9 +420,12 @@ public class HomeFragment extends Fragment {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            //    addbtn.setColorFilter(ContextCompat.getColor(context,R.color.teal_700));
                displayAlertDialog();
 
             }
+
         });
 
 /*
@@ -459,13 +468,13 @@ public class HomeFragment extends Fragment {
 
 
 
-
+/*
 
         ArrayList<Classview>  arrayList=new ArrayList<Classview>();
 
 
 
-        /*
+
     //    arrayList.add(new Classview("0",1,"0","2021-04-03 01:00:00","2021-04-03 01:00:00",0,"2021-04-03 01:00:00","0","T2",9 ));
         mRecycleview =root.findViewById(R.id.recycleview);
       //  mRecycleview.setHasFixedSize(true);
@@ -478,11 +487,32 @@ public class HomeFragment extends Fragment {
         mRecycleview.setLayoutManager(mLayoutManager);
         mRecycleview.setAdapter(mAdapter);
         today =mydb.getDayIndex(arrayList);
+
 */
 
+        // Layout Managers:
+        mLayoutManager= new LinearLayoutManager(getContext());
+
+        // Item Decorator:
+      //  mRecycleview.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
+        // recyclerView.setItemAnimator(new FadeInLeftAnimator());
+
+        // Adapter:
+        mRecycleview =root.findViewById(R.id.recycleview);
+        ArrayList<Classview>  arrayList=new ArrayList<Classview>();
+
+    arrayList=mydb.getAllProducts();
+    //    arrayList.add(new Classview("0",1,"0","2021-04-03 01:00:00","2021-04-03 01:00:00",0,"2021-04-03 01:00:00","0","T2",9 ));
+        arrayList=mydb.ArraylistCompare(arrayList);
+        int mypos=mydb.getDayIndex(arrayList);
+        mAdapter = new RecyclerViewAdapter(getContext(), arrayList);
+        ((RecyclerViewAdapter) mAdapter).setMode(Attributes.Mode.Single);
+        mRecycleview.setLayoutManager(mLayoutManager);
+        mRecycleview.setAdapter(mAdapter);
+        mRecycleview.scrollToPosition(mypos);
 
 
-
+/*
         ArrayList a = new ArrayList<Classview>();
         a  =  mydb.getAllProducts();
         a=mydb.ArraylistCompare(a);
@@ -494,7 +524,7 @@ public class HomeFragment extends Fragment {
         today =mydb.getDayIndex(a);
         listView.setAdapter(adaper);
        listView.setSelection(today);
-
+*/
 
         /*
 

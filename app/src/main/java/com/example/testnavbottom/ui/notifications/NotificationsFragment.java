@@ -145,15 +145,17 @@ String  myTasks="";
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
                 myTasks="fail";
-                ((Activity)getContext()).runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        tvloading.setText("Không thể kết nối đến máy chủ!");
+                try {
 
-                    }
 
-                });
+                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                        public void run() {
+                            tvloading.setText("Không thể kết nối đến máy chủ!");
+
+                        }
+
+                    });
+                }catch (Exception e1){}
                 SystemClock.sleep(3000);
                 dialog.cancel();
 
