@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/gradianbg2"
     android:padding="0dp">
 
     <RelativeLayout
@@ -66,6 +67,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/realdatepicker"
         android:visibility="gone"
+        android:background="@drawable/gradianbg2"
         android:layout_height="wrap_content">
 
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradianbackground"
+    android:background="#000000"
     android:outlineProvider="none"
     tools:context=".ui.home.HomeFragment">
 
@@ -15,10 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-
+        android:layout_marginTop="-4dp"
         android:layout_alignParentStart="true"
         android:divider="@android:color/transparent"
-        android:dividerHeight="15dp" />
+        android:dividerHeight="15dp"
+        android:visibility="visible"
+        />
+
+<androidx.recyclerview.widget.RecyclerView
+    android:scrollbars="vertical"
+    android:layout_below="@+id/toolbar"
+    android:layout_marginTop="-4dp"
+    android:background="@color/black"
+android:visibility="gone"
+    android:id="@+id/recycleview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</androidx.recyclerview.widget.RecyclerView>
 
 
 
@@ -28,20 +42,22 @@
         android:id="@+id/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/lightdark">
+        android:background="@android:color/transparent"
+        android:padding="4dp">
 
 
         <TextView
+
             android:id="@+id/tempToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left|center"
-            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp"
             android:text="Thời gian biểu"
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
-
+            android:background="@drawable/rounded_toolbar"
             >
 
 
@@ -63,7 +79,9 @@
             app:borderWidth="0dp"
             app:rippleColor="#3E3C3C"
             app:srcCompat="@drawable/ic_baseline_add_24"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:visibility="visible"
+            />
 
 
 
@@ -83,7 +101,8 @@
             app:borderWidth="0dp"
             app:rippleColor="#3E3C3C"
             app:srcCompat="@drawable/ic_baseline_refresh_24"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:visibility="visible"/>
 
 
     </RelativeLayout>

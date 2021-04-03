@@ -227,11 +227,11 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
         ArrayList<Classview> event = new ArrayList<Classview>();
 
-       SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+//       SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
 
        // SQLiteDatabase  db=SQLiteDatabase.openOrCreateDatabase("truongdeptrai.db",null, null);
 
-//        SQLiteDatabase  db = getWritableDatabase();
+        SQLiteDatabase  db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 0 or type like 1", null);
 
@@ -491,7 +491,7 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Cập nhật
-    void updateProduct(Classview classEvent) {
+    public  void updateProduct(Classview classEvent) {
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
         String sqlcommand="UPDATE events SET title= '"+classEvent.getTitle()+"',descr= '"+classEvent.getDescr()+"' ,startat = '"+classEvent.getStartat()+"',endat= '"+classEvent.getEndat()+"',type= "+ String.valueOf(classEvent.getType())+",note= '"+classEvent.getNote()+"',alarmat= '"+classEvent.getAlarmat()+"',enable= "+classEvent.getEnable()+" where id = "+classEvent.getId();
         db.execSQL(sqlcommand);

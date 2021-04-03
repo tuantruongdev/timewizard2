@@ -3,6 +3,8 @@ package com.example.testnavbottom.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -33,16 +36,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.testnavbottom.Classview;
 import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.classListAdaper;
+import com.example.testnavbottom.recycleViewAdapter;
 import com.example.testnavbottom.taskCL;
 import com.example.testnavbottom.internetClass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -68,6 +78,10 @@ public class HomeFragment extends Fragment {
     public int currentAddView=0;
     Context contextnew=this.getContext();
     private static Context context;
+    private RecyclerView mRecycleview;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     String eventStartAt="Không có tiêu đề";
 
     String eventTitle="Không có tiêu đề";
@@ -160,7 +174,7 @@ public class HomeFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     void listviewLoad(LayoutInflater inflater, ViewGroup container){
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final ListView listView = root.findViewById(R.id.lv1);
+        final SwipeMenuListView listView = root.findViewById(R.id.lv1);
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
         ArrayList<Classview> a  =  mydb.getAllProducts();
 
@@ -177,7 +191,7 @@ public class HomeFragment extends Fragment {
 
 
 
-    public void displayAlertDialog(ListView listView) {
+    public void displayAlertDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.addeventpicker, null);
         TimePicker timePicker =alertLayout.findViewById(R.id.datePicker1);
@@ -382,7 +396,7 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final ListView listView = root.findViewById(R.id.lv1);
+       final ListView listView = root.findViewById(R.id.lv1);
 
 
 
@@ -394,10 +408,19 @@ public class HomeFragment extends Fragment {
      //   Classview event= new Classview("--","mon loz","T5","18");
 
         FloatingActionButton addbtn = root.findViewById(R.id.floatingBtn);
+
+
+
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               displayAlertDialog(listView);
+               displayAlertDialog();
+
+            }
+        });
+
+/*
+
 //
            //     ArrayList<Classview> a  =  mydb.getAllProducts();
 
@@ -407,12 +430,11 @@ public class HomeFragment extends Fragment {
 
               // adaper.notifyDataSetChanged();
 
-            }
-        });
 
 
 
 
+*/
 
         FloatingActionButton btn2=root.findViewById(R.id.floatingBtnrefresh);
         btn2.setOnClickListener(new View.OnClickListener() {
@@ -420,13 +442,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
               mydb.deleteallevent();
 
-
-                ArrayList<Classview> a  =  mydb.getAllProducts();
-
-                classListAdaper adaper = new classListAdaper(context,R.layout.adaper_view_layout,a);
+               setUserVisibleHint(true);
 
               //  listView.setSelection(1);
-                listView.setAdapter(adaper);
+
+
+
+
+
 
 
             }
@@ -437,47 +460,156 @@ public class HomeFragment extends Fragment {
 
 
 
-        ArrayList<Classview> a  =  mydb.getAllProducts();
+
+        ArrayList<Classview>  arrayList=new ArrayList<Classview>();
+
+
+
+        /*
+    //    arrayList.add(new Classview("0",1,"0","2021-04-03 01:00:00","2021-04-03 01:00:00",0,"2021-04-03 01:00:00","0","T2",9 ));
+        mRecycleview =root.findViewById(R.id.recycleview);
+      //  mRecycleview.setHasFixedSize(true);
+        mLayoutManager= new LinearLayoutManager(getContext());
+
+        arrayList=mydb.getAllProducts();
+        arrayList=mydb.ArraylistCompare(arrayList);
+        mAdapter= new recycleViewAdapter(arrayList);
+
+        mRecycleview.setLayoutManager(mLayoutManager);
+        mRecycleview.setAdapter(mAdapter);
+        today =mydb.getDayIndex(arrayList);
+*/
+
+
+
+
+        ArrayList a = new ArrayList<Classview>();
+        a  =  mydb.getAllProducts();
         a=mydb.ArraylistCompare(a);
 
-        classListAdaper adaper = new classListAdaper(this.getContext(),R.layout.adaper_view_layout,a);
+      classListAdaper adaper = new classListAdaper(this.getContext(),R.layout.adaper_view_layout,a);
+
+
 
         today =mydb.getDayIndex(a);
         listView.setAdapter(adaper);
-        ArrayList<Classview> finalA = a;
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+       listView.setSelection(today);
+
+
+        /*
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int
-                    position, long id) {
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(180);
+                // set item title
+               // openItem.setTitle("Open");
+                // set item title fontsize
+                openItem.setTitleSize(18);
+                // set item title font color
 
-                // it will get the position of selected item from the ListView
+                openItem.setTitleColor(Color.GREEN);
+                openItem.setBackground(R.color.translucent_green);
 
-                final int selected_item = position;
+                // add to menu
+                openItem.setIcon(R.drawable.ic_baseline_edit_24);
+                menu.addMenuItem(openItem);
 
-                new AlertDialog.Builder(getContext()).
-                        setIcon(android.R.drawable.ic_delete)
-                        .setTitle("Xóa sự kiện này?")
-                        .setMessage("Bạn có thực sự muốn xóa vĩnh viễn sự kiện này..?")
-                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
 
-                                mydb.deleteProductByID(finalA.get(selected_item).getId());
 
-                                finalA.remove(selected_item);
-                                adaper.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("Không" , null).show();
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                deleteItem.setBackground(R.color.translucent_red);
+                // set item width
+                deleteItem.setWidth(180);
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_baseline_delete_sweep_24);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
 
-                return true;
+
+
+
+  //     listView.setMenuCreator(creator);
+
+    // listView.setCloseInterpolator(new BounceInterpolator());
+
+
+
+
+
+
+
+/*
+
+
+
+
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch(index){
+                    case 1:
+                        final int selected_item = position;
+
+                        new AlertDialog.Builder(getContext()).
+                                setIcon(android.R.drawable.ic_delete)
+                                .setTitle("Xóa sự kiện này?")
+                                .setMessage("Bạn có thực sự muốn xóa vĩnh viễn sự kiện này..?")
+                                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+
+                                        mydb.deleteProductByID(finalA.get(selected_item).getId());
+
+                                        setUserVisibleHint(true);
+                                    }
+                                })
+                                .setNegativeButton("Không" , null).show();
+                        break;
+                    case 0:
+
+                       String startAt=finalA.get(position).getStartat();
+                        String desc=finalA.get(position).getDescr();
+                        String title=finalA.get(position).getTitle();
+                        int id=finalA.get(position).getId();
+
+                        DatabaseHelper mydb= new DatabaseHelper(getContext());
+                        mydb.updateProduct(new Classview("0",1,"0",startAt,startAt,0,startAt,"0","T2",id ));
+
+                    setUserVisibleHint(true);
+
+
+
+                        break;
+
+
+
+                }
+
+
+
+                        return true;
             }
         });
 
+*/
 
 
-        listView.setSelection(today);
 
 
 

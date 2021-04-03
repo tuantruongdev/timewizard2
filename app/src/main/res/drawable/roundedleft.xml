@@ -1,16 +1,18 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="10dp"
-        android:color="@color/graydarkmode"
+        android:color="@color/yellowIos"
         />
 
     <solid
 
-        android:color="@color/graydarkmode"
+        android:color="@color/yellowIos"
         />
 
     <corners
         android:radius="0dp"
         android:topRightRadius="0dp"
-        android:topLeftRadius="8dp" />
+        android:topLeftRadius="5dp"
+        android:bottomLeftRadius="5dp"
+        />
 </shape>

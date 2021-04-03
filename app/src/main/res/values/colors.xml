@@ -10,4 +10,8 @@
     <color name="lightdark">#1a1b1c</color>
     <color name="yellowIos">#FFCC00</color>
     <color name="fadedgray">#7e827f</color>
+    <color name="translucent_white">#8FFFFFFF</color>
+    <color name="graydarkmode">#121212</color>
+    <color name="translucent_green">#CF00CC00</color>
+    <color name="translucent_red">#CFF93f25</color>
 </resources>
