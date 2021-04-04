@@ -2,11 +2,14 @@ package com.example.testnavbottom.ui.notifications;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -30,7 +33,11 @@ import androidx.annotation.RequiresApi;
 
 import com.example.testnavbottom.reponseClass;
 import com.example.testnavbottom.ui.home.HomeFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +54,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 import static com.example.testnavbottom.MainActivity.context;
 
 public class NotificationsFragment extends Fragment {
@@ -60,7 +68,22 @@ String  myTasks="";
         notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        FloatingActionButton addbtn = root.findViewById(R.id.floatingBtnaddQR);
+
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            displayQR("DTC1854801030076");
+
+
+            }
+        });
+
+
+
+
         TextView textView=root.findViewById(R.id.tvrefreshtaskFromSvo);
+
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +102,42 @@ String  myTasks="";
 
         return root;
     }
+
+
+    void displayQR(String content){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.qrcode_layout, null);
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setView(alertLayout);
+        alert.setCancelable(true);
+
+        dialog = alert.create();
+        dialog.show();
+     //   dialog.getWindow().setLayout(1200, 1200);
+                QRCodeWriter writer = new QRCodeWriter();
+                try {
+                    BitMatrix bitMatrix = writer.encode("DTC1854801030076", BarcodeFormat.QR_CODE, 512, 512);
+                    int width = bitMatrix.getWidth();
+                    int height = bitMatrix.getHeight();
+                    Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                        }
+                    }
+                    ((ImageView) alertLayout.findViewById(R.id.QRimageview)).setImageBitmap(bmp);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
+
+
+
 
 
     void displayLoading(){

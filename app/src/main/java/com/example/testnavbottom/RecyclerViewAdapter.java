@@ -171,13 +171,13 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         viewHolder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
-                Toast.makeText(mContext, "delete", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(mContext, "delete", Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
             @Override
             public void onDoubleClick(SwipeLayout layout, boolean surface) {
-                Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -210,7 +210,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
 
 
-                Toast.makeText(view.getContext(), "Deleted  !", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(view.getContext(), "Deleted  !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -532,7 +532,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
         String realdayname= "err";
 
-/*
+
         switch (date){
             case "Thứ Hai":
                 realdayname="T2";
@@ -557,9 +557,9 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
                 break;
 
         }
-*/
 
 
+/*
 
         switch (date){
             case "Monday":
@@ -585,7 +585,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
                 break;
 
         }
-
+*/
 
 
         return realdayname;
