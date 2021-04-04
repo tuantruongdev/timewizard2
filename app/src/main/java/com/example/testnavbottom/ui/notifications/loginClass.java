@@ -1,38 +1,28 @@
 package com.example.testnavbottom.ui.notifications;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.testnavbottom.R;
-import android.os.Build;
-import android.util.Log;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.testnavbottom.R;
 import com.example.testnavbottom.reponseClass;
 import com.example.testnavbottom.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,9 +32,17 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Inflater;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,145 +52,96 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.testnavbottom.MainActivity.context;
+import static com.example.testnavbottom.MainActivity.getContext;
 
-import static android.content.Context.MODE_PRIVATE;
 
-public class NotificationsFragment extends Fragment {
-String  myTasks="";
+
+
+public class loginClass extends AppCompatActivity {
+    String  myTasks="";
     AlertDialog dialog;
     TextView tvloading;
     private static final String FILE_NAME = "info.txt";
     ImageView profile;
-    TextView tvMsv;
+    EditText tvuser;
+    EditText tvpassword;
+    Button btnlogin;
+    @Override
+    protected void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    private NotificationsViewModel notificationsViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        FloatingActionButton addbtn = root.findViewById(R.id.floatingBtnaddQR);
-        FloatingActionButton loginout = root.findViewById(R.id.floatingBtnaddlogout);
+        int nightModeFlags =
+                this.getBaseContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                getSupportActionBar().hide();
+                break;
 
-        profile= root.findViewById(R.id.imageview1);
-        tvMsv=root.findViewById(R.id.msv);
+            case Configuration.UI_MODE_NIGHT_NO:
+                this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        FileInputStream in = null;
-        try {
-            in = getContext().openFileInput("profile.png");
-            profile.setImageBitmap(BitmapFactory.decodeStream(in));
-        } catch (FileNotFoundException e) {
+                break;
 
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+
+                break;
         }
 
 
-        loginout.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.loginlayout);
+
+
+        tvuser=findViewById(R.id.usernamelg);
+
+        tvpassword=findViewById(R.id.usernamelg);
+        btnlogin =findViewById(R.id.btnlogin);
+
+        btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),loginClass.class);
-                startActivity(intent);
+                displayLoading(tvuser.getText().toString(),tvpassword.getText().toString());
             }
         });
-
-
-        addbtn.setOnClickListener(new View.OnClickListener() {
+      /*
+        btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            displayQR(tvMsv.getText().toString());
+                displayLoading(tvuser.getText().toString(),tvpassword.getText().toString());
+
 
 
             }
-        });
+        });*/
 
-
-
-
-        TextView textView=root.findViewById(R.id.tvrefreshtaskFromSvo);
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-              //  Intent intent = new Intent( getContext(), LoadingActivity.class);
-                //startActivity(intent);
-            //    internetClass a= new internetClass();
-           //     a.checkSmartName("DTC18548010300766","Leminh77",inflater,container);
-            displayLoading();
-
-            }
-        });
-
-
-
-
-        return root;
     }
 
 
-    void displayQR(String content){
-
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.qrcode_layout, null);
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setView(alertLayout);
-        alert.setCancelable(true);
-    if (content.compareTo(" ")!=0) {
-        dialog = alert.create();
-        dialog.show();
-        //   dialog.getWindow().setLayout(1200, 1200);
-        QRCodeWriter writer = new QRCodeWriter();
-        try {
-            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            ((ImageView) alertLayout.findViewById(R.id.QRimageview)).setImageBitmap(bmp);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }else {
-        ((Activity)getContext()).runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(getContext(),"Bạn chưa đăng nhập!",Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
-
-
-    }
-            }
 
 
 
 
 
 
-
-    void displayLoading(){
+    void displayLoading(String username,String password){
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.loading_layouts, null);
-       tvloading= alertLayout.findViewById(R.id.tvstatus);
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        tvloading= alertLayout.findViewById(R.id.tvstatus);
+
+     //eerrr here
+        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
 
 
         alert.setView(alertLayout);
         alert.setCancelable(true);
 
-         dialog = alert.create();
-         dialog.show();
-       checkSmartName("DTC1854801030076","Leminh77",alertLayout);
-      //  downloadImage("https://halustorage-hn.ss-hn-1.vccloud.vn/60011b3b8003bf099275ca6d.jpg");
+        dialog = alert.create();
+        dialog.show();
+        checkSmartName(username,password,alertLayout);
+        //  downloadImage("https://halustorage-hn.ss-hn-1.vccloud.vn/60011b3b8003bf099275ca6d.jpg");
 
 
     }
@@ -224,7 +173,7 @@ String  myTasks="";
             return "1";
         }
         if (mode==8 && myRes.compareTo("{\"list_acc\":[]}")!=0){
-           return mtask.img250;
+            return mtask.img250;
 
 
         }
@@ -286,21 +235,7 @@ String  myTasks="";
 
                     String stt=checkAndGet(myRes, 6);
                     // tv1.setText(myRes);
-                    String img250;
                     if (stt.equals("1")) {
-                        img250=checkAndGet(myRes,8);
-                      //  downloadImage(img250);
-
-                                            /*
-                        ids[0]=checkAndGet(myRes,10);
-                        fullname[0]=checkAndGet(myRes,9);
-
-                        sso_token[0] =checkAndGet(myRes,2);
-                        refresh_token[0] =checkAndGet(myRes,3);
-                        save(sso_token[0]+"|"+refresh_token+"|"+ids[0]+"|"+fullname[0]+"|"+img250[0]);
-*/
-
-
 
                         Pattern pattern = Pattern.compile("(?<=_id\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
                         Pattern patternName = Pattern.compile("(?<=fullname\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
@@ -338,7 +273,7 @@ String  myTasks="";
                             {
                                 tvloading.setText("Tên đăng nhập không chính xác!");
 
-                                }
+                            }
 
                         });
                         SystemClock.sleep(3000);
@@ -369,10 +304,13 @@ String  myTasks="";
     }
 
 
-    public Returnobject loginfunc(String username, String password) {
+    public void loginfunc(String username, String password) {
 
         final String[] sso_token = {"undefined"};
         final String[] refresh_token = {"undefined"};
+        final String[] ids = {"undefined"};
+        final String[] img250 = {"undefined"};
+        final String[] fullname = {"undefined"};
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"type\":\"user\",\"_id\":\""+username+"\",\"passwd\":\""+password+"\"}");
@@ -412,9 +350,16 @@ String  myTasks="";
                             }
 
                         });
+                        ids[0]=checkAndGet(myRes,10);
+                        fullname[0]=checkAndGet(myRes,9);
+                        img250[0]=checkAndGet(myRes,8);
+                        downloadImage(img250[0]);
+                        sso_token[0] =checkAndGet(myRes,2);
+                        refresh_token[0] =checkAndGet(myRes,3);
+                        save(sso_token[0]+"|"+refresh_token+"|"+ids[0]+"|"+fullname[0]+"|"+img250[0]);
 
 
-                       getTaskFromSVO(sso_token[0],refresh_token[0]);
+                        getTaskFromSVO(sso_token[0],refresh_token[0]);
 
 
 
@@ -443,7 +388,7 @@ String  myTasks="";
         });
 
 
-        return new Returnobject( sso_token[0], refresh_token[0]);
+
 
     }
 
@@ -498,7 +443,7 @@ String  myTasks="";
                 }
             }
         }
-    return text;
+        return text;
     }
 
 
@@ -508,74 +453,74 @@ String  myTasks="";
 
 
 
-public void downloadImage(String image250){
-    OkHttpClient client = new OkHttpClient();
-    RequestBody body = RequestBody.create(MediaType.get("image/jpeg"), "");
-    String url = image250;
-    final Request request = new Request.Builder().url(url).build();
+    public void downloadImage(String image250){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(MediaType.get("image/jpeg"), "");
+        String url = image250;
+        final Request request = new Request.Builder().url(url).build();
 
 
-    client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-            e.printStackTrace();
-            myTasks="fail";
-            try {
-                Log.d("err","network failed!");
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+                myTasks="fail";
+                try {
+                    Log.d("err","network failed!");
 
 
-            }catch (Exception e1){}
+                }catch (Exception e1){}
 
 
-
-        }
-
-        @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-            if (response.isSuccessful()) {
-
-                ((Activity)getContext()).runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-
-
-
-
-
-                final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                try (  FileOutputStream  fos = getContext().openFileOutput("profile.png", MODE_PRIVATE)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                        FileInputStream in = null;
-                        try {
-                            in = getContext().openFileInput("profile.png");
-                            profile.setImageBitmap(BitmapFactory.decodeStream(in));
-
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-                    }
-
-                });
-
-
-
-                Log.d("image","saved");
-            }else {
-
-                Log.d("err","reponse failed!");
 
             }
 
-        }
-    });
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+
+                    ((Activity)getContext()).runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+
+
+
+
+
+                            final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                            try (  FileOutputStream  fos = getContext().openFileOutput("profile.png", MODE_PRIVATE)) {
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos); // bmp is your Bitmap instance
+                                // PNG is a lossless format, the compression factor (100) is ignored
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            FileInputStream in = null;
+                            try {
+                                in = getContext().openFileInput("profile.png");
+                                profile.setImageBitmap(BitmapFactory.decodeStream(in));
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+
+
+                        }
+
+                    });
+
+
+
+                    Log.d("image","saved");
+                }else {
+
+                    Log.d("err","reponse failed!");
+
+                }
+
+            }
+        });
 
 
 
@@ -583,7 +528,7 @@ public void downloadImage(String image250){
 
 
 
-}
+    }
 
 
 

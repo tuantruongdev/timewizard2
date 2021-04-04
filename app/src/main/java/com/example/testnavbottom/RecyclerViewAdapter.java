@@ -33,6 +33,7 @@ import com.example.testnavbottom.ui.home.HomeFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,13 +81,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
            // textViewData = (TextView) itemView.findViewById(R.id.text_data);
         buttonDelete = (ImageView) itemView.findViewById(R.id.trash);
             buttonedit = (ImageView) itemView.findViewById(R.id.edit);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(getClass().getSimpleName(), "onItemSelected: " + textViewData.getText().toString());
-                    Toast.makeText(view.getContext(), "onItemSelected: " + textViewData.getText().toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
+
         }
     }
 
@@ -532,34 +527,34 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
         String realdayname= "err";
 
+        if ( Locale.getDefault().getLanguage().compareTo("en")!=0) {
+            switch (date) {
+                case "Thứ Hai":
+                    realdayname = "T2";
+                    break;
+                case "Thứ Ba":
+                    realdayname = "T3";
+                    break;
+                case "Thứ Tư":
+                    realdayname = "T4";
+                    break;
+                case "Thứ Năm":
+                    realdayname = "T5";
+                    break;
+                case "Thứ Sáu":
+                    realdayname = "T6";
+                    break;
+                case "Thứ Bảy":
+                    realdayname = "T7";
+                    break;
+                case "Chủ Nhật":
+                    realdayname = "CN";
+                    break;
 
-        switch (date){
-            case "Thứ Hai":
-                realdayname="T2";
-                break;
-            case "Thứ Ba":
-                realdayname="T3";
-                break;
-            case "Thứ Tư":
-                realdayname="T4";
-                break;
-            case "Thứ Năm":
-                realdayname="T5";
-                break;
-            case "Thứ Sáu":
-                realdayname="T6";
-                break;
-            case "Thứ Bảy":
-                realdayname="T7";
-                break;
-            case "Chủ Nhật":
-                realdayname="CN";
-                break;
-
-        }
+            }
+        }else{
 
 
-/*
 
         switch (date){
             case "Monday":
@@ -585,7 +580,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
                 break;
 
         }
-*/
+}
 
 
         return realdayname;

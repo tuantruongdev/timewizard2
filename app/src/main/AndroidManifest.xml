@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Testnavbottom"
         >
+        <activity android:name=".ui.notifications.loginClass"/>
         <activity android:name=".LoadingActivity"></activity>
         <activity android:name=".ui.dashboard.MainActivity" />
         <activity

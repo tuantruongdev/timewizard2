@@ -233,7 +233,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        alert.setTitle("Chọn thời gian cho Sự Kiện");
+        //alert.setTitle("Chọn thời gian cho Sự Kiện");
         alert.setView(alertLayout);
         alert.setCancelable(false);
 
@@ -412,6 +412,23 @@ public class HomeFragment extends Fragment {
         Context context=this.getContext();
       //  listviewLoad(inflater,container);
      //   Classview event= new Classview("--","mon loz","T5","18");
+
+        FloatingActionButton demobtn = root.findViewById(R.id.floatingBtndemo);
+        demobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String rawJson="deo co gi";
+                try {
+                    rawJson=readText(getContext() ,R.raw.eventsjs);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                getEventsFromsvo(rawJson);
+                setUserVisibleHint(true);
+
+            }
+        });
+
 
         FloatingActionButton addbtn = root.findViewById(R.id.floatingBtn);
 
