@@ -120,12 +120,13 @@
         android:gravity="center|bottom"
         android:layout_weight="1">
         <TextView
+            android:id="@+id/alertLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Forgot password"
-            android:textColor="#ffffff"
+            android:text=""
+            android:textColor="@color/red_300"
             android:layout_marginBottom="20dp"
-            android:textSize="14sp"
+            android:textSize="19sp"
             android:fontFamily="@font/roboto_light"
             />
     </LinearLayout>

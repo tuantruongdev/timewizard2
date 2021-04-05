@@ -3,10 +3,12 @@ package com.example.testnavbottom.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -42,6 +45,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,16 +58,21 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.daimajia.swipe.util.Attributes;
 import com.example.testnavbottom.Classview;
 import com.example.testnavbottom.DatabaseHelper;
+import com.example.testnavbottom.MainActivity;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.RecyclerViewAdapter;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.recycleViewAdapter;
+import com.example.testnavbottom.reponseClass;
 import com.example.testnavbottom.taskCL;
 import com.example.testnavbottom.internetClass;
+import com.example.testnavbottom.ui.notifications.loginClass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -79,7 +88,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Inflater;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class HomeFragment extends Fragment {
+    String  myTasks="";
+    AlertDialog dialog;
+    TextView tvloading;
+
+    private static final String FILE_NAME = "info.txt";
+
+
+
     public  int today=1;
     public int currentAddView=0;
     Context contextnew=this.getContext();
@@ -115,6 +140,48 @@ public class HomeFragment extends Fragment {
     }
 
 
+    void displayLoading(){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.loading_layouts, null);
+        tvloading= alertLayout.findViewById(R.id.tvstatus);
+
+        //eerrr here
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+
+        alert.setView(alertLayout);
+        alert.setCancelable(true);
+
+        dialog = alert.create();
+        dialog.show();
+
+        try {
+            String info=load();
+            if (info!=null&&info.compareTo("nofile")!=0) {
+                String[] arrInfo = info.split("\\|", 5);
+                if (arrInfo[0] != null && arrInfo[1]!=null){
+                String agument1=arrInfo[0].replace("\n","");
+                    String agument2=arrInfo[1];
+                    getTaskFromSVO(agument1,agument2);
+                }else {
+                    Toast.makeText(getContext(),"Bạn chưa đăng nhập!",Toast.LENGTH_SHORT).show();
+                    tvloading.setText("Bạn chưa đăng nhập!");
+
+                    dialog.cancel();
+
+                }
+            }
+        }catch (Exception e){
+            Toast.makeText(getContext(),"Bạn chưa đăng nhập!",Toast.LENGTH_SHORT).show();
+            tvloading.setText("Bạn chưa đăng nhập!");
+
+            dialog.cancel();
+        }
+
+        //  downloadImage("https://halustorage-hn.ss-hn-1.vccloud.vn/60011b3b8003bf099275ca6d.jpg");
+
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
    public void getEventsFromsvo(String rawJson){
@@ -393,6 +460,183 @@ public class HomeFragment extends Fragment {
     }
 
 
+    public String load() {
+        String ret = "";
+
+        try {
+            InputStream inputStream = getContext().openFileInput(FILE_NAME);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+
+    }
+
+    String checkAndGet(String myRes, int mode) {
+        Gson gson1 = new Gson();
+        reponseClass mtask = gson1.fromJson(myRes, reponseClass.class);
+        if (mode == 1) {
+
+            return   "1";
+        }
+        if(mode==2){
+            return  mtask.sso_token;
+        }
+        if(mode==3){
+            return  mtask.refresh_token;
+        }
+
+
+        if (mode==5 && mtask._id.compareTo("1")==0){
+            return "1";
+        }
+
+        if (mode==6 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+            return "1";
+        }
+        if (mode==7 && mtask.stt.compareTo("success")==0){
+            return "1";
+        }
+        if (mode==8 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+            return mtask.img250;
+
+
+        }
+        if (mode==9 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+            return mtask.fullname;
+
+
+        }
+        if (mode==10 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+            return mtask.ids;
+
+
+        }
+
+        return "error";
+    }
+
+    public String getTaskFromSVO(String sso,String refresh_token ){
+
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"force_update\":true}");
+        String url = "https://api.dhdt.vn/calendar/task";
+        Request request = new Request.Builder().addHeader("accept", "application/json, text/plain, */*")
+                .addHeader("refresh_token", refresh_token)
+                .addHeader("sso_token", sso)
+                .addHeader("if-none-match", "W/\"b5b-3+NZGVqGPC6cHnb+39bL/VlxSY4\"")
+                .addHeader("agent", "{\"brower\":\"SVOapp\",\"version\":\"6.1.3\",\"device_name\":\"twzsv\",\"unique_device_id\":\"8DA9BD10 - B0D0 - 4808 - AB34 - 4AF30AA044EC\",\"user_agent\":\"Mozilla / 5.0(iPhone; CPU iPhone OS 13_6_1 like Mac OS X) AppleWebKit / 605.1.15(KHTML, like Gecko) Mobile / 15E148\",\"system_name\":\"iOS\",\"device_model\":\"iPhone 7\",\"system_version\":\"13.6.1\"}")
+                .post(body)
+                .url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+                (getActivity()).runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        tvloading.setText("Lỗi kết nối!");
+
+                    }
+
+                });
+                myTasks="fail";
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myRes = response.body().string();
+
+                    String stt=checkAndGet(myRes, 5);
+
+                    if (stt.compareTo("1")==0) {
+
+
+                        getEventsFromsvo(myRes);
+
+
+
+                        (getActivity()).runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                tvloading.setText("Lấy lịch học thành công ^.^!");
+                                setUserVisibleHint(true);
+
+
+
+                            }
+
+                        });
+                        SystemClock.sleep(4000);
+                        dialog.cancel();
+
+
+
+
+                    } else {
+
+
+                        (getActivity()).runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                tvloading.setText("Lấy lịch học thất bại!");
+
+                            }
+
+                        });
+                        SystemClock.sleep(3000);
+                        dialog.cancel();
+
+                    }
+
+
+                }
+                else {
+                    (getActivity()).runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            tvloading.setText("Lấy lịch học thất bại");
+
+                        }
+
+                    });
+                    SystemClock.sleep(3000);
+                    dialog.cancel();
+                }
+
+            }
+        });
+
+
+        return "";
+    }
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -414,7 +658,9 @@ public class HomeFragment extends Fragment {
      //   Classview event= new Classview("--","mon loz","T5","18");
 
         FloatingActionButton demobtn = root.findViewById(R.id.floatingBtndemo);
-        demobtn.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton demobtn2 = root.findViewById(R.id.floatingBtndemo2);
+
+        demobtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String rawJson="deo co gi";
@@ -425,6 +671,30 @@ public class HomeFragment extends Fragment {
                 }
                 getEventsFromsvo(rawJson);
                 setUserVisibleHint(true);
+            }
+        });
+
+
+        demobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            displayLoading();
+
+             /*
+                String rawJson="deo co gi";
+                try {
+                    rawJson=readText(getContext() ,R.raw.eventsjs);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                getEventsFromsvo(rawJson);
+                setUserVisibleHint(true);
+*/
+
+
+
+
+
 
             }
         });

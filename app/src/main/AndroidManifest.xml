@@ -20,6 +20,7 @@
         >
         <activity android:name=".ui.notifications.loginClass"/>
         <activity android:name=".LoadingActivity"></activity>
+
         <activity android:name=".ui.dashboard.MainActivity" />
         <activity
             android:name=".MainActivity"

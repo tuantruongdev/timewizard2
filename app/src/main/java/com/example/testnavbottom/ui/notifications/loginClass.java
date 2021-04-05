@@ -1,6 +1,7 @@
 package com.example.testnavbottom.ui.notifications;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.testnavbottom.MainActivity;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.reponseClass;
 import com.example.testnavbottom.ui.home.HomeFragment;
@@ -34,6 +36,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -62,11 +65,17 @@ public class loginClass extends AppCompatActivity {
     String  myTasks="";
     AlertDialog dialog;
     TextView tvloading;
+    TextView alertLogin;
     private static final String FILE_NAME = "info.txt";
     ImageView profile;
     EditText tvuser;
     EditText tvpassword;
     Button btnlogin;
+    final String[] sso_token = {"undefined"};
+    final String[] refresh_token = {"undefined"};
+    final String[] ids = {"undefined"};
+    final String[] img250 = {"undefined"};
+    final String[] fullname = {"undefined"};
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,9 +106,9 @@ public class loginClass extends AppCompatActivity {
 
         tvuser=findViewById(R.id.usernamelg);
 
-        tvpassword=findViewById(R.id.usernamelg);
+        tvpassword=findViewById(R.id.passwordlg);
         btnlogin =findViewById(R.id.btnlogin);
-
+        alertLogin=findViewById(R.id.alertLogin);
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +141,7 @@ public class loginClass extends AppCompatActivity {
         tvloading= alertLayout.findViewById(R.id.tvstatus);
 
      //eerrr here
-        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder alert = new AlertDialog.Builder(loginClass.this);
 
 
         alert.setView(alertLayout);
@@ -212,7 +221,7 @@ public class loginClass extends AppCompatActivity {
                 try {
 
 
-                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                    (loginClass.this).runOnUiThread(new Runnable() {
                         public void run() {
                             tvloading.setText("Không thể kết nối đến máy chủ!");
 
@@ -239,17 +248,31 @@ public class loginClass extends AppCompatActivity {
 
                         Pattern pattern = Pattern.compile("(?<=_id\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
                         Pattern patternName = Pattern.compile("(?<=fullname\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
+                        Pattern userinfopattern = Pattern.compile("(?<=\\[)[\\s\\S]*?(?=\\])",Pattern.MULTILINE);
+
 
 
                         ArrayList<String> tasks = new ArrayList<String>();
                         Matcher matcher = pattern.matcher(myRes);
                         Matcher matcherName = patternName.matcher(myRes);
+                        Matcher userInfoMatcher = userinfopattern.matcher(myRes);
 
                         while (matcher.find()){
-                            ((Activity)getContext()).runOnUiThread(new Runnable()
+                            (loginClass.this).runOnUiThread(new Runnable()
                             {
                                 public void run()
                                 {
+
+
+
+
+
+                                    while (userInfoMatcher.find()){
+                                        ids[0]=checkAndGet(userInfoMatcher.group(0),10);
+                                        fullname[0]=checkAndGet(userInfoMatcher.group(0),9);
+                                        img250[0]=checkAndGet(userInfoMatcher.group(0),8);
+                                    }
+
 
                                     while (matcherName.find()){
 
@@ -267,12 +290,12 @@ public class loginClass extends AppCompatActivity {
                     } else {
 
 
-                        ((Activity)getContext()).runOnUiThread(new Runnable()
+                        (loginClass.this).runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
                                 tvloading.setText("Tên đăng nhập không chính xác!");
-
+                                alertLogin.setText("Tên đăng nhập không chính xác!");
                             }
 
                         });
@@ -283,12 +306,12 @@ public class loginClass extends AppCompatActivity {
 
                 }else {
 
-                    ((Activity)getContext()).runOnUiThread(new Runnable()
+                    (loginClass.this).runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
                             tvloading.setText("Lỗi máy chủ!");
-
+                            alertLogin.setText("Lỗi máy chủ!");
                         }
 
                     });
@@ -306,11 +329,7 @@ public class loginClass extends AppCompatActivity {
 
     public void loginfunc(String username, String password) {
 
-        final String[] sso_token = {"undefined"};
-        final String[] refresh_token = {"undefined"};
-        final String[] ids = {"undefined"};
-        final String[] img250 = {"undefined"};
-        final String[] fullname = {"undefined"};
+
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"type\":\"user\",\"_id\":\""+username+"\",\"passwd\":\""+password+"\"}");
@@ -341,7 +360,7 @@ public class loginClass extends AppCompatActivity {
                     // tv1.setText(myRes);
                     if (stt.equals("1")) {
 
-                        ((Activity)getContext()).runOnUiThread(new Runnable()
+                        (loginClass.this).runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
@@ -350,16 +369,42 @@ public class loginClass extends AppCompatActivity {
                             }
 
                         });
-                        ids[0]=checkAndGet(myRes,10);
-                        fullname[0]=checkAndGet(myRes,9);
-                        img250[0]=checkAndGet(myRes,8);
+
+
+
+                        File fdelete = new File(FILE_NAME);
+                        if (fdelete.exists()) {
+                            if (fdelete.delete()) {
+                                System.out.println("file Deleted :");
+                            } else {
+                                System.out.println("file not Deleted :");
+                            }
+                        }
+                        File fdelete2 = new File("profile.png");
+                        if (fdelete.exists()) {
+                            if (fdelete.delete()) {
+                                System.out.println("file Deleted :");
+                            } else {
+                                System.out.println("file not Deleted :");
+                            }
+                        }
+                        SystemClock.sleep(2000);
+
                         downloadImage(img250[0]);
                         sso_token[0] =checkAndGet(myRes,2);
                         refresh_token[0] =checkAndGet(myRes,3);
-                        save(sso_token[0]+"|"+refresh_token+"|"+ids[0]+"|"+fullname[0]+"|"+img250[0]);
 
+                        save(sso_token[0]+"|"+refresh_token[0]+"|"+ids[0]+"|"+fullname[0]+"|"+img250[0]);
+                       SystemClock.sleep(3000);
+                        dialog.cancel();
+                        finish();
 
-                        getTaskFromSVO(sso_token[0],refresh_token[0]);
+                        Intent intent = new Intent(loginClass.this, MainActivity.class);
+                        intent.putExtra("action","dashboard");
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+
+                   //     getTaskFromSVO(sso_token[0],refresh_token[0]);
 
 
 
@@ -367,12 +412,12 @@ public class loginClass extends AppCompatActivity {
 
                     } else {
 
-                        ((Activity)getContext()).runOnUiThread(new Runnable()
+                        (loginClass.this).runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
                                 tvloading.setText("Mật khẩu không chính xác!");
-
+                                alertLogin.setText("Mật khẩu không chính xác!");
                             }
 
                         });
@@ -397,7 +442,7 @@ public class loginClass extends AppCompatActivity {
 
         FileOutputStream fos = null;
         try {
-            fos = getContext().openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos = loginClass.this.openFileOutput(FILE_NAME, MODE_PRIVATE);
             fos.write(text.getBytes());
 
 
@@ -479,7 +524,7 @@ public class loginClass extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
 
-                    ((Activity)getContext()).runOnUiThread(new Runnable()
+                    (loginClass.this).runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
@@ -489,20 +534,13 @@ public class loginClass extends AppCompatActivity {
 
 
                             final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                            try (  FileOutputStream  fos = getContext().openFileOutput("profile.png", MODE_PRIVATE)) {
+                            try (  FileOutputStream  fos = loginClass.this.openFileOutput("profile.png", MODE_PRIVATE)) {
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos); // bmp is your Bitmap instance
                                 // PNG is a lossless format, the compression factor (100) is ignored
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            FileInputStream in = null;
-                            try {
-                                in = getContext().openFileInput("profile.png");
-                                profile.setImageBitmap(BitmapFactory.decodeStream(in));
 
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
 
 
 
@@ -551,12 +589,12 @@ public class loginClass extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                ((Activity)getContext()).runOnUiThread(new Runnable()
+                (loginClass.this).runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
                         tvloading.setText("Lỗi kết nối!");
-
+                        alertLogin.setText("Lỗi kết nối!");
                     }
 
                 });
@@ -578,17 +616,23 @@ public class loginClass extends AppCompatActivity {
 
 
 
-                        ((Activity)getContext()).runOnUiThread(new Runnable()
+                        (loginClass.this).runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
                                 tvloading.setText("Lấy lịch học thành công ^.^!");
+                                SystemClock.sleep(3000);
+                                dialog.cancel();
+                                finish();
 
+                                Intent intent = new Intent(loginClass.this, MainActivity.class);
+                                intent.putExtra("action","dashboard");
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
                             }
 
                         });
-                        SystemClock.sleep(3000);
-                        dialog.cancel();
+
 
 
 
@@ -596,7 +640,7 @@ public class loginClass extends AppCompatActivity {
                     } else {
 
 
-                        ((Activity)getContext()).runOnUiThread(new Runnable()
+                        (loginClass.this).runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
@@ -613,7 +657,7 @@ public class loginClass extends AppCompatActivity {
 
                 }
                 else {
-                    ((Activity)getContext()).runOnUiThread(new Runnable()
+                    (loginClass.this).runOnUiThread(new Runnable()
                     {
                         public void run()
                         {

@@ -111,10 +111,15 @@ if (action!=null) {
     if (action.equals("alarm")) {
         navView.setSelectedItemId(R.id.navigation_dashboard);
     }
-    else{
-        navView.setSelectedItemId(R.id.navigation_home);
-
+    if ( action.equals("dashboard")) {
+        navView.setSelectedItemId(R.id.navigation_notifications);
     }
+
+
+
+} else{
+    navView.setSelectedItemId(R.id.navigation_home);
+
 }
 
 

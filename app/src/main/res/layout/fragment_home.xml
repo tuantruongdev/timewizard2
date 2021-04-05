@@ -126,6 +126,28 @@ android:layout_marginBottom="?attr/actionBarSize"
             app:srcCompat="@drawable/ic_baseline_refresh_24"
             app:tint="@drawable/flatbtntint"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingBtndemo2"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="150dp"
+            app:backgroundTint="@android:color/transparent"
+
+            android:layout_marginBottom="0dp"
+            android:outlineProvider="none"
+            android:visibility="visible"
+
+
+            app:borderWidth="0dp"
+            app:rippleColor="#999999"
+            app:srcCompat="@drawable/ic_baseline_tag_faces_24"
+            app:tint="@drawable/flatbtntint"/>
+
+
 
     </RelativeLayout>
 

@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import androidx.annotation.RequiresApi;
@@ -64,6 +65,7 @@ String  myTasks="";
     private static final String FILE_NAME = "info.txt";
     ImageView profile;
     TextView tvMsv;
+    TextView tvName;
 
     private NotificationsViewModel notificationsViewModel;
 
@@ -77,11 +79,29 @@ String  myTasks="";
 
         profile= root.findViewById(R.id.imageview1);
         tvMsv=root.findViewById(R.id.msv);
-
+        tvName=root.findViewById(R.id.tvname);
         FileInputStream in = null;
         try {
             in = getContext().openFileInput("profile.png");
             profile.setImageBitmap(BitmapFactory.decodeStream(in));
+
+
+            try {
+                String info=load();
+                if (info!=null&&info.compareTo("nofile")!=0) {
+                    String[] arrInfo = info.split("\\|", 5);
+                    if (arrInfo[3] != null && arrInfo[2]!=null){
+                        tvName.setText(arrInfo[3]);
+                        tvMsv.setText(arrInfo[2]);
+                    }
+                }
+            }catch (Exception e){
+
+            }
+
+
+
+
         } catch (FileNotFoundException e) {
 
         }
@@ -92,6 +112,8 @@ String  myTasks="";
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),loginClass.class);
                 startActivity(intent);
+
+
             }
         });
 
@@ -118,7 +140,7 @@ String  myTasks="";
                 //startActivity(intent);
             //    internetClass a= new internetClass();
            //     a.checkSmartName("DTC18548010300766","Leminh77",inflater,container);
-            displayLoading();
+         //   displayLoading();
 
             }
         });
@@ -299,7 +321,7 @@ String  myTasks="";
                         refresh_token[0] =checkAndGet(myRes,3);
                         save(sso_token[0]+"|"+refresh_token+"|"+ids[0]+"|"+fullname[0]+"|"+img250[0]);
 */
-
+    //sso error
 
 
                         Pattern pattern = Pattern.compile("(?<=_id\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
@@ -414,7 +436,7 @@ String  myTasks="";
                         });
 
 
-                       getTaskFromSVO(sso_token[0],refresh_token[0]);
+             //          getTaskFromSVO(sso_token[0],refresh_token[0]);
 
 
 
@@ -473,32 +495,32 @@ String  myTasks="";
     }
 
     public String load() {
-        FileInputStream fis = null;
-        String text=" ";
+        String ret = "";
+
         try {
+            InputStream inputStream = getContext().openFileInput(FILE_NAME);
 
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
 
-            while ((text = br.readLine()) != null) {
-                sb.append(text).append("\n");
-            }
-        } catch (FileNotFoundException e) {
-            text="nofile";
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
                 }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
             }
         }
-    return text;
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 
 
