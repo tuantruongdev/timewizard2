@@ -63,12 +63,12 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
         LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
         LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
-          dt2=dt2.minusDays(1);
+       //   dt2=dt2.minusDays(1);
 //maybe error here
-          if ( dt1.compareTo(dt2)!=0) {
+
               if (dt1.isAfter(dt2)) {
                   return true;
-              }
+
           }
 
 
@@ -118,7 +118,7 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
         return clss;
     }
-    
+
 
 
     public DatabaseHelper(Context context) {
@@ -168,7 +168,7 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
     public Boolean checkscroll(String mydate){
 
         Calendar cal1 = GregorianCalendar.getInstance();
-      //  int date=  cal1.get(Calendar.YEAR);
+
         if (Integer.parseInt(getdate(mydate,0))==cal1.get(Calendar.YEAR)&&Integer.parseInt(getdate(mydate,1))==cal1.get(Calendar.MONTH)+1&&Integer.parseInt(getdate(mydate,2))==cal1.get(Calendar.DAY_OF_MONTH)){
             return  true;
         }
@@ -191,31 +191,16 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
 
     public int getDayIndex(ArrayList<Classview> events) {
-
-      //  ArrayList<Classview> event = new ArrayList<Classview>();
-
-
-        //Đến dòng đầu của tập dữ liệu
-
-
-
-
         int i=0;
 
 
         while (i < events.size()) {
             if (checkscroll(events.get(i).getStartat())) {
                 currentDateIndex = i;
-
+                return currentDateIndex;
             }
             i++;
         }
-
-
-
-
-
-
 
         return currentDateIndex;
     }

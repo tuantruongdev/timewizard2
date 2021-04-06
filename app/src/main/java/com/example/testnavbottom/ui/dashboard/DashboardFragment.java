@@ -361,17 +361,7 @@ Calendar calendar;
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final ListView listView = root.findViewById(R.id.listviewAlarm);
         FloatingActionButton buttonadd=root.findViewById(R.id.floatingBtnaddalarm);
-        Button btn =root.findViewById(R.id.testButton);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             setUserVisibleHint(true);
-                //   openActivity2();
-              //  Intent refresh = new Intent(getContext(), DashboardFragment.class);
-              //  startActivity(refresh);
-              //  this.finish();
-            }
-        });
+
 
 
 

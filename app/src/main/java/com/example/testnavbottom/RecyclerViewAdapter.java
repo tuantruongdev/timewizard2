@@ -31,8 +31,10 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.example.testnavbottom.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,7 +62,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         TextView daycolor;
         TextView tvtimeend;
         TextView tvTime;
-
+        RelativeLayout myLayout;
         public SimpleViewHolder(View itemView) {
             super(itemView);
             Dtime = itemView.findViewById(R.id.tv1);
@@ -72,6 +74,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
             daycolor=itemView.findViewById(R.id.colormatch);
             tvtimeend= itemView.findViewById(R.id.tvendat);
             tvTime= itemView.findViewById(R.id.tvsstartAt);
+            myLayout= itemView.findViewById(R.id.idrelalayout);
 
 
 
@@ -101,7 +104,71 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         return new SimpleViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean checkscroll2(String mydate) {
 
+
+        Calendar cal1 = GregorianCalendar.getInstance();
+
+
+        String mTempday4 = getdate(mydate, 2);
+
+
+        String mTempmonth4 = getdate(mydate, 1);
+
+
+        String mTempyear4 = getdate(mydate, 0);
+
+
+        int mTempday5 = cal1.get(Calendar.DAY_OF_MONTH);
+
+        int mTempmonth5 = cal1.get(Calendar.MONTH)+1;
+        int mTempyear5 =  cal1.get(Calendar.YEAR);
+
+       String mTempday6=String.valueOf(mTempday5);
+        String mTempmonth6=String.valueOf(mTempmonth5);
+
+        if (mTempday5<10){
+            mTempday6="0"+mTempday6;
+        }
+        if (mTempmonth5<10){
+            mTempmonth6="0"+mTempmonth6;
+        }
+
+
+
+        LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+        //  cal.add(Calendar.DATE,-1);
+        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth6+"-"+mTempday6);
+  //      dt2=   dt2.minusDays(1);
+   //     dt2=   dt2.minusDays(1);
+
+//Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
+
+        // Log.d("cac",cal.getTime().toString());
+        //   dt1.isAfter(dt2)
+        if (dt2.isAfter(dt1)){
+
+
+          return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean checkscroll(String mydate){
+
+        Calendar cal1 = GregorianCalendar.getInstance();
+
+        if (Integer.parseInt(getdate(mydate,0))==cal1.get(Calendar.YEAR)&&Integer.parseInt(getdate(mydate,1))==cal1.get(Calendar.MONTH)+1&&Integer.parseInt(getdate(mydate,2))==cal1.get(Calendar.DAY_OF_MONTH)){
+            return  true;
+        }
+
+
+
+        return false;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(final SimpleViewHolder viewHolder, final int position) {
         Classview item = mDataset.get(position);
@@ -122,33 +189,129 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
             //viewHolder.Ddesc.setBackgroundColor(Color.parseColor("#5a1363"));
         }
-        switch (weekday){
-            case "T2":
-                       viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_mon);
-                       break;
-            case "T3":
-                viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_tue);
-                break;
-            case "T4":
-                viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_we);
-                break;
 
-            case "T5":
-                viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_th);
-                break;
-            case "T6":
-                viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_fri);
-                break;
-            case "T7":
 
-                break;
-                 case "CN":
-                viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_sun);
-                break;
+
+
+
+
+        if (checkscroll(time)){
+
+            //  viewHolder.Ddate.setOutlineAmbientShadowColor(Color.parseColor("#cf1d1d"));
+            viewHolder.Ddate.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Ddate.setTextColor(Color.parseColor("#CFFFCC00"));
+            //   viewHolder.Dtime.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Dtime.setTextColor(Color.parseColor("#CFFFCC00"));
+
+            // viewHolder.Ddateweek.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Ddateweek.setTextColor(Color.parseColor("#CFFFCC00"));
+/*
+            android:shadowColor="#cf1d1d"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="8"
+*/
+            switch (weekday){
+                case "T2":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_mon);
+                    break;
+                case "T3":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_tue);
+                    break;
+                case "T4":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_we);
+                    break;
+
+                case "T5":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_th);
+                    break;
+                case "T6":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_fri);
+                    break;
+                case "T7":
+
+                    break;
+                case "CN":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_sun);
+                    break;
+            }
         }
 
+        else {
 
 
+
+            viewHolder.Ddate.setShadowLayer(15,0,0,Color.parseColor("#000000") );
+            viewHolder.Ddate.setTextColor(Color.parseColor("#DFFFFFFF"));
+
+            viewHolder.Dtime.setTextColor(Color.parseColor("#DFFFFFFF"));
+
+
+            viewHolder.Ddateweek.setTextColor(Color.parseColor("#DFFFFFFF"));
+
+
+        }
+
+        if (checkscroll2(time)){
+            viewHolder.Ddate.setTextColor(Color.parseColor("#4FFFFFFF"));
+            viewHolder.Dtime.setTextColor(Color.parseColor("#4FFFFFFF"));
+            viewHolder.Ddateweek.setTextColor(Color.parseColor("#4FFFFFFF"));
+            viewHolder.Ddesc.setTextColor(Color.parseColor("#4FFFFFFF"));
+            viewHolder.Dinfo.setTextColor(Color.parseColor("#4FFFFFFF"));
+            viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_exp);
+        }
+        else {
+            switch (weekday) {
+                case "T2":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_mon);
+                    break;
+                case "T3":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_tue);
+                    break;
+                case "T4":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_we);
+                    break;
+
+                case "T5":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_th);
+                    break;
+                case "T6":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_fri);
+                    break;
+                case "T7":
+
+                    break;
+                case "CN":
+                    viewHolder.daycolor.setBackgroundResource(R.drawable.roundedleft_sun);
+                    break;
+            }
+
+
+            viewHolder.Ddate.setTextColor(Color.parseColor("#AFFFFFFF"));
+            viewHolder.Dtime.setTextColor(Color.parseColor("#AFFFFFFF"));
+            viewHolder.Ddateweek.setTextColor(Color.parseColor("#AFFFFFFF"));
+            viewHolder.Ddesc.setTextColor(Color.parseColor("#AFFFFFFF"));
+            viewHolder.Dinfo.setTextColor(Color.parseColor("#AFFFFFFF"));
+
+
+        }
+
+        if (checkscroll(time)){
+
+            //  viewHolder.Ddate.setOutlineAmbientShadowColor(Color.parseColor("#cf1d1d"));
+            viewHolder.Ddate.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Ddate.setTextColor(Color.parseColor("#CFFFCC00"));
+            //   viewHolder.Dtime.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Dtime.setTextColor(Color.parseColor("#CFFFCC00"));
+
+            // viewHolder.Ddateweek.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
+            viewHolder.Ddateweek.setTextColor(Color.parseColor("#CFFFCC00"));
+        }
+
+     //viewHolder.Ddate.setTextColor(Color.parseColor("#d566d9"));
+
+     // viewHolder.Ddate.setBackgroundResource(R.drawable.rounded_all);
+       // viewHolder.myLayout.setBackgroundResource(R.color.fadedgray);
         String timeend =item.getEndat();
         viewHolder.tvtimeend.setText(timeend);
         viewHolder.Ddate.setText(date);
