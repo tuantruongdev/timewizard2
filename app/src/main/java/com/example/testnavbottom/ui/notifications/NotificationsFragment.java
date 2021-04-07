@@ -76,7 +76,7 @@ String  myTasks="";
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         FloatingActionButton addbtn = root.findViewById(R.id.floatingBtnaddQR);
         FloatingActionButton loginout = root.findViewById(R.id.floatingBtnaddlogout);
-
+        FloatingActionButton btnsetting=root.findViewById(R.id.floatingBtnSetting);
         profile= root.findViewById(R.id.imageview1);
         tvMsv=root.findViewById(R.id.msv);
         tvName=root.findViewById(R.id.tvname);
@@ -105,6 +105,15 @@ String  myTasks="";
         } catch (FileNotFoundException e) {
 
         }
+
+btnsetting.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent= new Intent(getContext(),settingClass.class);
+        startActivity(intent);
+
+    }
+});
 
 
         loginout.setOnClickListener(new View.OnClickListener() {

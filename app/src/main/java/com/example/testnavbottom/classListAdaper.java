@@ -1,25 +1,23 @@
 package com.example.testnavbottom;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.Switch;
@@ -31,27 +29,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testnavbottom.ui.home.HomeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.testnavbottom.R.id.date;
-import static com.example.testnavbottom.R.id.end;
-import static com.example.testnavbottom.R.id.fade;
 import static com.example.testnavbottom.R.id.swEnableEvent;
-import static com.example.testnavbottom.R.id.tvInfo;
 
 
 public class classListAdaper extends ArrayAdapter<Classview> {
@@ -560,4 +546,6 @@ int currentAddView=0;
         Ddesc.setText(desc);
         return  convertView;
     }
+
+
 }

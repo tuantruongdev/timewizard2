@@ -16,25 +16,25 @@ tools:context=".ui.dashboard.DashboardFragment">
         android:id="@+id/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/lightdark">
+        android:background="@android:color/transparent"
+        android:padding="4dp">
 
 
         <TextView
+
             android:id="@+id/tempToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left|center"
-            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp"
             android:text="Ngủ khoa học"
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
-
+            android:background="@drawable/rounded_toolbar"
             >
 
-
         </TextView>
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtnaddalarm"
             style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -42,16 +42,18 @@ tools:context=".ui.dashboard.DashboardFragment">
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_marginEnd="0dp"
+            android:layout_marginTop="-5dp"
+
+            app:backgroundTint="@android:color/transparent"
             android:layout_marginBottom="0dp"
             android:outlineProvider="none"
-            app:backgroundTint="@color/lightdark"
+            android:visibility="visible"
+
+
             app:borderWidth="0dp"
             app:rippleColor="#3E3C3C"
             app:srcCompat="@drawable/ic_baseline_add_24"
-            app:tint="@color/white" />
+            app:tint="@drawable/flatbtntint" />
 
 
 
@@ -62,16 +64,23 @@ tools:context=".ui.dashboard.DashboardFragment">
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_marginEnd="50dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="50dp"
+            app:backgroundTint="@android:color/transparent"
+
             android:layout_marginBottom="0dp"
             android:outlineProvider="none"
-            app:backgroundTint="@color/lightdark"
+            android:visibility="visible"
+
+
             app:borderWidth="0dp"
-            app:rippleColor="#3E3C3C"
+            app:rippleColor="#999999"
             app:srcCompat="@drawable/ic_baseline_edit_24"
-            app:tint="@color/white" />
+            app:tint="@drawable/flatbtntint"/>
+
+
+
+
 
 
     </RelativeLayout>
@@ -88,6 +97,17 @@ tools:context=".ui.dashboard.DashboardFragment">
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/new1faa3cda455c865f037d63a223577ab5"
+        android:scaleY="0.8"
+        android:scaleX="0.8"
 
+        android:layout_centerInParent="true"
+        android:paddingBottom="20dp"
+        android:id="@+id/imgviewEmptyAlarm"
+        android:visibility="gone"
+        ></ImageView>
 
 </RelativeLayout>

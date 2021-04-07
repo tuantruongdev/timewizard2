@@ -21,6 +21,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.testnavbottom.ui.dashboard.DashboardFragment;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.Provider;
 
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
@@ -28,6 +33,35 @@ import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 public class Music extends Service {
     MediaPlayer mediaPlayer;
     String newid="";
+    public String load() {
+        String ret = "";
+
+        try {
+            InputStream inputStream = getApplicationContext().openFileInput("ringtone.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+
+    }
 
     private static final int ID_SERVICE = 101;
 @Nullable
@@ -119,11 +153,32 @@ public class Music extends Service {
      builder.setChannelId(channelId);
 
    //   notificationManager.notify(1,builder.build());
+    String ringtone=load();
+    ringtone=ringtone.replace("\n","");
+            if(ringtone.compareTo("")!=0) {
+
+             if (ringtone.compareTo("0")==0){
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.iphone_alarm_morning);
+                mediaPlayer.start();}
 
 
+                if (ringtone.compareTo("1")==0){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.reality);
+                mediaPlayer.start();}
+                if (ringtone.compareTo("2")==0){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.gac_lai_au_lo);
+                    mediaPlayer.start();}
+                if (ringtone.compareTo("3")==0){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tiec_tra_sao);
+                    mediaPlayer.start();}
+            }
+            else
+            {
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tiec_tra_sao);
+                mediaPlayer.start();
 
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.iphone_alarm_morning);
-            mediaPlayer.start();
+
+            }
 
 
 

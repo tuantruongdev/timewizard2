@@ -243,13 +243,8 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
             viewHolder.Ddate.setShadowLayer(15,0,0,Color.parseColor("#000000") );
             viewHolder.Ddate.setTextColor(Color.parseColor("#DFFFFFFF"));
-
             viewHolder.Dtime.setTextColor(Color.parseColor("#DFFFFFFF"));
-
-
             viewHolder.Ddateweek.setTextColor(Color.parseColor("#DFFFFFFF"));
-
-
         }
 
         if (checkscroll2(time)){

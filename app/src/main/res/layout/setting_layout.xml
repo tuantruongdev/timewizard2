@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.notifications.settingClass"
+    android:background="@color/black">
+    <RelativeLayout
+
+        android:id="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:padding="4dp">
+
+
+
+        <TextView
+
+            android:id="@+id/tempToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="50dp"
+            android:text="Cài đặt"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_toolbar"
+            >   </TextView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingBtnedit"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+
+
+            android:outlineProvider="none"
+            android:visibility="visible"
+            app:backgroundTint="@android:color/transparent"
+            app:borderWidth="0dp"
+            app:rippleColor="#999999"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            app:tint="@drawable/flatbtntint" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+
+        android:id="@+id/layoutseekbar"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/toolbar"
+        android:padding="4dp">
+
+            <TextView
+
+                android:id="@+id/tvSeekbar"
+                android:padding="-4dp"
+                android:layout_width="match_parent"
+                android:layout_height="2500dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="25dp"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_toolbar"
+                ></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:text="Thông báo trước sự kiện (phút) :"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:textStyle="bold"
+            android:id="@+id/tv43"
+            ></TextView>
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="15 Phút"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:layout_below="@+id/seekbar1"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tvtime"
+    ></TextView>
+        <SeekBar
+        android:id="@+id/seekbar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleX="1"
+            android:scaleY="1"
+        android:layout_below="@+id/tv43"
+        android:maxHeight="16dp"
+        android:minHeight="16dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:id="@+id/layoutRingtone"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/layoutseekbar"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_marginTop="2dp"
+            android:id="@+id/tvRingtone"
+            android:padding="-4dp"
+            android:layout_width="match_parent"
+            android:layout_height="2500dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_toolbar"
+            ></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhạc chuông báo thức :"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:textStyle="bold"
+            android:id="@+id/TV44"
+            ></TextView>
+
+        <Spinner
+            android:id="@+id/spinerRingtone"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/TV44"
+            android:paddingLeft="20dp"
+
+
+
+            android:backgroundTint="@color/teal_700"
+
+            android:spinnerMode="dropdown" />
+    </RelativeLayout>
+
+</RelativeLayout>

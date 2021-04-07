@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -402,6 +403,16 @@ Calendar calendar;
 
 
       a= mydb.getAllProducts2();
+
+        if (a.isEmpty()){
+
+            ImageView emptyimg= root.findViewById(R.id.imgviewEmptyAlarm);
+            emptyimg.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(),"Bạn chưa có báo thức nào, thêm ngay nhé!",Toast.LENGTH_SHORT).show();
+            //     mRecycleview.setBackgroundResource(R.drawable.ss1faa3cda455c865f037d63a223577ab5);
+        }
+
+
      // a=mydb.ArraylistCompare(a);
         classlistAlarm_adapter adapter = new classlistAlarm_adapter(this.getContext(),R.layout.alarm_layout,a);
 
