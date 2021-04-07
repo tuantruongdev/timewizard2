@@ -35,6 +35,19 @@ android:layout_marginBottom="?attr/actionBarSize"
 
 </androidx.recyclerview.widget.RecyclerView>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/new1faa3cda455c865f037d63a223577ab5"
+        android:scaleY="0.8"
+        android:scaleX="0.8"
+
+        android:layout_centerInParent="true"
+        android:paddingBottom="20dp"
+        android:id="@+id/imgviewEmpty"
+        android:visibility="gone"
+        ></ImageView>
+
 
 
 

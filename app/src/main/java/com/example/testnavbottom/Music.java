@@ -72,8 +72,6 @@ public class Music extends Service {
 
 
 
-        Intent clickIntent = new Intent(getApplicationContext(),notiActivity.class);
-        PendingIntent clickpendingIntent =PendingIntent.getBroadcast(getApplicationContext(),0,clickIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         String channelId = "Your_channel_id";
@@ -135,7 +133,8 @@ public class Music extends Service {
 
         SystemClock.sleep(2000);
         Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
-        this.stopForeground(false);
+
+        this.stopForeground(true);
 
        startForeground(1, builder.build());
         //
@@ -150,18 +149,14 @@ public class Music extends Service {
 
 
 
-
+            if (mediaPlayer!=null){
 
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.stop();
                     mediaPlayer.reset();
 
 
-
-
-
-
-
+                }
             }
         }
 

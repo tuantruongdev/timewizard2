@@ -164,7 +164,57 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
         return  arrOfStr[opt];
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean checkscroll2(String mydate) {
 
+
+        Calendar cal1 = GregorianCalendar.getInstance();
+
+
+        String mTempday4 = getdate(mydate, 2);
+
+
+        String mTempmonth4 = getdate(mydate, 1);
+
+
+        String mTempyear4 = getdate(mydate, 0);
+
+
+        int mTempday5 = cal1.get(Calendar.DAY_OF_MONTH);
+
+        int mTempmonth5 = cal1.get(Calendar.MONTH)+1;
+        int mTempyear5 =  cal1.get(Calendar.YEAR);
+
+        String mTempday6=String.valueOf(mTempday5);
+        String mTempmonth6=String.valueOf(mTempmonth5);
+
+        if (mTempday5<10){
+            mTempday6="0"+mTempday6;
+        }
+        if (mTempmonth5<10){
+            mTempmonth6="0"+mTempmonth6;
+        }
+
+
+
+        LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+        //  cal.add(Calendar.DATE,-1);
+        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth6+"-"+mTempday6);
+        //      dt2=   dt2.minusDays(1);
+       dt2=   dt2.minusDays(1);
+
+//Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
+
+        // Log.d("cac",cal.getTime().toString());
+        //   dt1.isAfter(dt2)
+        if (dt2.isBefore(dt1)){
+
+
+            return true;
+        } else {
+            return false;
+        }
+    }
     public Boolean checkscroll(String mydate){
 
         Calendar cal1 = GregorianCalendar.getInstance();
@@ -190,12 +240,13 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public int getDayIndex(ArrayList<Classview> events) {
         int i=0;
 
 
         while (i < events.size()) {
-            if (checkscroll(events.get(i).getStartat())) {
+            if (checkscroll2(events.get(i).getStartat())) {
                 currentDateIndex = i;
                 return currentDateIndex;
             }

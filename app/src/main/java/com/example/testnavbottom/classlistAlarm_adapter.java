@@ -222,12 +222,23 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
 
 
 
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                Calendar nowcalendar=Calendar.getInstance();
+                if (nowcalendar.getTimeInMillis() >calendar.getTimeInMillis() ){
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis()+86400000, pendingIntent);
+
+                }else{
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+                }
                 Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
 
 
 
             }
+
+
                 if (!swalamr.isChecked()) {
                     Bundle extras = new Bundle();
 

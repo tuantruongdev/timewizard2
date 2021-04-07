@@ -214,16 +214,34 @@ Calendar calendar;
                 intent.putExtras(extras);
                 intent.setAction(eventStartAt);
 
+
+
                 calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(eventStartAt, 0)));
                 calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(eventStartAt, 1)));
                 calendar.set(Calendar.SECOND, 0);
 
 
-                alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
 
+
+
+                alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
                 pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+                Calendar nowcalendar=Calendar.getInstance();
+                if (nowcalendar.getTimeInMillis() >calendar.getTimeInMillis() ){
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis()+86400000, pendingIntent);
+
+                }else{
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+                }
+
+
+
+
                 Log.d("receiver", String.valueOf(calendar.getTimeInMillis()));
 
 
@@ -394,6 +412,9 @@ Calendar calendar;
             public boolean onItemLongClick(AdapterView<?> parent, View view, int
                     position, long id) {
 
+         //       setUserVisibleHint(true);
+
+
                 // it will get the position of selected item from the ListView
 
                 final int selected_item = position;
@@ -407,11 +428,19 @@ Calendar calendar;
                             public void onClick(DialogInterface dialog, int which)
                             {
 
-                                mydb.deleteProductByID(finalA.get(selected_item).getId());
 
+
+                            Classview iam=    mydb.getProductByID(finalA.get(selected_item).getId());
+                              if ( iam.getEnable()==1){
+
+                                  Toast.makeText(getContext(),"Hãy tắt báo thức trước khi xóa!",Toast.LENGTH_SHORT).show();
+
+                              }else {
+
+                                  mydb.deleteProductByID(finalA.get(selected_item).getId());
                                 finalA.remove(selected_item);
                                 adapter.notifyDataSetChanged();
-                            }
+                            }}
                         })
                         .setNegativeButton("Không" , null).show();
 

@@ -343,6 +343,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
 
                 eventTitle = edtTitle.getText().toString();
+                if (eventTitle.compareTo("")==0){
+                    eventTitle="Sự kiện không có tiêu đề.";
+
+                }
                 eventDesc=edtDesc.getText().toString();
                 DatabaseHelper mydb = new DatabaseHelper(getContext());
                 mydb.insertProduct(new Classview(eventTitle,1,eventDesc,eventStartAt,eventStartAt,0,eventStartAt,"no note","T2",0 ));
@@ -560,6 +564,8 @@ public class HomeFragment extends Fragment {
                     }
 
                 });
+                SystemClock.sleep(3000);
+                dialog.cancel();
                 myTasks="fail";
             }
 
@@ -789,6 +795,14 @@ public class HomeFragment extends Fragment {
         ArrayList<Classview>  arrayList=new ArrayList<Classview>();
 
     arrayList=mydb.getAllProducts();
+
+    if (arrayList.isEmpty()){
+        ImageView emptyimg= root.findViewById(R.id.imgviewEmpty);
+        emptyimg.setVisibility(View.VISIBLE);
+        Toast.makeText(getContext(),"Bạn chưa có sự kiện nào, thêm ngay nhé!",Toast.LENGTH_SHORT).show();
+       //     mRecycleview.setBackgroundResource(R.drawable.ss1faa3cda455c865f037d63a223577ab5);
+    }
+
     //    arrayList.add(new Classview("0",1,"0","2021-04-03 01:00:00","2021-04-03 01:00:00",0,"2021-04-03 01:00:00","0","T2",9 ));
         arrayList=mydb.ArraylistCompare(arrayList);
         int mypos=mydb.getDayIndex(arrayList);
