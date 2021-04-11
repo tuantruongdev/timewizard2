@@ -1,7 +1,10 @@
 package com.example.testnavbottom;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +32,7 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.example.testnavbottom.ui.home.HomeFragment;
+import com.example.testnavbottom.ui.home.notiReceiver;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -39,6 +43,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.content.ContentValues.TAG;
+import static android.content.Context.ALARM_SERVICE;
 import static com.example.testnavbottom.MainActivity.context;
 import static com.example.testnavbottom.MainActivity.getContext;
 
@@ -296,17 +302,10 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
             //  viewHolder.Ddate.setOutlineAmbientShadowColor(Color.parseColor("#cf1d1d"));
             viewHolder.Ddate.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
             viewHolder.Ddate.setTextColor(Color.parseColor("#CFFFCC00"));
-            //   viewHolder.Dtime.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
             viewHolder.Dtime.setTextColor(Color.parseColor("#CFFFCC00"));
-
-            // viewHolder.Ddateweek.setShadowLayer(15,0,0,Color.parseColor("#cf1d1d") );
             viewHolder.Ddateweek.setTextColor(Color.parseColor("#CFFFCC00"));
         }
 
-     //viewHolder.Ddate.setTextColor(Color.parseColor("#d566d9"));
-
-     // viewHolder.Ddate.setBackgroundResource(R.drawable.rounded_all);
-       // viewHolder.myLayout.setBackgroundResource(R.color.fadedgray);
         String timeend =item.getEndat();
         viewHolder.tvtimeend.setText(timeend);
         viewHolder.Ddate.setText(date);
@@ -352,6 +351,25 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         viewHolder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
+
+                String time =item.getStartat();
+
+                Intent intent2 = new Intent(mContext, notiReceiver.class);
+                intent2.setAction(time);
+
+                AlarmManager alarmManager2;
+                PendingIntent pendingIntent2;
+                alarmManager2 = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+                pendingIntent2 = PendingIntent.getBroadcast(mContext, 99, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                alarmManager2.cancel(pendingIntent2);
+                Log.d("canceled action",time);
+
+
                 DatabaseHelper mydb = new DatabaseHelper(mContext);
                 mydb.deleteProductByID(item.getId());
                 mydb.close();
@@ -360,6 +378,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mDataset.size());
                 mItemManger.closeAllItems();
+
 
 
 
@@ -375,7 +394,10 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
 
     }
+    void dosomething(Classview a){
 
+
+    }
     public Bundle displayAlertDialog(String time,String eventDesc,String eventTitle,int id,int position) {
 
         Bundle extras= new Bundle();

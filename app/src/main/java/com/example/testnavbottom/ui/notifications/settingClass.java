@@ -70,7 +70,35 @@ public class settingClass extends AppCompatActivity {
         return ret;
 
     }
+    public String load2() {
+        String ret = "";
 
+        try {
+            InputStream inputStream = getApplicationContext().openFileInput("settings.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        }
+
+        return ret;
+
+    }
     public void save(String text) {
 
 
@@ -187,7 +215,18 @@ public class settingClass extends AppCompatActivity {
        tvTime=findViewById(R.id.tvtime);
         seekBar = findViewById(R.id.seekbar1);
         seekBar.setMax(24);
-        seekBar.setProgress(3);
+        String progess =load2();
+        progess =progess.replace("\n","");
+        if (progess.compareTo("")!=0){
+            seekBar.setProgress(Integer.valueOf(progess)/5);
+            tvTime.setText(   Integer.valueOf(progess)  +" Phút");
+        }
+        else {
+            seekBar.setProgress(3);
+
+        }
+
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

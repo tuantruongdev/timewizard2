@@ -39,6 +39,13 @@
             android:label="@string/app_name">
         </activity>
         <receiver
+            android:name=".ui.home.notiReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
+
+
+        <receiver
             android:name=".alarmReceiver"
             android:enabled="true"
             android:exported="true" />

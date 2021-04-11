@@ -240,6 +240,7 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
 
 
                 if (!swalamr.isChecked()) {
+
                     Bundle extras = new Bundle();
 
 
@@ -251,28 +252,44 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
                     intent.putExtras(extras);
                     pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     calendar = Calendar.getInstance();
-                    calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
-                    calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
-                    calendar.set(Calendar.SECOND, 0);
+
+
                     alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                    Calendar currnethour=Calendar.getInstance();
-                    currnethour.set(Calendar.SECOND,0);
-                    int h1=calendar.get(Calendar.HOUR_OF_DAY);
-                    int m1=calendar.get(Calendar.MINUTE);
-                    int h2=currnethour.get(Calendar.HOUR_OF_DAY);
-                    int m2=currnethour.get(Calendar.MINUTE);
+
+                   Calendar calendar2 = Calendar.getInstance();
+
+               //    String year=String.valueOf(calendar2.get(Calendar.DAY_OF_MONTH));
+                 //   String month=String.valueOf(calendar2.get(Calendar.MONTH));
+                   // String day=String.valueOf()
+
+                    // time do chuong
+                    calendar2.set(calendar2.get(Calendar.YEAR),calendar2.get(Calendar.MONTH),calendar2.get(Calendar.DATE),Integer.parseInt(getTime(time, 0)),Integer.parseInt(getTime(time, 1)),0 );
+
+                    //time hien tai
+                    calendar.set(calendar2.get(Calendar.YEAR),calendar2.get(Calendar.MONTH),calendar2.get(Calendar.DATE),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),0 );
+
+
+                    Log.d("Ring time" ,time);
 
 
 
 
+                long a=calendar.getTimeInMillis();
+                Log.d("a" ,String.valueOf(calendar.getTimeInMillis()));
 
-                    LocalTime dt1 = LocalTime.parse(checkday(h1)+":"+checkday(m1)+":00");
-                    LocalTime dt2 = LocalTime.parse(checkday(h2)+":"+checkday(m2)+":00");
-                dt2=    dt2.plus(2, ChronoUnit.MINUTES);
-                   if (dt2.isAfter(dt1)) {
+
+
+                    long b=calendar2.getTimeInMillis();
+                    Log.d("b" ,String.valueOf(calendar2.getTimeInMillis()));
+
+
+
+                    if (calendar.getTimeInMillis()<calendar2.getTimeInMillis()+60000) {
 
 
                         getContext().sendBroadcast(intent);
+
+                        Log.d("trying stop music" ,"ran");
                     }
 
                     alarmManager.cancel(pendingIntent);

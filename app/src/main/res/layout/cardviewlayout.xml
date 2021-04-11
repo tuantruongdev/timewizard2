@@ -52,7 +52,7 @@
 
 
             android:textColor="@color/red_300"
-            android:textSize="35dp"></TextView>
+            android:textSize="30dp"></TextView>
 
         <TextView
             android:id="@+id/dateweek"

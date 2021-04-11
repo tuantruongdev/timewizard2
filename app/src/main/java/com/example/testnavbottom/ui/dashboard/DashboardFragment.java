@@ -264,7 +264,7 @@ Calendar calendar;
                     timeDisplayOnaddtitle.setText(timePicker.getHour()+":"+timePicker.getMinute());
 
                     //need to add "0" char
-
+                    Calendar calendar3= Calendar.getInstance();
 
                     eventStartAt="2000-12-03 "+timePicker.getHour()+":"+timePicker.getMinute()+":00";
 

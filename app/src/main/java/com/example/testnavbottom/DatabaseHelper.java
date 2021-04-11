@@ -296,10 +296,6 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
             int eventtype= cursor.getInt(6);
 
 
-// request add vao database, truong hop su kien trong, insert cot vao db
-
-
-
         if(ftime==1){
             nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,note,"1",eventID);
 
@@ -423,6 +419,10 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
             //   nClass.getTitle();
 
+
+
+
+
             event.add(nClass);
 
             olddate = cursor.getString(3);
@@ -534,6 +534,19 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
 
  //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
+        //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
+
+
+
+    }
+
+    public  void updatenoitced(int id) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
+        String sqlcommand="UPDATE events SET note='noitced' where id = "+id;
+        db.execSQL(sqlcommand);
+
+
+        //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
         //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
 
 

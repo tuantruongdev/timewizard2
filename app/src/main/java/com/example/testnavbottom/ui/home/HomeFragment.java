@@ -1,6 +1,8 @@
 package com.example.testnavbottom.ui.home;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -61,6 +64,7 @@ import com.example.testnavbottom.DatabaseHelper;
 import com.example.testnavbottom.MainActivity;
 import com.example.testnavbottom.R;
 import com.example.testnavbottom.RecyclerViewAdapter;
+import com.example.testnavbottom.alarmReceiver;
 import com.example.testnavbottom.classListAdaper;
 import com.example.testnavbottom.recycleViewAdapter;
 import com.example.testnavbottom.reponseClass;
@@ -77,6 +81,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -84,6 +91,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Inflater;
@@ -96,12 +104,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class HomeFragment extends Fragment {
     String  myTasks="";
     AlertDialog dialog;
     TextView tvloading;
 
-    private static final String FILE_NAME = "info.txt";
+
 
 
 
@@ -156,7 +166,7 @@ public class HomeFragment extends Fragment {
         dialog.show();
 
         try {
-            String info=load();
+            String info=load("info.txt");
             if (info!=null&&info.compareTo("nofile")!=0) {
                 String[] arrInfo = info.split("\\|", 5);
                 if (arrInfo[0] != null && arrInfo[1]!=null){
@@ -464,11 +474,11 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public String load() {
+    public String load(String filename) {
         String ret = "";
 
         try {
-            InputStream inputStream = getContext().openFileInput(FILE_NAME);
+            InputStream inputStream = getContext().openFileInput(filename);
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -652,7 +662,6 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-      // final ListView listView = root.findViewById(R.id.lv1);
 
 
 
@@ -660,8 +669,6 @@ public class HomeFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
         DatabaseHelper mydb = new DatabaseHelper(this.getContext());
         Context context=this.getContext();
-      //  listviewLoad(inflater,container);
-     //   Classview event= new Classview("--","mon loz","T5","18");
 
         FloatingActionButton demobtn = root.findViewById(R.id.floatingBtndemo);
         FloatingActionButton demobtn2 = root.findViewById(R.id.floatingBtndemo2);
@@ -685,22 +692,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
             displayLoading();
-
-             /*
-                String rawJson="deo co gi";
-                try {
-                    rawJson=readText(getContext() ,R.raw.eventsjs);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                getEventsFromsvo(rawJson);
-                setUserVisibleHint(true);
-*/
-
-
-
-
-
 
             }
         });
@@ -746,12 +737,6 @@ public class HomeFragment extends Fragment {
 
                setUserVisibleHint(true);
 
-              //  listView.setSelection(1);
-
-
-
-
-
 
 
             }
@@ -794,13 +779,121 @@ public class HomeFragment extends Fragment {
         mRecycleview =root.findViewById(R.id.recycleview);
         ArrayList<Classview>  arrayList=new ArrayList<Classview>();
 
+
+
+
+
+
+
+
     arrayList=mydb.getAllProducts();
+
+
+
+
 
     if (arrayList.isEmpty()){
         ImageView emptyimg= root.findViewById(R.id.imgviewEmpty);
         emptyimg.setVisibility(View.VISIBLE);
         Toast.makeText(getContext(),"Bạn chưa có sự kiện nào, thêm ngay nhé!",Toast.LENGTH_SHORT).show();
        //     mRecycleview.setBackgroundResource(R.drawable.ss1faa3cda455c865f037d63a223577ab5);
+    }
+    else {
+
+        ArrayList<Classview> finalArrayList = arrayList;
+      //  new Handler().postDelayed(new Runnable() {
+       //     public void run() {
+                final int[] i = {0};
+                finalArrayList.forEach((arrayListitem)->{
+
+                    if( checkscroll2(arrayListitem.getStartat())&& i[0] <3&&arrayListitem.getNote().compareTo("noitced")!=0){
+                        AlarmManager alarmManager;
+                        PendingIntent pendingIntent;
+                         Calendar calendar2;
+                        calendar2 = Calendar.getInstance();
+                        calendar2.set(Integer.parseInt(getdate(arrayListitem.getStartat(), 0)),Integer.parseInt(getdate(arrayListitem.getStartat(), 1))-1,Integer.parseInt(getdate(arrayListitem.getStartat(), 2)),Integer.parseInt(getTime(arrayListitem.getStartat(), 0)),Integer.parseInt(getTime(arrayListitem.getStartat(), 1)),0 );
+
+                   //     calendar2 = Calendar.getInstance();
+                    //    calendar2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(arrayListitem.getStartat(), 0)));
+                   //     calendar2.set(Calendar.MINUTE, Integer.parseInt(getTime(arrayListitem.getStartat(), 1)));
+                   //     calendar2.set(Calendar.SECOND, 0);
+
+
+                        Intent intent= new Intent(getContext(),notiReceiver.class);
+
+
+                        intent.setAction(arrayListitem.getStartat());
+                        intent.putExtra("id",String.valueOf(arrayListitem.getId()));
+                        intent.putExtra("title",arrayListitem.getTitle());
+                        intent.putExtra("desc",arrayListitem.getDescr());
+                        intent.putExtra("time",getTime(arrayListitem.getStartat(),0)+":"+getTime(arrayListitem.getStartat(),1));
+                        alarmManager=(AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+
+                        pendingIntent =PendingIntent.getBroadcast(getContext(),99,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+                        Calendar nowcalendar=Calendar.getInstance();
+                        if (nowcalendar.getTimeInMillis()<calendar2.getTimeInMillis()){
+
+                            String delay= load("settings.txt");
+                            delay =delay.replace("\n","");
+                            if (delay.compareTo("nofile")!=0&&delay.compareTo("")!=0){
+                                calendar2.add(Calendar.MINUTE, Integer.parseInt(delay)*-1);
+                            }
+
+                            Log.d("time",String.valueOf(calendar2.getTimeInMillis()));
+                            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar2.getTimeInMillis(),pendingIntent);
+                            i[0]++;
+                       //     alarmManager.cancel(pendingIntent);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            //  Toast.makeText(getContext(),"added alarm "+calendar2.getTimeInMillis(),Toast.LENGTH_SHORT).show();
+                            Log.d("added alarm", String.valueOf(calendar2.getTimeInMillis()));
+                        }else {
+                           // Toast.makeText(getContext(),"time expried",Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                    }
+                    else {
+
+                   //     Toast.makeText(getContext(),"time expried "+arrayListitem.getStartat(),Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                        }
+
+
+
+
+
+
+                    );
+
+
+     //       }
+    //    }, 100);
+
+
+
+
+
     }
 
     //    arrayList.add(new Classview("0",1,"0","2021-04-03 01:00:00","2021-04-03 01:00:00",0,"2021-04-03 01:00:00","0","T2",9 ));
@@ -811,6 +904,10 @@ public class HomeFragment extends Fragment {
         mRecycleview.setLayoutManager(mLayoutManager);
         mRecycleview.setAdapter(mAdapter);
         mRecycleview.scrollToPosition(mypos);
+
+
+
+
 
 
 /*
@@ -946,4 +1043,127 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+//this is  a cancel pending intent func
+    void dosomething(Classview a){
+
+        String time =a.getStartat();
+        Intent intent = new Intent(getContext(), alarmReceiver.class);
+        Calendar calendar;
+        AlarmManager alarmManager;
+        PendingIntent pendingIntent;
+        alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(getTime(time, 0)));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(getTime(time, 1)));
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Calendar currnethour=Calendar.getInstance();
+        alarmManager.cancel(pendingIntent);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean checkscroll2(String mydate) {
+      //  calendar2.set(Integer.parseInt(getdate(arrayListitem.getStartat(), 0)),Integer.parseInt(getdate(arrayListitem.getStartat(), 1))-1,Integer.parseInt(getdate(arrayListitem.getStartat(), 2)),Integer.parseInt(getTime(arrayListitem.getStartat(), 0)),Integer.parseInt(getTime(arrayListitem.getStartat(), 1)) );
+        Calendar calendar2=Calendar.getInstance();
+
+        Calendar cal1 = GregorianCalendar.getInstance();
+
+
+        String mTempday4 = getdate(mydate, 2);
+
+
+        String mTempmonth4 = getdate(mydate, 1);
+
+
+        String mTempyear4 = getdate(mydate, 0);
+
+
+
+        //trash
+
+        int mTempday5 = cal1.get(Calendar.DAY_OF_MONTH);
+
+        int mTempmonth5 = cal1.get(Calendar.MONTH)+1;
+        int mTempyear5 =  cal1.get(Calendar.YEAR);
+
+        String mTempday6=String.valueOf(mTempday5);
+        String mTempmonth6=String.valueOf(mTempmonth5);
+
+        if (mTempday5<10){
+            mTempday6="0"+mTempday6;
+        }
+        if (mTempmonth5<10){
+            mTempmonth6="0"+mTempmonth6;
+        }
+
+
+
+        LocalDate dt1 = LocalDate.now();
+
+        //  cal.add(Calendar.DATE,-1);
+        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth6+"-"+mTempday6);
+        //      dt2=   dt2.minusDays(1);
+        //     dt2=   dt2.minusDays(1);
+
+
+        dt2 = LocalDateTime.ofInstant(calendar2.toInstant(), calendar2.getTimeZone().toZoneId()).toLocalDate();
+//Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
+
+        // Log.d("cac",cal.getTime().toString());
+        //   dt1.isAfter(dt2)
+        Calendar calendar3=Calendar.getInstance();
+        LocalTime lt1= LocalTime.of(calendar3.get(Calendar.HOUR_OF_DAY),calendar3.get(Calendar.MINUTE),0);
+        LocalTime lt2=  LocalTime.of(Integer.parseInt(getTime(mydate, 0)),Integer.parseInt(getTime(mydate, 1)),0);
+
+        if (dt1.isAfter(dt2)){
+
+
+            return true;
+        } else {
+            if(lt2.isAfter(lt1)){
+                return  true;
+
+            }
+
+
+            return false;
+        }
+    }
+    public String getdate(String rawdate,int opt){
+
+        // rawdate = "2020-08-24 09:30:00";
+        Pattern pattern = Pattern.compile("(?<=^)[\\s\\S]*?(?= )");
+        ArrayList<String> tasks = new ArrayList<String>();
+        Matcher matcher = pattern.matcher(rawdate);
+        String month="0";
+        while (matcher.find()) {
+            month= matcher.group(0);
+        }
+        String[] arrOfStr = month.split("-", 3);
+        if (arrOfStr[opt].length()<2){
+            return  "0"+arrOfStr[opt];
+        }
+        return  arrOfStr[opt];
+    }
+
+    String getTime(String src,int opt){
+        // rawdate = "2020-08-24 09:30:00";
+        Pattern pattern = Pattern.compile("(?<= )[\\s\\S]*?(?=$)");
+        ArrayList<String> tasks = new ArrayList<String>();
+        Matcher matcher = pattern.matcher(src);
+        String month="0";
+        while (matcher.find()) {
+            month= matcher.group(0);
+        }
+        String[] arrOfStr = month.split(":", 3);
+        if (arrOfStr[opt].length()<2){
+            return  "0"+arrOfStr[opt];
+        }
+        return  arrOfStr[opt];
+
+
+
+
+    }
+
 }

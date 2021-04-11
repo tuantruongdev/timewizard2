@@ -187,9 +187,9 @@ public class Music extends Service {
 
 
         SystemClock.sleep(2000);
-        Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
+      //  Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
 
-        this.stopForeground(true);
+        this.stopForeground(false);
 
        startForeground(1, builder.build());
         //
@@ -216,7 +216,7 @@ public class Music extends Service {
         }
 
 
-
+     //   stopSelf();
 
         return START_NOT_STICKY;
     }
