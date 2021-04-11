@@ -70,8 +70,7 @@ tools:context=".ui.dashboard.DashboardFragment">
 
             android:layout_marginBottom="0dp"
             android:outlineProvider="none"
-            android:visibility="visible"
-
+            android:visibility="gone"
 
             app:borderWidth="0dp"
             app:rippleColor="#999999"

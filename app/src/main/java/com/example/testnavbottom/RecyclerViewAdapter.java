@@ -185,6 +185,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         int id=item.getId();
         String weekday= dayName(getdate(item.getStartat(),0),getdate(item.getStartat(),1),getdate(item.getStartat(),2));
 
+        String month =getdate(item.getStartat(),1);
         String date =getdate(item.getStartat(),2);
 
 
@@ -308,7 +309,7 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
 
         String timeend =item.getEndat();
         viewHolder.tvtimeend.setText(timeend);
-        viewHolder.Ddate.setText(date);
+        viewHolder.Ddate.setText(date+"/"+month);
         viewHolder.Ddateweek.setText(weekday);
         viewHolder.Dtime.setText(  getTime(time,0)+":"+getTime(time,1)+"-"+getTime(timeend,0)+":"+getTime(timeend,1));
         viewHolder.Dinfo.setText(title);

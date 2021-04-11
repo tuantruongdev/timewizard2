@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testnavbottom.MainActivity;
 import com.example.testnavbottom.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -208,7 +210,13 @@ public class settingClass extends AppCompatActivity {
             spinner.setSelection(3);
         }
 
-
+    FloatingActionButton btnback= findViewById(R.id.btnBackSetting);
+        btnback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
 

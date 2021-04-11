@@ -166,18 +166,20 @@ public class classlistAlarm_adapter extends ArrayAdapter<Classview> {
 
         long diff =date2.getTime()-( 5400000* (Integer.parseInt(chuky)+2) +840000);
 
-        long sodu=     86400000+diff;
+       // long sodu=     86400000+diff;
 
+
+        /*
         if (sodu<0){
 
 
             sodu =86400000+sodu;
 
         }
+*/
 
 
-
-        date3.setTime(sodu);
+        date3.setTime(diff);
 
         chukyTv.setText("("+ String.valueOf(Integer.parseInt(chuky)+2) +" chu kỳ)");
         sleeptime.setText(String.valueOf(date3.getHours()+":"+date3.getMinutes()));

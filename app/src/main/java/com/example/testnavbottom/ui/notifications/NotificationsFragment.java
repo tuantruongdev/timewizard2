@@ -145,6 +145,9 @@ btnsetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(getContext(),aboutProductClass.class);
+                startActivity(intent);
+
               //  Intent intent = new Intent( getContext(), LoadingActivity.class);
                 //startActivity(intent);
             //    internetClass a= new internetClass();

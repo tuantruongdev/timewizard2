@@ -676,14 +676,7 @@ public class HomeFragment extends Fragment {
         demobtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String rawJson="deo co gi";
-                try {
-                    rawJson=readText(getContext() ,R.raw.eventsjs);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                getEventsFromsvo(rawJson);
-                setUserVisibleHint(true);
+
             }
         });
 
@@ -693,6 +686,20 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
             displayLoading();
 
+            }
+        });
+        demobtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String rawJson="deo co gi";
+                try {
+                    rawJson=readText(getContext() ,R.raw.eventsjs);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                getEventsFromsvo(rawJson);
+                setUserVisibleHint(true);
+                return true;
             }
         });
 

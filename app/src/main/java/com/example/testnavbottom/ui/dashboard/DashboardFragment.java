@@ -290,10 +290,20 @@ Calendar calendar;
                     List<String> categories = new ArrayList<String>();
                     for (int i=2;i<7;i++) {
 
-                        long diff = date2.getTime() - (5400000 * i + 840000);
+                       long time1=date2.getTime();
 
-                        long sodu = 86400000 + diff;
 
+                        if(timePicker.getHour()==12){
+                            date2.setHours(11);
+
+                           time1 =date2.getTime()+3600000;
+                           Log.d("equal 12","12");
+
+                        }
+                        long diff = time1- (5400000 * i + 840000);
+
+                      //  long sodu = 86400000 + diff;
+/*
                         if (sodu < 0) {
 
 
@@ -304,6 +314,9 @@ Calendar calendar;
                             date3.setTime(sodu);
 
                         }
+
+ */
+                        date3.setTime(diff);
                         categories.add(i+ " chu kì  "+date3.getHours()+":"+date3.getMinutes());
                     }
 
