@@ -19,21 +19,20 @@
         android:layout_alignParentStart="true"
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
-<androidx.recyclerview.widget.RecyclerView
-    android:scrollbars="vertical"
-    android:layout_below="@+id/toolbar"
-    android:layout_marginTop="-4dp"
-    android:background="@color/black"
-android:visibility="visible"
-    android:id="@+id/recycleview"
-android:layout_marginBottom="?attr/actionBarSize"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:scrollbars="vertical"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="-4dp"
+        android:background="@color/black"
+        android:visibility="visible"
+        android:id="@+id/recycleview"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -45,11 +44,7 @@ android:layout_marginBottom="?attr/actionBarSize"
         android:layout_centerInParent="true"
         android:paddingBottom="20dp"
         android:id="@+id/imgviewEmpty"
-        android:visibility="gone"
-        ></ImageView>
-
-
-
+        android:visibility="gone"></ImageView>
 
 
     <RelativeLayout
@@ -71,8 +66,7 @@ android:layout_marginBottom="?attr/actionBarSize"
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:background="@drawable/rounded_toolbar"
-            >
+            android:background="@drawable/rounded_toolbar">
 
 
         </TextView>
@@ -117,7 +111,8 @@ android:layout_marginBottom="?attr/actionBarSize"
             app:borderWidth="0dp"
             app:rippleColor="#999999"
             app:srcCompat="@drawable/ic_baseline_delete_sweep_24"
-            app:tint="@drawable/flatbtntint"/>
+            app:tint="@drawable/flatbtntint" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtndemo"
             style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -137,7 +132,7 @@ android:layout_marginBottom="?attr/actionBarSize"
             app:borderWidth="0dp"
             app:rippleColor="#999999"
             app:srcCompat="@drawable/ic_baseline_refresh_24"
-            app:tint="@drawable/flatbtntint"/>
+            app:tint="@drawable/flatbtntint" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtndemo2"
@@ -158,8 +153,7 @@ android:layout_marginBottom="?attr/actionBarSize"
             app:borderWidth="0dp"
             app:rippleColor="#999999"
             app:srcCompat="@drawable/ic_baseline_tag_faces_24"
-            app:tint="@drawable/flatbtntint"/>
-
+            app:tint="@drawable/flatbtntint" />
 
 
     </RelativeLayout>

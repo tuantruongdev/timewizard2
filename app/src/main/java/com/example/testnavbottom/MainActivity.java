@@ -1,44 +1,26 @@
 package com.example.testnavbottom;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.testnavbottom.ui.dashboard.DashboardFragment;
 import com.example.testnavbottom.ui.home.HomeFragment;
 import com.example.testnavbottom.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.viewpager.widget.ViewPager;
-
 public class MainActivity extends AppCompatActivity {
-    public static Context context=getContext();
+    public static Context context = getContext();
     DatabaseHelper mDatabasehelper;
 
     public static Context getContext() {
@@ -47,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void refresh(){
-        ViewGroup vg = (ViewGroup) findViewById (R.id.nav_host_fragment_container);
+    public void refresh() {
+        ViewGroup vg = (ViewGroup) findViewById(R.id.nav_host_fragment_container);
         vg.removeAllViews();
         vg.refreshDrawableState();
     }
@@ -57,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         int nightModeFlags =
                 this.getBaseContext().getResources().getConfiguration().uiMode &
@@ -78,69 +59,54 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-
-
-
-
-
         super.onCreate(savedInstanceState);
-     //   setContentView(R.layout.activity_main);
+        //   setContentView(R.layout.activity_main);
 
-    //    this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        //    this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_main);
-     // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-  // getSupportActionBar().hide();
-
-
-
-
-
+        // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // getSupportActionBar().hide();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new HomeFragment()).commit();
-
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new HomeFragment()).commit();
 
         Intent intent = getIntent();
 
-
         String action = intent.getStringExtra("action");
-if (action!=null) {
-    if (action.equals("alarm")) {
-        navView.setSelectedItemId(R.id.navigation_dashboard);
-    }
-    if ( action.equals("dashboard")) {
-        navView.setSelectedItemId(R.id.navigation_notifications);
-    }
+        if (action != null) {
+            if (action.equals("alarm")) {
+                navView.setSelectedItemId(R.id.navigation_dashboard);
+            }
+            if (action.equals("dashboard")) {
+                navView.setSelectedItemId(R.id.navigation_notifications);
+            }
 
+        } else {
+            navView.setSelectedItemId(R.id.navigation_home);
 
-
-} else{
-    navView.setSelectedItemId(R.id.navigation_home);
-
-}
-
+        }
 
     }
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener= new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment=null;
-            switch (item.getItemId()){
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    selectedFragment=new HomeFragment();
+                    selectedFragment = new HomeFragment();
                     break;
                 case R.id.navigation_dashboard:
-                    selectedFragment=new DashboardFragment();
+                    selectedFragment = new DashboardFragment();
                     break;
                 case R.id.navigation_notifications:
-                    selectedFragment=new NotificationsFragment();
+                    selectedFragment = new NotificationsFragment();
                     break;
 
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, selectedFragment).commit();
             return true;
 
         }

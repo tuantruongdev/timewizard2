@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-
 import androidx.annotation.RequiresApi;
 
 import com.example.testnavbottom.ui.home.HomeFragment;
@@ -26,8 +25,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class internetClass  {
-    String myTasks="not yet";
+public class internetClass {
+    String myTasks = "not yet";
 
 
     String checkAndGet(String myRes, int mode) {
@@ -35,19 +34,19 @@ public class internetClass  {
         reponseClass mtask = gson1.fromJson(myRes, reponseClass.class);
         if (mode == 1) {
 
-            return   "1";
+            return "1";
         }
-        if(mode==2){
-            return  mtask.sso_token;
+        if (mode == 2) {
+            return mtask.sso_token;
         }
-        if(mode==3){
-            return  mtask.refresh_token;
+        if (mode == 3) {
+            return mtask.refresh_token;
         }
-        if (mode==5 && mtask._id.compareTo("1")==0){
+        if (mode == 5 && mtask._id.compareTo("1") == 0) {
             return "1";
         }
 
-        if (mode==6 && myRes.compareTo("{\"list_acc\":[]}")!=0){
+        if (mode == 6 && myRes.compareTo("{\"list_acc\":[]}") != 0) {
             return "1";
         }
 
@@ -57,22 +56,20 @@ public class internetClass  {
     class Returnobject {
 
 
-        public   String sso;
+        public String sso;
         public String refresh;
 
-        Returnobject(String _sso,String _refresh){
-            this.sso=_sso;
-            this.refresh=_refresh;
+        Returnobject(String _sso, String _refresh) {
+            this.sso = _sso;
+            this.refresh = _refresh;
 
         }
-
 
     }
 //5b7c2bbaad2d080d6c44dd36
     //Leminh77
 
-    public String getTaskFromSVO(String sso,String refresh_token,LayoutInflater inflater, ViewGroup container ){
-
+    public String getTaskFromSVO(String sso, String refresh_token, LayoutInflater inflater, ViewGroup container) {
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"force_update\":true}");
@@ -88,8 +85,8 @@ public class internetClass  {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                Log.d("gettask","failure");
-                myTasks="fail";
+                Log.d("gettask", "failure");
+                myTasks = "fail";
             }
 
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -98,34 +95,27 @@ public class internetClass  {
                 if (response.isSuccessful()) {
                     final String myRes = response.body().string();
 
-                            String stt=checkAndGet(myRes, 5);
+                    String stt = checkAndGet(myRes, 5);
 
-                            if (stt.compareTo("1")==0) {
+                    if (stt.compareTo("1") == 0) {
 
-                                HomeFragment a=new HomeFragment();
-                                a.getEventsFromsvo(myRes);
+                        HomeFragment a = new HomeFragment();
+                        a.getEventsFromsvo(myRes);
 
-                                Log.d("gettask","correct");
+                        Log.d("gettask", "correct");
 
+                    } else {
 
+                        Log.d("gettask", "failed!");
 
+                    }
 
-                            } else {
-
-
-                                Log.d("gettask","failed!");
-
-                            }
-
-
-                }
-                else {
-                    Log.d("gettask","notsuccesfully!");
+                } else {
+                    Log.d("gettask", "notsuccesfully!");
                 }
 
             }
         });
-
 
         return "";
     }
@@ -134,10 +124,10 @@ public class internetClass  {
 
 
 
-    public String checkSmartName(String smartName, String password ,LayoutInflater inflater, ViewGroup container) {
+    public String checkSmartName(String smartName, String password, LayoutInflater inflater, ViewGroup container) {
 
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"smartname\":\""+smartName+"\",\"acc_type\":\"user\"}");
+        RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"smartname\":\"" + smartName + "\",\"acc_type\":\"user\"}");
         String url = "https://api.dhdt.vn/account/login/check-smartname";
         Request request = new Request.Builder().addHeader("accept", "application/json, text/plain, */*")
                 .addHeader("refresh_token", "undefined")
@@ -150,8 +140,8 @@ public class internetClass  {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                myTasks="fail";
-                Log.d("username","failure!");
+                myTasks = "fail";
+                Log.d("username", "failure!");
 
             }
 
@@ -160,36 +150,30 @@ public class internetClass  {
                 if (response.isSuccessful()) {
                     final String myRes = response.body().string();
 
-                            String stt=checkAndGet(myRes, 6);
-                            // tv1.setText(myRes);
-                            if (stt.equals("1")) {
+                    String stt = checkAndGet(myRes, 6);
+                    // tv1.setText(myRes);
+                    if (stt.equals("1")) {
 
-                                Pattern pattern = Pattern.compile("(?<=_id\":\")[\\s\\S]*?(?=\")",Pattern.MULTILINE);
+                        Pattern pattern = Pattern.compile("(?<=_id\":\")[\\s\\S]*?(?=\")", Pattern.MULTILINE);
 
+                        ArrayList<String> tasks = new ArrayList<String>();
+                        Matcher matcher = pattern.matcher(myRes);
 
-                                ArrayList<String> tasks = new ArrayList<String>();
-                                Matcher matcher = pattern.matcher(myRes);
+                        while (matcher.find()) {
+                            loginfunc(matcher.group(0), password, inflater, container);
+                        }
 
-                                while (matcher.find()){
-                                    loginfunc(matcher.group(0),password,inflater,container);
-                                }
+                    } else {
+                        Log.d("username", "not equal!");
 
+                    }
 
+                } else {
 
-
-                            } else {
-                                Log.d("username","not equal!");
-
-                            }
-
-
-                }else {
-
-                    Log.d("username","notsuccessfully!");
+                    Log.d("username", "notsuccessfully!");
                 }
             }
         });
-
 
         return "err notyet";
 
@@ -201,12 +185,12 @@ public class internetClass  {
 
 
 
-    public Returnobject loginfunc(String username, String password,LayoutInflater inflater, ViewGroup container) {
+    public Returnobject loginfunc(String username, String password, LayoutInflater inflater, ViewGroup container) {
 
         final String[] sso_token = {"undefined"};
         final String[] refresh_token = {"undefined"};
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"type\":\"user\",\"_id\":\""+username+"\",\"passwd\":\""+password+"\"}");
+        RequestBody body = RequestBody.create(MediaType.get("application/json"), "{\"type\":\"user\",\"_id\":\"" + username + "\",\"passwd\":\"" + password + "\"}");
         String url = "https://api.dhdt.vn/account/login/passwd";
         Request request = new Request.Builder().addHeader("accept", "application/json, text/plain, */*")
                 .addHeader("refresh_token", refresh_token[0])
@@ -219,7 +203,7 @@ public class internetClass  {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                myTasks="fail";
+                myTasks = "fail";
             }
 
             @Override
@@ -227,35 +211,25 @@ public class internetClass  {
                 if (response.isSuccessful()) {
                     final String myRes = response.body().string();
 
-                            String stt=checkAndGet(myRes, 1);
-                            // tv1.setText(myRes);
-                            if (stt.equals("1")) {
+                    String stt = checkAndGet(myRes, 1);
+                    // tv1.setText(myRes);
+                    if (stt.equals("1")) {
 
-                                sso_token[0] =checkAndGet(myRes,2);
-                                refresh_token[0] =checkAndGet(myRes,3);
-                                getTaskFromSVO(sso_token[0],refresh_token[0],inflater,container);
+                        sso_token[0] = checkAndGet(myRes, 2);
+                        refresh_token[0] = checkAndGet(myRes, 3);
+                        getTaskFromSVO(sso_token[0], refresh_token[0], inflater, container);
 
+                    } else {
 
-
-
-
-                            } else {
-
-                            }
-
+                    }
 
                 }
 
             }
         });
 
-
-        return new Returnobject( sso_token[0], refresh_token[0]);
+        return new Returnobject(sso_token[0], refresh_token[0]);
 
     }
-
-
-
-
 
 }

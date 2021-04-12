@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:weightSum="100"
     android:background="@android:color/transparent"
     android:layout_height="match_parent"
-    android:id="@+id/idrelalayout"
-    >
+    android:id="@+id/idrelalayout">
 
-<Switch
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/swEnableEvent"
-    android:layout_below="@id/dateweek"
-    android:layout_marginLeft="15dp"
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/swEnableEvent"
+        android:layout_below="@id/dateweek"
+        android:layout_marginLeft="15dp"
 
-    android:background="@drawable/rounded_cornersw"
-    android:visibility="gone"
-    ></Switch>
+        android:background="@drawable/rounded_cornersw"
+        android:visibility="gone"></Switch>
+
     <TextView
         android:id="@+id/date"
         android:layout_width="40dp"
@@ -58,46 +55,42 @@
         android:textSize="13dp"></TextView>
 
 
-
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
 
         android:layout_marginLeft="80dp"
         android:background="@android:color/darker_gray"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
 
         android:id="@+id/colormatch"
         android:layout_width="50dp"
         android:layout_height="96dp"
-       android:layout_marginTop="3dp"
+        android:layout_marginTop="3dp"
 
         android:layout_marginLeft="80dp"
         android:background="@drawable/roundedleft"></TextView>
 
     <TextView
-            android:layout_marginTop="3dp"
-       android:background="@color/graydarkmode"
-       android:layout_width="match_parent"
-       android:layout_height="50dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/graydarkmode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:id="@+id/tv2"
-       android:paddingLeft="14dp"
-       android:paddingTop="3dp"
-       android:layout_marginLeft="90dp"
+        android:paddingLeft="14dp"
+        android:paddingTop="3dp"
+        android:layout_marginLeft="90dp"
 
-       android:text="thông tin môn học\nline 2"
+        android:text="thông tin môn học\nline 2"
 
         android:textColor="@color/translucent_white"
 
-       android:textSize="17dp"
+        android:textSize="17dp"
 
 
-       >
-       </TextView>
-
+        ></TextView>
 
 
     <TextView
@@ -120,10 +113,7 @@
         >
 
 
-
-
-
-   </TextView>
+    </TextView>
 
 
     <TextView
@@ -145,6 +135,7 @@
         android:visibility="gone">
 
     </TextView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -156,10 +147,4 @@
     </TextView>
 
 
-
-
-
-
-
-
-    </RelativeLayout>
+</RelativeLayout>

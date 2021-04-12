@@ -25,15 +25,13 @@ public class refreshview extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-public void refreshview(){}
+
+    public void refreshview() {
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -44,51 +42,42 @@ public void refreshview(){}
         // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
-
-
-
-
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new HomeFragment()).commit();
-
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new HomeFragment()).commit();
 
         Intent intent = getIntent();
 
-
         String action = intent.getStringExtra("action");
-        if (action!=null) {
+        if (action != null) {
             if (action.equals("alarm")) {
                 navView.setSelectedItemId(R.id.navigation_dashboard);
-            }
-            else{
+            } else {
                 navView.setSelectedItemId(R.id.navigation_home);
 
             }
         }
 
-
     }
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener= new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment=null;
-            switch (item.getItemId()){
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    selectedFragment=new HomeFragment();
+                    selectedFragment = new HomeFragment();
                     break;
                 case R.id.navigation_dashboard:
-                    selectedFragment=new DashboardFragment();
+                    selectedFragment = new DashboardFragment();
                     break;
                 case R.id.navigation_notifications:
-                    selectedFragment=new NotificationsFragment();
+                    selectedFragment = new NotificationsFragment();
                     break;
 
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, selectedFragment).commit();
             return true;
 
         }

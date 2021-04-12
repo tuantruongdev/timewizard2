@@ -1,12 +1,7 @@
 package com.example.testnavbottom.ui.notifications;
 
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.SystemClock;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -17,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testnavbottom.MainActivity;
 import com.example.testnavbottom.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,40 +24,39 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.testnavbottom.MainActivity.getContext;
-
 public class settingClass extends AppCompatActivity {
     TextView tvTime;
     SeekBar seekBar;
     Spinner spinner;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        save(String.valueOf(seekBar.getProgress()*5));
+        save(String.valueOf(seekBar.getProgress() * 5));
         save2(String.valueOf(spinner.getSelectedItemId()));
 
     }
+
     public String load() {
         String ret = "";
 
         try {
             InputStream inputStream = getApplicationContext().openFileInput("ringtone.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append("\n").append(receiveString);
                 }
 
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
 
         } catch (IOException e) {
 
@@ -72,27 +65,27 @@ public class settingClass extends AppCompatActivity {
         return ret;
 
     }
+
     public String load2() {
         String ret = "";
 
         try {
             InputStream inputStream = getApplicationContext().openFileInput("settings.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append("\n").append(receiveString);
                 }
 
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
 
         } catch (IOException e) {
 
@@ -101,16 +94,14 @@ public class settingClass extends AppCompatActivity {
         return ret;
 
     }
-    public void save(String text) {
 
+    public void save(String text) {
 
         FileOutputStream fos = null;
         try {
             fos = getApplicationContext().openFileOutput("settings.txt", MODE_PRIVATE);
             fos.write(text.getBytes());
 
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -125,16 +116,14 @@ public class settingClass extends AppCompatActivity {
             }
         }
     }
-    public void save2(String text) {
 
+    public void save2(String text) {
 
         FileOutputStream fos = null;
         try {
             fos = getApplicationContext().openFileOutput("ringtone.txt", MODE_PRIVATE);
             fos.write(text.getBytes());
 
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -149,6 +138,7 @@ public class settingClass extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,24 +163,21 @@ public class settingClass extends AppCompatActivity {
         }
         setContentView(R.layout.setting_layout);
 
-
-
-
-       spinner = findViewById(R.id.spinerRingtone);
+        spinner = findViewById(R.id.spinerRingtone);
 
         List<String> categories = new ArrayList<String>();
         categories.add("Reality");
         categories.add("ios Ringtone");
         categories.add("Gac lai au lo - Dalab");
         categories.add("Tiec tra sao - 星茶会");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getApplicationContext(),R.layout.spinner_layout, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_layout, categories);
 
-    //    dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        //    dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-       spinner.setAdapter(dataAdapter);
-        String ringtone=load();
-        ringtone=ringtone.replace("\n","");
-        if(ringtone.compareTo("")!=0) {
+        spinner.setAdapter(dataAdapter);
+        String ringtone = load();
+        ringtone = ringtone.replace("\n", "");
+        if (ringtone.compareTo("") != 0) {
 
             if (ringtone.compareTo("0") == 0) {
                 spinner.setSelection(0);
@@ -205,12 +192,12 @@ public class settingClass extends AppCompatActivity {
             if (ringtone.compareTo("3") == 0) {
                 spinner.setSelection(3);
             }
-        }       else {
+        } else {
 
             spinner.setSelection(3);
         }
 
-    FloatingActionButton btnback= findViewById(R.id.btnBackSetting);
+        FloatingActionButton btnback = findViewById(R.id.btnBackSetting);
         btnback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,29 +205,24 @@ public class settingClass extends AppCompatActivity {
             }
         });
 
-
-
-       tvTime=findViewById(R.id.tvtime);
+        tvTime = findViewById(R.id.tvtime);
         seekBar = findViewById(R.id.seekbar1);
         seekBar.setMax(24);
-        String progess =load2();
-        progess =progess.replace("\n","");
-        if (progess.compareTo("")!=0){
-            seekBar.setProgress(Integer.valueOf(progess)/5);
-            tvTime.setText(   Integer.valueOf(progess)  +" Phút");
-        }
-        else {
+        String progess = load2();
+        progess = progess.replace("\n", "");
+        if (progess.compareTo("") != 0) {
+            seekBar.setProgress(Integer.valueOf(progess) / 5);
+            tvTime.setText(Integer.valueOf(progess) + " Phút");
+        } else {
             seekBar.setProgress(3);
 
         }
-
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                tvTime.setText(   seekBar.getProgress()*5 +" Phút");
-
+                tvTime.setText(seekBar.getProgress() * 5 + " Phút");
 
             }
 
@@ -254,14 +236,6 @@ public class settingClass extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
-
-
 
     }
 }

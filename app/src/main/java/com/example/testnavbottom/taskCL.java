@@ -1,8 +1,5 @@
 package com.example.testnavbottom;
 
-import java.util.List;
-
-
 public class taskCL {
     public String title;
     public String desc;

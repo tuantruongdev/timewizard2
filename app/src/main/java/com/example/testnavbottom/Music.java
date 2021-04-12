@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaParser;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,41 +18,36 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.example.testnavbottom.ui.dashboard.DashboardFragment;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.Provider;
-
-import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 public class Music extends Service {
     MediaPlayer mediaPlayer;
-    String newid="";
+    String newid = "";
+
     public String load() {
         String ret = "";
 
         try {
             InputStream inputStream = getApplicationContext().openFileInput("ringtone.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append("\n").append(receiveString);
                 }
 
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
@@ -64,159 +58,133 @@ public class Music extends Service {
     }
 
     private static final int ID_SERVICE = 101;
-@Nullable
+
+    @Nullable
     @Override
-    public IBinder onBind(Intent intent){
-    return null;
-}
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
 
-
-    public int onStartCommand(Intent intent,int flags,int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("on music", "im on music ");
-        int id=0;
-
+        int id = 0;
 
         Bundle extras = intent.getExtras();
 
-        String keymedia=extras.getString("extra");
-        String getnewID=extras.getString("newid");
-        String neededid=extras.getString("neededid");
-        String title=extras.getString("title");
-        String desc=extras.getString("desc");
+        String keymedia = extras.getString("extra");
+        String getnewID = extras.getString("newid");
+        String neededid = extras.getString("neededid");
+        String title = extras.getString("title");
+        String desc = extras.getString("desc");
 
-        if (getnewID!=null){
+        if (getnewID != null) {
 
-            if(!getnewID.equals(" "))
-            newid=getnewID;
-
-        }
-
-
-        if (keymedia.equals("on")){
-            id=1;
-        }
-        if (keymedia.equals("off")){
-            id=0;
+            if (!getnewID.equals(" "))
+                newid = getnewID;
 
         }
 
-        if (id==1){
+        if (keymedia.equals("on")) {
+            id = 1;
+        }
+        if (keymedia.equals("off")) {
+            id = 0;
 
-
-
-
-
-        String channelId = "Your_channel_id";
-        NotificationManager notificationManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-
-
-        Intent repeating_intent = new Intent(getApplicationContext(), MainActivity.class);
-           repeating_intent.putExtra("action","alarm");
-
-
-
-        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent =PendingIntent.getActivity(getApplicationContext(),100,repeating_intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder= new NotificationCompat.Builder(
-                getApplicationContext()
-        ).setSmallIcon(R.drawable.ic_baseline_calendar_today_24)
-                .setContentTitle(title)
-                .setAutoCancel(true)
-                .setContentText(desc)
-
-                .setShowWhen(true)
-
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
-                ;
-
-
-
-
-        NotificationChannel channel = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
         }
 
+        if (id == 1) {
 
+            String channelId = "Your_channel_id";
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
+            Intent repeating_intent = new Intent(getApplicationContext(), MainActivity.class);
+            repeating_intent.putExtra("action", "alarm");
 
-     builder.setChannelId(channelId);
+            repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 100, repeating_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-   //   notificationManager.notify(1,builder.build());
-    String ringtone=load();
-    ringtone=ringtone.replace("\n","");
-            if(ringtone.compareTo("")!=0) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getApplicationContext()
+            ).setSmallIcon(R.drawable.ic_baseline_calendar_today_24)
+                    .setContentTitle(title)
+                    .setAutoCancel(true)
+                    .setContentText(desc)
 
-             if (ringtone.compareTo("0")==0){
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.iphone_alarm_morning);
-                mediaPlayer.start();}
+                    .setShowWhen(true)
 
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent);
 
-                if (ringtone.compareTo("1")==0){
-                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.reality);
-                mediaPlayer.start();}
-                if (ringtone.compareTo("2")==0){
-                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.gac_lai_au_lo);
-                    mediaPlayer.start();}
-                if (ringtone.compareTo("3")==0){
-                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tiec_tra_sao);
-                    mediaPlayer.start();}
+            NotificationChannel channel = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                channel = new NotificationChannel(
+                        channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(channel);
             }
-            else
-            {
+
+            builder.setChannelId(channelId);
+
+            //   notificationManager.notify(1,builder.build());
+            String ringtone = load();
+            ringtone = ringtone.replace("\n", "");
+            if (ringtone.compareTo("") != 0) {
+
+                if (ringtone.compareTo("0") == 0) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.iphone_alarm_morning);
+                    mediaPlayer.start();
+                }
+
+                if (ringtone.compareTo("1") == 0) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.reality);
+                    mediaPlayer.start();
+                }
+                if (ringtone.compareTo("2") == 0) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.gac_lai_au_lo);
+                    mediaPlayer.start();
+                }
+                if (ringtone.compareTo("3") == 0) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tiec_tra_sao);
+                    mediaPlayer.start();
+                }
+            } else {
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tiec_tra_sao);
                 mediaPlayer.start();
 
-
             }
 
+            //  builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
 
+            SystemClock.sleep(2000);
+            //  Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
 
+            this.stopForeground(false);
 
-      //  builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
-
-
-        SystemClock.sleep(2000);
-      //  Notification notification = new Notification.Builder(getApplicationContext(),createNotificationChannel(notificationManager)).build();
-
-        this.stopForeground(false);
-
-       startForeground(1, builder.build());
-        //
-        return START_NOT_STICKY;
+            startForeground(1, builder.build());
+            //
+            return START_NOT_STICKY;
         }
-        if (id==0) {
+        if (id == 0) {
 
+            Log.d("trying to stop service", "1");
+            Log.d("newid", newid);
+            Log.d("needid", neededid);
 
-            Log.d("trying to stop service","1");
-            Log.d("newid",newid);
-            Log.d("needid",neededid);
-
-
-
-            if (mediaPlayer!=null){
+            if (mediaPlayer != null) {
 
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.stop();
                     mediaPlayer.reset();
 
-
                 }
             }
         }
 
-
-     //   stopSelf();
+        //   stopSelf();
 
         return START_NOT_STICKY;
     }
@@ -265,7 +233,7 @@ public class Music extends Service {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private String createNotificationChannel(NotificationManager notificationManager){
+    private String createNotificationChannel(NotificationManager notificationManager) {
         String channelId = "my_service_channelid";
         String channelName = "My Foreground Service";
         NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);

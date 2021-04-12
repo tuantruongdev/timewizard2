@@ -11,6 +11,7 @@
         swipe:leftEdgeSwipeOffset="0dp"
         android:layout_marginTop="19dp"
         swipe:rightEdgeSwipeOffset="0dp">
+
         <LinearLayout
             android:tag="Bottom2"
             android:layout_width="wrap_content"
@@ -24,6 +25,7 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:layout_height="match_parent" />
+
             <ImageView
                 android:id="@+id/trash"
                 android:src="@drawable/ic_baseline_delete_sweep_24"
@@ -94,6 +96,7 @@
                 android:text="T4"
                 android:textColor="@color/white"
                 android:textSize="13dp"></TextView>
+
             <TextView
 
                 android:id="@+id/colormatch"
@@ -197,7 +200,6 @@
 
 
         </RelativeLayout>
-
 
 
     </com.daimajia.swipe.SwipeLayout>

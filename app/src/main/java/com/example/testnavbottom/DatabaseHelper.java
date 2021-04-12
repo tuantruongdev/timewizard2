@@ -7,23 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import java.io.Console;
-import java.sql.SQLData;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.content.Context.MODE_PRIVATE;
-
-public class  DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "ProductDbHelper";
     private static final String DATABASE_NAME = "truongdeptrai.db";
     private static final int DATABASE_VERSION = 1;
@@ -36,7 +30,7 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
     private String type = "";
     private String alarmat = "";
     private String note = "";
-    private  int currentDateIndex=0;
+    private int currentDateIndex = 0;
 
     public int getCurrentDateIndex() {
         return currentDateIndex;
@@ -44,12 +38,11 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean compare2Classlist(Classview a, Classview b ){
-            a.getStartat();
+    public boolean compare2Classlist(Classview a, Classview b) {
+        a.getStartat();
 
         String tempDay = a.getStartat();
         String tempDayb = b.getStartat();
-
 
         String mTempday4 = getdate(tempDay, 2);
         String mTempmonth4 = getdate(tempDay, 1);
@@ -59,36 +52,31 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
         String mTempmonth5 = getdate(tempDayb, 1);
         String mTempyear5 = getdate(tempDayb, 0);
 
-
-
-        LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
-        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
-       //   dt2=dt2.minusDays(1);
+        LocalDate dt1 = LocalDate.parse(mTempyear4 + "-" + mTempmonth4 + "-" + mTempday4);
+        LocalDate dt2 = LocalDate.parse(mTempyear5 + "-" + mTempmonth5 + "-" + mTempday5);
+        //   dt2=dt2.minusDays(1);
 //maybe error here
 
-              if (dt1.isAfter(dt2)) {
-                  return true;
+        if (dt1.isAfter(dt2)) {
+            return true;
 
-          }
+        }
 
-
-
-        return  false;
+        return false;
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public  ArrayList<Classview> ArraylistCompare(ArrayList<Classview> myClass){
+    public ArrayList<Classview> ArraylistCompare(ArrayList<Classview> myClass) {
         Classview[] arrayClassview = new Classview[myClass.size()];
 
-        int i=0;
+        int i = 0;
         while (i < myClass.size()) {
-            arrayClassview[i]=myClass.get(i);
+            arrayClassview[i] = myClass.get(i);
             i++;
         }
 
-
-   //     arrayClassview[k] > key
+        //     arrayClassview[k] > key
 
         int n = myClass.size();
         for (int j = 1; j < n; ++j) {
@@ -97,24 +85,19 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
             // Di chuyển các phần tử của arr [0 ... i - 1], lớn hơn key
             // đến một vị trí trước vị trí hiện tại của chúng
-            while (k >= 0 && (compare2Classlist( arrayClassview[k],key) )) {
+            while (k >= 0 && (compare2Classlist(arrayClassview[k], key))) {
                 arrayClassview[k + 1] = arrayClassview[k];
                 k = k - 1;
             }
             arrayClassview[k + 1] = key;
         }
 
-
-
-       ArrayList<Classview> clss= new ArrayList<Classview>();
-        i=0;
+        ArrayList<Classview> clss = new ArrayList<Classview>();
+        i = 0;
         while (i < myClass.size()) {
             clss.add(arrayClassview[i]);
             i++;
         }
-
-
-
 
         return clss;
     }
@@ -128,7 +111,6 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
     // Phương thức này tự động gọi nếu storage chưa có DATABASE_NAME
     @Override
     public void onCreate(SQLiteDatabase db) {
-
 
         Log.i(TAG, "Create table");
         String queryCreateTable = "CREATE TABLE " + TABLE_PRODUCT + " ( " +
@@ -147,83 +129,74 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryCreateTable);
     }
 
-    public String getdate(String rawdate,int opt){
+    public String getdate(String rawdate, int opt) {
 
         // rawdate = "2020-08-24 09:30:00";
         Pattern pattern = Pattern.compile("(?<=^)[\\s\\S]*?(?= )");
         ArrayList<String> tasks = new ArrayList<String>();
         Matcher matcher = pattern.matcher(rawdate);
-        String month="0";
+        String month = "0";
         while (matcher.find()) {
-            month= matcher.group(0);
+            month = matcher.group(0);
         }
         String[] arrOfStr = month.split("-", 3);
-        if (arrOfStr[opt].length()<2){
-            return  "0"+arrOfStr[opt];
+        if (arrOfStr[opt].length() < 2) {
+            return "0" + arrOfStr[opt];
         }
-        return  arrOfStr[opt];
+        return arrOfStr[opt];
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Boolean checkscroll2(String mydate) {
 
-
         Calendar cal1 = GregorianCalendar.getInstance();
-
 
         String mTempday4 = getdate(mydate, 2);
 
-
         String mTempmonth4 = getdate(mydate, 1);
-
 
         String mTempyear4 = getdate(mydate, 0);
 
-
         int mTempday5 = cal1.get(Calendar.DAY_OF_MONTH);
 
-        int mTempmonth5 = cal1.get(Calendar.MONTH)+1;
-        int mTempyear5 =  cal1.get(Calendar.YEAR);
+        int mTempmonth5 = cal1.get(Calendar.MONTH) + 1;
+        int mTempyear5 = cal1.get(Calendar.YEAR);
 
-        String mTempday6=String.valueOf(mTempday5);
-        String mTempmonth6=String.valueOf(mTempmonth5);
+        String mTempday6 = String.valueOf(mTempday5);
+        String mTempmonth6 = String.valueOf(mTempmonth5);
 
-        if (mTempday5<10){
-            mTempday6="0"+mTempday6;
+        if (mTempday5 < 10) {
+            mTempday6 = "0" + mTempday6;
         }
-        if (mTempmonth5<10){
-            mTempmonth6="0"+mTempmonth6;
+        if (mTempmonth5 < 10) {
+            mTempmonth6 = "0" + mTempmonth6;
         }
 
-
-
-        LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
+        LocalDate dt1 = LocalDate.parse(mTempyear4 + "-" + mTempmonth4 + "-" + mTempday4);
         //  cal.add(Calendar.DATE,-1);
-        LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth6+"-"+mTempday6);
+        LocalDate dt2 = LocalDate.parse(mTempyear5 + "-" + mTempmonth6 + "-" + mTempday6);
         //      dt2=   dt2.minusDays(1);
-       dt2=   dt2.minusDays(1);
+        dt2 = dt2.minusDays(1);
 
 //Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
 
         // Log.d("cac",cal.getTime().toString());
         //   dt1.isAfter(dt2)
-        if (dt2.isBefore(dt1)){
-
+        if (dt2.isBefore(dt1)) {
 
             return true;
         } else {
             return false;
         }
     }
-    public Boolean checkscroll(String mydate){
+
+    public Boolean checkscroll(String mydate) {
 
         Calendar cal1 = GregorianCalendar.getInstance();
 
-        if (Integer.parseInt(getdate(mydate,0))==cal1.get(Calendar.YEAR)&&Integer.parseInt(getdate(mydate,1))==cal1.get(Calendar.MONTH)+1&&Integer.parseInt(getdate(mydate,2))==cal1.get(Calendar.DAY_OF_MONTH)){
-            return  true;
+        if (Integer.parseInt(getdate(mydate, 0)) == cal1.get(Calendar.YEAR) && Integer.parseInt(getdate(mydate, 1)) == cal1.get(Calendar.MONTH) + 1 && Integer.parseInt(getdate(mydate, 2)) == cal1.get(Calendar.DAY_OF_MONTH)) {
+            return true;
         }
-
-
 
         return false;
     }
@@ -242,8 +215,7 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public int getDayIndex(ArrayList<Classview> events) {
-        int i=0;
-
+        int i = 0;
 
         while (i < events.size()) {
             if (checkscroll2(events.get(i).getStartat())) {
@@ -265,25 +237,22 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
 //       SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
 
-       // SQLiteDatabase  db=SQLiteDatabase.openOrCreateDatabase("truongdeptrai.db",null, null);
+        // SQLiteDatabase  db=SQLiteDatabase.openOrCreateDatabase("truongdeptrai.db",null, null);
 
-        SQLiteDatabase  db = getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 0 or type like 1", null);
 
         //Đến dòng đầu của tập dữ liệu
         cursor.moveToFirst();
-        int i=0;
+        int i = 0;
 
         //dddddddddddajwhdlkahjdlawd
-        Classview nClass=   new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!",1,"", "1970-01-01 00:00:00"," ",2,"","","1",-1);
-        Cursor oldCusor =cursor;
-        int ftime=1;
-        String olddate="";
+        Classview nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", "1970-01-01 00:00:00", " ", 2, "", "", "1", -1);
+        Cursor oldCusor = cursor;
+        int ftime = 1;
+        String olddate = "";
         while (!cursor.isAfterLast()) {
-
-
-
 
             int eventID = cursor.getInt(0);
             String eventtitle = cursor.getString(1);
@@ -292,157 +261,130 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
             String eventendat = cursor.getString(4);
             int eventenable = cursor.getInt(5);
             String eventalarmat = cursor.getString(7);
-            String note=cursor.getString(8);
-            int eventtype= cursor.getInt(6);
+            String note = cursor.getString(8);
+            int eventtype = cursor.getInt(6);
 
+            if (ftime == 1) {
+                nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, note, "1", eventID);
 
-        if(ftime==1){
-            nClass=   new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,note,"1",eventID);
+                //   nClass.getTitle();
 
-            //   nClass.getTitle();
+                event.add(nClass);
+                olddate = cursor.getString(3);
+                // nClass.getTitle();
+                cursor.moveToNext();
+                i++;
+                ftime = 0;
+                continue;
+            } else {
 
-            event.add(nClass);
-            olddate = cursor.getString(3);
-            // nClass.getTitle();
-            cursor.moveToNext();
-            i++;
-            ftime=0;
-            continue;
-        }else {
+                String tempDay = olddate;
 
+                String mTempday4 = getdate(tempDay, 2);
 
+                String mTempmonth4 = getdate(tempDay, 1);
 
+                String mTempyear4 = getdate(tempDay, 0);
 
-            String tempDay = olddate;
+                String mTempday5 = getdate(eventstartat, 2);
+                String mTempmonth5 = getdate(eventstartat, 1);
+                String mTempyear5 = getdate(eventstartat, 0);
 
-            String mTempday4 = getdate(tempDay, 2);
-
-
-            String mTempmonth4 = getdate(tempDay, 1);
-
-
-            String mTempyear4 = getdate(tempDay, 0);
-
-            String mTempday5 = getdate(eventstartat, 2);
-            String mTempmonth5 = getdate(eventstartat, 1);
-            String mTempyear5 = getdate(eventstartat, 0);
-
-            String mTempyear9 = getdate(eventstartat, 0);
-        //check neu 2 task gan nhau thi bo qua
+                String mTempyear9 = getdate(eventstartat, 0);
+                //check neu 2 task gan nhau thi bo qua
 //dawhjkkkkkkkkkkkkkkk
-            Calendar cal = GregorianCalendar.getInstance();
-            Calendar oldcal = GregorianCalendar.getInstance();
-            int flag=0;
+                Calendar cal = GregorianCalendar.getInstance();
+                Calendar oldcal = GregorianCalendar.getInstance();
+                int flag = 0;
 
-        cal.set(Integer.parseInt(mTempyear4) ,Integer.parseInt(mTempmonth4 ),Integer.parseInt( mTempday4));
-                    LocalDate dt1 = LocalDate.parse(mTempyear4+"-"+mTempmonth4+"-"+mTempday4);
-                  //  cal.add(Calendar.DATE,-1);
-                    LocalDate dt2 = LocalDate.parse(mTempyear5+"-"+mTempmonth5+"-"+mTempday5);
-                 dt2=   dt2.minusDays(1);
+                cal.set(Integer.parseInt(mTempyear4), Integer.parseInt(mTempmonth4), Integer.parseInt(mTempday4));
+                LocalDate dt1 = LocalDate.parse(mTempyear4 + "-" + mTempmonth4 + "-" + mTempday4);
+                //  cal.add(Calendar.DATE,-1);
+                LocalDate dt2 = LocalDate.parse(mTempyear5 + "-" + mTempmonth5 + "-" + mTempday5);
+                dt2 = dt2.minusDays(1);
 //Integer.parseInt(mTempday4)<Integer.parseInt(mTempday5)-1
 
-           // Log.d("cac",cal.getTime().toString());
-         //   dt1.isAfter(dt2)
-            if (dt2.isAfter(dt1)){
+                // Log.d("cac",cal.getTime().toString());
+                //   dt1.isAfter(dt2)
+                if (dt2.isAfter(dt1)) {
 
-                String time1 = mTempyear4+"-"+mTempmonth4+"-"+String.valueOf(Integer.parseInt(mTempday4)) ;  // Start date
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar c1 = Calendar.getInstance();
-                try {
-                    c1.setTime(sdf.parse(time1));
-                }catch (Exception e){
+                    String time1 = mTempyear4 + "-" + mTempmonth4 + "-" + String.valueOf(Integer.parseInt(mTempday4));  // Start date
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar c1 = Calendar.getInstance();
+                    try {
+                        c1.setTime(sdf.parse(time1));
+                    } catch (Exception e) {
 
-                }
+                    }
 
+                    c1.add(Calendar.DATE, 1);
 
-                c1.add(Calendar.DATE,1);
+                    String timeC1 = sdf.format(c1.getTime()) + " 01:01:01";
 
-                String timeC1 =sdf.format(c1.getTime())+" 01:01:01";
+                    String time2 = mTempyear5 + "-" + mTempmonth5 + "-" + String.valueOf(Integer.parseInt(mTempday5));  // Start date
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar c2 = Calendar.getInstance();
+                    try {
+                        c2.setTime(sdf2.parse(time1));
+                    } catch (Exception e) {
 
+                    }
 
+                    //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
 
-                String time2 = mTempyear5+"-"+mTempmonth5+"-"+String.valueOf(Integer.parseInt(mTempday5)) ;  // Start date
-                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar c2 = Calendar.getInstance();
-                try {
-                    c2.setTime(sdf2.parse(time1));
-                }catch (Exception e){
+                    String timeC2 = sdf.format(c2.getTime()) + " 01:01:01";
 
-                }
+                    if (timeC1 != timeC2) {
 
-                //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+                        //disabled
 
-
-
-                String timeC2 =sdf.format(c2.getTime())+" 01:01:01";
-
-
-
-
-                if (timeC1!=timeC2 ){
-
-                //disabled
-
-                     //   nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", timeC1, " ", 2, "", "", "1", -1);
-                       // event.add(nClass);
+                        //   nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", timeC1, " ", 2, "", "", "1", -1);
+                        // event.add(nClass);
                         //i++;
 
-
-
-
-
                         //set next day here
-               // Calendar cal = GregorianCalendar.getInstance();
-                //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
-                String dt3 = mTempyear4+"-"+mTempmonth4+"-"+String.valueOf(Integer.parseInt(mTempday4)) ;
-                SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar c3 = Calendar.getInstance();
-               try {
-                   c3.setTime(sdf3.parse(dt3));
-               }catch (Exception e){}
+                        // Calendar cal = GregorianCalendar.getInstance();
+                        //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+                        String dt3 = mTempyear4 + "-" + mTempmonth4 + "-" + String.valueOf(Integer.parseInt(mTempday4));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
+                        Calendar c3 = Calendar.getInstance();
+                        try {
+                            c3.setTime(sdf3.parse(dt3));
+                        } catch (Exception e) {
+                        }
 
-                //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
+                        //  cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
 
-                c3.add(Calendar.DATE,1);
+                        c3.add(Calendar.DATE, 1);
 
-                olddate =sdf.format(c3.getTime())+" 01:01:01";
-                     ///   olddate = mTempyear5+"-"+mTempmonth5+"-"+String.valueOf(Integer.parseInt(mTempday4)+1)+" 00:00:00";
+                        olddate = sdf.format(c3.getTime()) + " 01:01:01";
+                        ///   olddate = mTempyear5+"-"+mTempmonth5+"-"+String.valueOf(Integer.parseInt(mTempday4)+1)+" 00:00:00";
                         continue;
 
-                     }
+                    }
 
+                }
 
+                nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, note, "1", eventID);
+
+                //   nClass.getTitle();
+
+                event.add(nClass);
+
+                olddate = cursor.getString(3);
+                // nClass.getTitle();
+                cursor.moveToNext();
+                i++;
+                continue;
             }
 
-
-            nClass = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, note, "1", eventID);
-
-            //   nClass.getTitle();
-
-
-
-
-
-            event.add(nClass);
-
-            olddate = cursor.getString(3);
-            // nClass.getTitle();
-            cursor.moveToNext();
-            i++;
-            continue;
-        }
-
-
-          //  Calendar cal = GregorianCalendar.getInstance();
-         //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
-
-
-
+            //  Calendar cal = GregorianCalendar.getInstance();
+            //   cal.set(Integer.valueOf(getdate(startat,0)), Integer.valueOf(getdate(startat,1)), Integer.valueOf(getdate(startat,2)));
 
         }
 
         cursor.close();
-       // Classview a= event.get(5);
+        // Classview a= event.get(5);
 
         return event;
     }
@@ -452,20 +394,18 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
         ArrayList<Classview> event = new ArrayList<Classview>();
 
-
-        SQLiteDatabase  db = getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT id, title, descr,startat,endat,enable,type,alarmat,note  from events where type like 3", null);
 
         //Đến dòng đầu của tập dữ liệu
         cursor.moveToFirst();
-        int i=0;
+        int i = 0;
 
-        Classview nClass=   new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!",1,"", "1970-01-01 00:00:00"," ",2,"","","1",-1);
-        Cursor oldCusor =cursor;
+        Classview nClass = new Classview("Bạn không có lịch hôm nay, hãy thêm lịch nhé~!", 1, "", "1970-01-01 00:00:00", " ", 2, "", "", "1", -1);
+        Cursor oldCusor = cursor;
 
         while (!cursor.isAfterLast()) {
-
 
             int eventID = cursor.getInt(0);
             String eventtitle = cursor.getString(1);
@@ -483,14 +423,13 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
 
             event.add(nClass);
 
-
             // nClass.getTitle();
             cursor.moveToNext();
             i++;
             continue;
 
         }
-            return event;
+        return event;
     }
 
 
@@ -512,90 +451,76 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
             String eventendat = cursor.getString(4);
             int eventenable = cursor.getInt(5);
             String eventalarmat = cursor.getString(7);
-            int eventtype= cursor.getInt(6);
+            int eventtype = cursor.getInt(6);
 
-
-
-
-
-
-
-            classEvent = new Classview(eventtitle,eventenable,eventdescr,eventstartat,eventendat,eventtype,eventalarmat,"","1",eventID);
+            classEvent = new Classview(eventtitle, eventenable, eventdescr, eventstartat, eventendat, eventtype, eventalarmat, "", "1", eventID);
         }
         cursor.close();
         return classEvent;
     }
 
     //Cập nhật
-    public  void updateProduct(Classview classEvent) {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
-        String sqlcommand="UPDATE events SET title= '"+classEvent.getTitle()+"',descr= '"+classEvent.getDescr()+"' ,startat = '"+classEvent.getStartat()+"',endat= '"+classEvent.getEndat()+"',type= "+ String.valueOf(classEvent.getType())+",note= '"+classEvent.getNote()+"',alarmat= '"+classEvent.getAlarmat()+"',enable= "+classEvent.getEnable()+" where id = "+classEvent.getId();
+    public void updateProduct(Classview classEvent) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db", null);
+        String sqlcommand = "UPDATE events SET title= '" + classEvent.getTitle() + "',descr= '" + classEvent.getDescr() + "' ,startat = '" + classEvent.getStartat() + "',endat= '" + classEvent.getEndat() + "',type= " + String.valueOf(classEvent.getType()) + ",note= '" + classEvent.getNote() + "',alarmat= '" + classEvent.getAlarmat() + "',enable= " + classEvent.getEnable() + " where id = " + classEvent.getId();
         db.execSQL(sqlcommand);
-
-
- //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
-        //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
-
-
-
-    }
-
-    public  void updatenoitced(int id) {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
-        String sqlcommand="UPDATE events SET note='noitced' where id = "+id;
-        db.execSQL(sqlcommand);
-
 
         //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
         //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
 
+    }
 
+    public void updatenoitced(int id) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db", null);
+        String sqlcommand = "UPDATE events SET note='noitced' where id = " + id;
+        db.execSQL(sqlcommand);
+
+        //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
+        //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
 
     }
 
 
     //Cập nhật
-    void enableEvent(int id,int opt) {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
-        String sqlcommand="UPDATE events SET enable='"+opt+"'  where id = "+id;
+    void enableEvent(int id, int opt) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db", null);
+        String sqlcommand = "UPDATE events SET enable='" + opt + "'  where id = " + id;
         db.execSQL(sqlcommand);
-
 
         //  db.execSQL("UPDATE events SET title=?,descr= ? ,startat = ?,endat= ?,type= ?,note= ?,alarmat= ?,enable= ? where id = ?",
         //             new String[]{classEvent.getTitle(),classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),String.valueOf(classEvent.getEnable())});
-
-
 
     }
 
 
     //Chèn mới
-  public   void insertProduct(Classview classEvent) {
+    public void insertProduct(Classview classEvent) {
 
-      SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db",null);
-      //  SQLiteDatabase db = getWritableDatabase();
-    // String[] a= new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),classEvent.getType(),classEvent.getNote(),classEvent.getNote()};
-
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.timewizard/databases/truongdeptrai.db", null);
+        //  SQLiteDatabase db = getWritableDatabase();
+        // String[] a= new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),classEvent.getType(),classEvent.getNote(),classEvent.getNote()};
 
         db.execSQL("INSERT INTO events (title,descr,startat,endat,type,note,alarmat,enable) VALUES (?,?,?,?,?,?,?,?)",
-                new String[]{classEvent.getTitle(), classEvent.getDescr(),classEvent.getStartat(),classEvent.getEndat(),String.valueOf(classEvent.getType()),classEvent.getNote(),classEvent.getAlarmat(),enable+ ""});
+                new String[]{classEvent.getTitle(), classEvent.getDescr(), classEvent.getStartat(), classEvent.getEndat(), String.valueOf(classEvent.getType()), classEvent.getNote(), classEvent.getAlarmat(), enable + ""});
     }
 
     //Xoá sản phẩm khỏi DB
-  public   void deleteProductByID(int eventID) {
+    public void deleteProductByID(int eventID) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id = ?", new String[]{String.valueOf(eventID)});
     }
-    public   void deleteallevent() {
+
+    public void deleteallevent() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id NOT NULL and type like 0 or type like 1");
     }
-    public   void deletealltask() {
+
+    public void deletealltask() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id NOT NULL and type like 1");
     }
 
-    public   void deleteallevent2() {
+    public void deleteallevent2() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id NOT NULL");
     }

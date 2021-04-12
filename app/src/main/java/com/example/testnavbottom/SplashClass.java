@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.SystemClock;
 import android.view.Window;
 
 import androidx.annotation.Nullable;
@@ -41,24 +39,15 @@ public class SplashClass extends AppCompatActivity {
 
         android.os.Handler handler = new Handler();
 
-
-
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
 
-
         }, 1500);
-
-
-
-
-
 
     }
 }

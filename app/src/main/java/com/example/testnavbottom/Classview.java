@@ -9,10 +9,11 @@ public class Classview {
     private int type = 0;
     private String alarmat = "";
     private String note = "";
-    private String weekday="T2";
+    private String weekday = "T2";
 
-    private int Id=0;
-    public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note,String weekday,int Id) {
+    private int Id = 0;
+
+    public Classview(String title, int enable, String descr, String startat, String endat, int type, String alarmat, String note, String weekday, int Id) {
         this.title = title;
         this.enable = enable;
         this.descr = descr;
@@ -21,7 +22,7 @@ public class Classview {
         this.type = type;
         this.alarmat = alarmat;
         this.note = note;
-        this.weekday=weekday;
+        this.weekday = weekday;
         this.Id = Id;
     }
 
@@ -41,6 +42,7 @@ public class Classview {
     public void setWeekday(String title) {
         this.weekday = weekday;
     }
+
     public String getTitle() {
         return title;
     }

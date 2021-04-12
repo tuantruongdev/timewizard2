@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-      <RelativeLayout
+    <RelativeLayout
 
         android:id="@+id/toolbar"
         android:layout_width="wrap_content"
@@ -15,21 +15,21 @@
         android:padding="4dp">
 
 
-          <com.google.android.material.floatingactionbutton.FloatingActionButton
-              android:id="@+id/btnBackAbout"
-              style="@style/Widget.MaterialComponents.FloatingActionButton"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="-5dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnBackAbout"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
 
 
-              android:outlineProvider="none"
-              android:visibility="visible"
-              app:backgroundTint="@android:color/transparent"
-              app:borderWidth="0dp"
-              app:rippleColor="#999999"
-              app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-              app:tint="@drawable/flatbtntint" />
+            android:outlineProvider="none"
+            android:visibility="visible"
+            app:backgroundTint="@android:color/transparent"
+            app:borderWidth="0dp"
+            app:rippleColor="#999999"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            app:tint="@drawable/flatbtntint" />
 
         <TextView
 
@@ -42,12 +42,10 @@
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:background="@drawable/rounded_toolbar"
-            >   </TextView>
+            android:background="@drawable/rounded_toolbar"></TextView>
 
 
-
-      </RelativeLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,31 +59,31 @@
         android:id="@+id/tvabout"
         android:background="@drawable/rounded_toolbar"
         android:padding="10dp"
-        android:layout_below="@+id/toolbar"
-        ></TextView>
+        android:layout_below="@+id/toolbar"></TextView>
+
     <RelativeLayout
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvabout"
-    >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="     Để hoàn thành tốt bài báo cáo thực tập cơ sở này, \ntrước hết em xin gửi đến quý thầy, cô giáo trong khoa Công Nghệ Thông Tin trường Đại Học Công Nghệ Thông Tin và Truyền Thông Thái Nguyên lời cảm ơn chân thành.
+        android:layout_below="@+id/tvabout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="     Để hoàn thành tốt bài báo cáo thực tập cơ sở này, \ntrước hết em xin gửi đến quý thầy, cô giáo trong khoa Công Nghệ Thông Tin trường Đại Học Công Nghệ Thông Tin và Truyền Thông Thái Nguyên lời cảm ơn chân thành.
 \n    Đặc biệt, em xin gửi đến thầy Nguyễn Thị Tính, người đã tận tình hướng dẫn, giúp đỡ trong việc nâng cao kiến thức chuyên môn, phát huy cho em tính tự học, tự tìm hiểu, từ đó hình thành cho em phương pháp nghiên cứu, tìm tòi, tiếp cận với khoa học công nghệ. \nĐồng thời trau dồi cho em kỹ năng học tập năng động và sáng tạo, giúp cho em tiếp cận các ứng dụng thông minh trong thực tế một cách thiết thực hơn.
 Vì kiến thức bản thân còn hạn chế, nên trong quá trình xây dựng đề tài này em không tránh khỏi những sai sót, kính mong nhận được những ý kiến đóng góp từ quý thầy cô.
 Em xin trân trọng cảm ơn!
  "
-        android:background="@drawable/rounded_toolbar"
-        android:padding="20dp"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:textSize="15dp"
-        android:layout_margin="10dp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_toolbar"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:textSize="15dp"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
 
-        ></TextView>
+            ></TextView>
     </RelativeLayout>
 </RelativeLayout>

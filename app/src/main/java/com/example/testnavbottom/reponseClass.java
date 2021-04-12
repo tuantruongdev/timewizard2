@@ -6,8 +6,8 @@ public class reponseClass {
     public String refresh_token;
     String school_url;
     String type;
-    public String _id="1";
-    public  String img250;
+    public String _id = "1";
+    public String img250;
     public String ids;
     public String fullname;
 

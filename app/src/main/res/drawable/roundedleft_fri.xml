@@ -3,13 +3,11 @@
 
     <solid
 
-        android:color="@color/teal_200"
-        />
+        android:color="@color/teal_200" />
 
     <corners
         android:radius="0dp"
         android:topRightRadius="0dp"
         android:topLeftRadius="10dp"
-        android:bottomLeftRadius="10dp"
-        />
+        android:bottomLeftRadius="10dp" />
 </shape>

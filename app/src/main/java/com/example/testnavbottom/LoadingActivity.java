@@ -1,17 +1,16 @@
 package com.example.testnavbottom;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoadingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         int nightModeFlags =
                 this.getBaseContext().getResources().getConfiguration().uiMode &
@@ -31,7 +30,6 @@ public class LoadingActivity extends AppCompatActivity {
 
                 break;
         }
-
 
         setContentView(R.layout.loading_layouts);
     }

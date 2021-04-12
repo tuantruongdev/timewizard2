@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/black"
 
-tools:context=".ui.dashboard.DashboardFragment">
-
-
+    tools:context=".ui.dashboard.DashboardFragment">
 
 
     <RelativeLayout
@@ -31,10 +29,10 @@ tools:context=".ui.dashboard.DashboardFragment">
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:background="@drawable/rounded_toolbar"
-            >
+            android:background="@drawable/rounded_toolbar">
 
         </TextView>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtnaddalarm"
             style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -56,7 +54,6 @@ tools:context=".ui.dashboard.DashboardFragment">
             app:tint="@drawable/flatbtntint" />
 
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtnedit"
             style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -75,11 +72,7 @@ tools:context=".ui.dashboard.DashboardFragment">
             app:borderWidth="0dp"
             app:rippleColor="#999999"
             app:srcCompat="@drawable/ic_baseline_edit_24"
-            app:tint="@drawable/flatbtntint"/>
-
-
-
-
+            app:tint="@drawable/flatbtntint" />
 
 
     </RelativeLayout>
@@ -106,7 +99,6 @@ tools:context=".ui.dashboard.DashboardFragment">
         android:layout_centerInParent="true"
         android:paddingBottom="20dp"
         android:id="@+id/imgviewEmptyAlarm"
-        android:visibility="gone"
-        ></ImageView>
+        android:visibility="gone"></ImageView>
 
 </RelativeLayout>

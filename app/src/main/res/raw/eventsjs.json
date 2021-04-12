@@ -9,7 +9,8 @@
         "startAt": "2020-08-24 06:45:00",
         "finishAt": "2020-08-24 09:30:00",
         "key": "lich-hoc"
-      }],
+      }
+    ],
     "2021-02-22": [
       {
         "title": "Ứng dụng thuật toán-2-20 (K17.KTPM.N05.TH1)",
@@ -377,7 +378,8 @@
         "finishAt": "2021-04-16 15:45:00",
         "key": "lich-hoc"
       }
-    ],"2021-05-02": [
+    ],
+    "2021-05-02": [
       {
         "title": "Kỹ năng mềm-1-20 (K17.KTPM.MMT CHUNG.K1.D1.N01)",
         "desc": "• Tiết: 6, 7, 8\n• Phòng: C5.103 C5\n• Mã học phần: SSK221\n• Sĩ số: 62\n• Số đăng ký: 62\n• Số tín chỉ: 2",

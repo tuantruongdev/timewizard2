@@ -1,13 +1,11 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="10dp"
-        android:color="@color/graydarkmode"
-        />
+        android:color="@color/graydarkmode" />
 
     <solid
 
-        android:color="@color/graydarkmode"
-        />
+        android:color="@color/graydarkmode" />
 
     <corners
         android:radius="0dp"

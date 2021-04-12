@@ -39,18 +39,13 @@ public class aboutProductClass extends AppCompatActivity {
         }
         setContentView(R.layout.aboutproduct_layout);
 
-        FloatingActionButton btnback= findViewById(R.id.btnBackAbout);
+        FloatingActionButton btnback = findViewById(R.id.btnBackAbout);
         btnback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-
-
-
-
 
     }
 }
