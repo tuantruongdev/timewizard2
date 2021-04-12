@@ -214,6 +214,12 @@ public class HomeFragment extends Fragment {
             count++;
         }
 
+        if(count>1){
+            mydb.deletealltask();
+
+
+        }
+
         for (int i=0;i<count;i++) {
             taskCL mtask= gson1.fromJson(tasks.get(i),taskCL.class);
             Classview myDbtask= new Classview(mtask.title,1,mtask.desc,mtask.startAt,mtask.finishAt,1,"1","this is note","T2",1);
@@ -740,7 +746,7 @@ public class HomeFragment extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              mydb.deleteallevent();
+              mydb.deletealltask();
 
                setUserVisibleHint(true);
 
@@ -748,7 +754,16 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        btn2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mydb.deleteallevent();
 
+                setUserVisibleHint(true);
+
+                return true;
+            }
+        });
 
 
 

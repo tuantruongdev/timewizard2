@@ -590,6 +590,10 @@ public class  DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM events where id NOT NULL and type like 0 or type like 1");
     }
+    public   void deletealltask() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM events where id NOT NULL and type like 1");
+    }
 
     public   void deleteallevent2() {
         SQLiteDatabase db = getWritableDatabase();
