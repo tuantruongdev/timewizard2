@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -41,6 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.content.Context.ALARM_SERVICE;
+import static com.example.testnavbottom.MainActivity.context;
 import static com.example.testnavbottom.MainActivity.getContext;
 
 public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapter.SimpleViewHolder> {
@@ -286,6 +288,8 @@ public class RecyclerViewAdapter extends RecyclerSwipeAdapter<RecyclerViewAdapte
         viewHolder.tvTime.setText(time);
         viewHolder.Did.setText(String.valueOf(id));
         viewHolder.Ddesc.setText(desc);
+
+
 
         viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
         viewHolder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {

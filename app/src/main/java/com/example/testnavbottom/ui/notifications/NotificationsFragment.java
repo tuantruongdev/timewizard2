@@ -34,6 +34,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -110,6 +111,16 @@ public class NotificationsFragment extends Fragment {
         loginout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                File file = new File("data/data/com.example.timewizard/files/info.txt");
+                file.delete();
+                file = new File("data/data/com.example.timewizard/files/profile.png");
+                file.delete();
+///data/data/com.example.timewizard/files
+
+
+
                 Intent intent = new Intent(getContext(), loginClass.class);
                 startActivity(intent);
 

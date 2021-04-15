@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+
     String eventStartAt = "Không có tiêu đề";
 
     String eventTitle = "Không có tiêu đề";
@@ -692,6 +693,9 @@ public class HomeFragment extends Fragment {
         mRecycleview = root.findViewById(R.id.recycleview);
         ArrayList<Classview> arrayList = new ArrayList<Classview>();
 
+
+
+
         arrayList = mydb.getAllProducts();
 
         if (arrayList.isEmpty()) {
@@ -908,6 +912,8 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+
 
     //this is  a cancel pending intent func
     void dosomething(Classview a) {
